@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="e1b2f72f7f3448c09f78673b3b8070bd" Name="Diagram1" ZoomLevel="72">
+        <EntityTypeShape EntityType="Dev_PPCPModel.CitiesLKP" Width="1.5" PointX="7.75" PointY="10.75" />
+        <EntityTypeShape EntityType="Dev_PPCPModel.CountriesLKP" Width="1.5" PointX="5.75" PointY="16.125" />
+        <EntityTypeShape EntityType="Dev_PPCPModel.FamilyMember" Width="1.5" PointX="3" PointY="18.125" />
+        <EntityTypeShape EntityType="Dev_PPCPModel.Member" Width="1.5" PointX="0.75" PointY="9.875" />
+        <EntityTypeShape EntityType="Dev_PPCPModel.MemberCredential" Width="1.5" PointX="3" PointY="2" />
+        <EntityTypeShape EntityType="Dev_PPCPModel.PlansPriceDetail" Width="1.5" PointX="15.25" PointY="2.375" />
+        <EntityTypeShape EntityType="Dev_PPCPModel.ProviderCredential" Width="1.5" PointX="8" PointY="6" />
+        <EntityTypeShape EntityType="Dev_PPCPModel.ProviderSpecialization" Width="1.5" PointX="8" PointY="2.75" />
+        <EntityTypeShape EntityType="Dev_PPCPModel.RelationshipLkp" Width="1.5" PointX="10.75" PointY="15.75" />
+        <EntityTypeShape EntityType="Dev_PPCPModel.SpecializationLKP" Width="1.5" PointX="5.75" PointY="10" />
+        <EntityTypeShape EntityType="Dev_PPCPModel.StatesLKP" Width="1.5" PointX="8" PointY="15.875" />
+        <EntityTypeShape EntityType="Dev_PPCPModel.sysdiagram" Width="1.5" PointX="15.75" PointY="6.75" />
+        <EntityTypeShape EntityType="Dev_PPCPModel.TimeZonesLKP" Width="1.5" PointX="12.75" PointY="15.75" />
+        <EntityTypeShape EntityType="Dev_PPCPModel.UserCredential" Width="1.5" PointX="15.25" PointY="9.75" />
+        <EntityTypeShape EntityType="Dev_PPCPModel.Application_Parameter_Config" Width="1.5" PointX="15.75" PointY="14.75" />
+        <AssociationConnector Association="Dev_PPCPModel.R_4" />
+        <AssociationConnector Association="Dev_PPCPModel.FK_FamilyMember_Member" />
+        <AssociationConnector Association="Dev_PPCPModel.FK_MemberCredentials_Member" />
+        <AssociationConnector Association="Dev_PPCPModel.FK_ProviderSpecialization_SpecializationLKP" />
+        <EntityTypeShape EntityType="Dev_PPCPModel.OrganizationPlan" Width="1.5" PointX="13" PointY="18.875" />
+        <EntityTypeShape EntityType="Dev_PPCPModel.Plan" Width="1.5" PointX="15.375" PointY="18.25" />
+        <AssociationConnector Association="Dev_PPCPModel.FK_OrganizationPlans_Plans1" />
+        <EntityTypeShape EntityType="Dev_PPCPModel.PaymentDetail" Width="1.5" PointX="3" PointY="26.625" />
+        <AssociationConnector Association="Dev_PPCPModel.FK_PaymentDetails_Member" />
+        <EntityTypeShape EntityType="Dev_PPCPModel.PlansMapping" Width="1.5" PointX="18.625" PointY="16.25" />
+        <AssociationConnector Association="Dev_PPCPModel.FK_PlansMapping_Plans1" />
+        <EntityTypeShape EntityType="Dev_PPCPModel.TermsAndCondition" Width="1.5" PointX="10.375" PointY="0.75" />
+        <EntityTypeShape EntityType="Dev_PPCPModel.OrganizationUser" Width="1.5" PointX="13" PointY="7.25" />
+        <AssociationConnector Association="Dev_PPCPModel.FK_UserCredentials_OrganizationUsers" />
+        <EntityTypeShape EntityType="Dev_PPCPModel.Organization" Width="1.5" PointX="10.75" PointY="8.375" />
+        <AssociationConnector Association="Dev_PPCPModel.FK_OrganizationPlans_Organizations" />
+        <AssociationConnector Association="Dev_PPCPModel.FK_OrganizationUsers_Organizations" />
+        <AssociationConnector Association="Dev_PPCPModel.FK_PlansMapping_Organizations" />
+        <EntityTypeShape EntityType="Dev_PPCPModel.MemberPlanMapping" Width="1.5" PointX="12.75" PointY="0.75" />
+        <EntityTypeShape EntityType="Dev_PPCPModel.MemberPlan" Width="1.5" PointX="3.375" PointY="10.875" />
+        <EntityTypeShape EntityType="Dev_PPCPModel.ModuleUseCas" Width="1.5" PointX="0.75" PointY="6.75" />
+        <EntityTypeShape EntityType="Dev_PPCPModel.RolesLKP" Width="1.5" PointX="2.75" PointY="6.75" />
+        <AssociationConnector Association="Dev_PPCPModel.FK_MemberPlans_Member" />
+        <EntityTypeShape EntityType="Dev_PPCPModel.Provider" Width="1.5" PointX="5.75" PointY="0.75" />
+        <EntityTypeShape EntityType="Dev_PPCPModel.PPCP_CODE_LKP" Width="1.5" PointX="17.375" PointY="1.375" />
+        <AssociationConnector Association="Dev_PPCPModel.FK_ProviderCredentials_Provider" />
+        <AssociationConnector Association="Dev_PPCPModel.FK_ProviderSpecialization_Provider" />
+        <EntityTypeShape EntityType="Dev_PPCPModel.MemberPlanInstallmentMapping" Width="1.5" PointX="5.625" PointY="18.5" />
+        <AssociationConnector Association="Dev_PPCPModel.FK_MemberPlanInstallmentMapping_MemberPlans" />
+        <EntityTypeShape EntityType="Dev_PPCPModel.TransactionstoPractice" Width="1.5" PointX="17.375" PointY="9.75" />
+        </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

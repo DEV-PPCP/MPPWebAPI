@@ -1,0 +1,708 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="Dev_PPCPModelStoreContainer" CdmEntityContainer="Dev_PPCPEntities">
+    <EntitySetMapping Name="CitiesLKPs">
+      <EntityTypeMapping TypeName="Dev_PPCPModel.CitiesLKP">
+        <MappingFragment StoreEntitySet="CitiesLKP">
+          <ScalarProperty Name="ParentTownshipID" ColumnName="ParentTownshipID" />
+          <ScalarProperty Name="IsTownship" ColumnName="IsTownship" />
+          <ScalarProperty Name="TimeZoneID" ColumnName="TimeZoneID" />
+          <ScalarProperty Name="StateID" ColumnName="StateID" />
+          <ScalarProperty Name="CountyID" ColumnName="CountyID" />
+          <ScalarProperty Name="CityName" ColumnName="CityName" />
+          <ScalarProperty Name="CityID" ColumnName="CityID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="CountriesLKPs">
+      <EntityTypeMapping TypeName="Dev_PPCPModel.CountriesLKP">
+        <MappingFragment StoreEntitySet="CountriesLKP">
+          <ScalarProperty Name="CountryName" ColumnName="CountryName" />
+          <ScalarProperty Name="CountryID" ColumnName="CountryID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="FamilyMembers">
+      <EntityTypeMapping TypeName="Dev_PPCPModel.FamilyMember">
+        <MappingFragment StoreEntitySet="FamilyMember">
+          <ScalarProperty Name="TwoFactorType" ColumnName="TwoFactorType" />
+          <ScalarProperty Name="PreferredIP" ColumnName="PreferredIP" />
+          <ScalarProperty Name="IsTwofactorAuthentication" ColumnName="IsTwofactorAuthentication" />
+          <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+          <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+          <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />
+          <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+          <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+          <ScalarProperty Name="OrganizationType" ColumnName="OrganizationType" />
+          <ScalarProperty Name="Organizationname" ColumnName="Organizationname" />
+          <ScalarProperty Name="OrganizationID" ColumnName="OrganizationID" />
+          <ScalarProperty Name="Zip" ColumnName="Zip" />
+          <ScalarProperty Name="Address" ColumnName="Address" />
+          <ScalarProperty Name="CityName" ColumnName="CityName" />
+          <ScalarProperty Name="CityID" ColumnName="CityID" />
+          <ScalarProperty Name="StateName" ColumnName="StateName" />
+          <ScalarProperty Name="StateID" ColumnName="StateID" />
+          <ScalarProperty Name="CountryName" ColumnName="CountryName" />
+          <ScalarProperty Name="CountryID" ColumnName="CountryID" />
+          <ScalarProperty Name="MobileNumber" ColumnName="MobileNumber" />
+          <ScalarProperty Name="CountryCode" ColumnName="CountryCode" />
+          <ScalarProperty Name="Email" ColumnName="Email" />
+          <ScalarProperty Name="Gender" ColumnName="Gender" />
+          <ScalarProperty Name="DOB" ColumnName="DOB" />
+          <ScalarProperty Name="Salutation" ColumnName="Salutation" />
+          <ScalarProperty Name="LastName" ColumnName="LastName" />
+          <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+          <ScalarProperty Name="MemberCode" ColumnName="MemberCode" />
+          <ScalarProperty Name="RelationshipName" ColumnName="RelationshipName" />
+          <ScalarProperty Name="RelationshipID" ColumnName="RelationshipID" />
+          <ScalarProperty Name="ParentID" ColumnName="ParentID" />
+          <ScalarProperty Name="FamilyMemberID" ColumnName="FamilyMemberID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Members">
+      <EntityTypeMapping TypeName="Dev_PPCPModel.Member">
+        <MappingFragment StoreEntitySet="Member">
+          <ScalarProperty Name="TandCAcceptedDate" ColumnName="TandCAcceptedDate" />
+          <ScalarProperty Name="StripeCustomerID" ColumnName="StripeCustomerID" />
+          <ScalarProperty Name="Type" ColumnName="Type" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+          <ScalarProperty Name="TwoFactorType" ColumnName="TwoFactorType" />
+          <ScalarProperty Name="PreferredIP" ColumnName="PreferredIP" />
+          <ScalarProperty Name="IsTwofactorAuthentication" ColumnName="IsTwofactorAuthentication" />
+          <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+          <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+          <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />
+          <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+          <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+          <ScalarProperty Name="Zip" ColumnName="Zip" />
+          <ScalarProperty Name="Address" ColumnName="Address" />
+          <ScalarProperty Name="CityName" ColumnName="CityName" />
+          <ScalarProperty Name="CityID" ColumnName="CityID" />
+          <ScalarProperty Name="StateName" ColumnName="StateName" />
+          <ScalarProperty Name="StateID" ColumnName="StateID" />
+          <ScalarProperty Name="CountryName" ColumnName="CountryName" />
+          <ScalarProperty Name="CountryID" ColumnName="CountryID" />
+          <ScalarProperty Name="MobileNumber" ColumnName="MobileNumber" />
+          <ScalarProperty Name="CountryCode" ColumnName="CountryCode" />
+          <ScalarProperty Name="Email" ColumnName="Email" />
+          <ScalarProperty Name="Gender" ColumnName="Gender" />
+          <ScalarProperty Name="DOB" ColumnName="DOB" />
+          <ScalarProperty Name="Salutation" ColumnName="Salutation" />
+          <ScalarProperty Name="LastName" ColumnName="LastName" />
+          <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+          <ScalarProperty Name="RelationshipName" ColumnName="RelationshipName" />
+          <ScalarProperty Name="RelationshipID" ColumnName="RelationshipID" />
+          <ScalarProperty Name="MemberCode" ColumnName="MemberCode" />
+          <ScalarProperty Name="MemberParentID" ColumnName="MemberParentID" />
+          <ScalarProperty Name="MemberID" ColumnName="MemberID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="MemberCredentials">
+      <EntityTypeMapping TypeName="Dev_PPCPModel.MemberCredential">
+        <MappingFragment StoreEntitySet="MemberCredentials">
+          <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+          <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />
+          <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+          <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+          <ScalarProperty Name="IsTermsAccepted" ColumnName="IsTermsAccepted" />
+          <ScalarProperty Name="UserNameExpiryDate" ColumnName="UserNameExpiryDate" />
+          <ScalarProperty Name="PasswordExpiryDate" ColumnName="PasswordExpiryDate" />
+          <ScalarProperty Name="WrongLoginCount" ColumnName="WrongLoginCount" />
+          <ScalarProperty Name="UserStatus" ColumnName="UserStatus" />
+          <ScalarProperty Name="UserPassword" ColumnName="UserPassword" />
+          <ScalarProperty Name="UserName" ColumnName="UserName" />
+          <ScalarProperty Name="MemberID" ColumnName="MemberID" />
+          <ScalarProperty Name="CredentialID" ColumnName="CredentialID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="PlansPriceDetails">
+      <EntityTypeMapping TypeName="Dev_PPCPModel.PlansPriceDetail">
+        <MappingFragment StoreEntitySet="PlansPriceDetails">
+          <ScalarProperty Name="Modifieddate" ColumnName="Modifieddate" />
+          <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />
+          <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+          <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+          <ScalarProperty Name="PlanMappingID" ColumnName="PlanMappingID" />
+          <ScalarProperty Name="Planname" ColumnName="Planname" />
+          <ScalarProperty Name="PlanID" ColumnName="PlanID" />
+          <ScalarProperty Name="PriceDetailsID" ColumnName="PriceDetailsID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="ProviderCredentials">
+      <EntityTypeMapping TypeName="Dev_PPCPModel.ProviderCredential">
+        <MappingFragment StoreEntitySet="ProviderCredentials">
+          <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+          <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />
+          <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+          <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+          <ScalarProperty Name="IsTermsAccepted" ColumnName="IsTermsAccepted" />
+          <ScalarProperty Name="UserNameExpiryDate" ColumnName="UserNameExpiryDate" />
+          <ScalarProperty Name="PasswordExpiryDate" ColumnName="PasswordExpiryDate" />
+          <ScalarProperty Name="WrongLoginCount" ColumnName="WrongLoginCount" />
+          <ScalarProperty Name="UserStatus" ColumnName="UserStatus" />
+          <ScalarProperty Name="Userpassword" ColumnName="Userpassword" />
+          <ScalarProperty Name="UserName" ColumnName="UserName" />
+          <ScalarProperty Name="ProviderID" ColumnName="ProviderID" />
+          <ScalarProperty Name="CredentialID" ColumnName="CredentialID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="ProviderSpecializations">
+      <EntityTypeMapping TypeName="Dev_PPCPModel.ProviderSpecialization">
+        <MappingFragment StoreEntitySet="ProviderSpecialization">
+          <ScalarProperty Name="IsDelete" ColumnName="IsDelete" />
+          <ScalarProperty Name="SpecializationID" ColumnName="SpecializationID" />
+          <ScalarProperty Name="ProviderID" ColumnName="ProviderID" />
+          <ScalarProperty Name="ProviderSpecializationID" ColumnName="ProviderSpecializationID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="RelationshipLkps">
+      <EntityTypeMapping TypeName="Dev_PPCPModel.RelationshipLkp">
+        <MappingFragment StoreEntitySet="RelationshipLkp">
+          <ScalarProperty Name="Gender" ColumnName="Gender" />
+          <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+          <ScalarProperty Name="DisplayOrder" ColumnName="DisplayOrder" />
+          <ScalarProperty Name="Desciption" ColumnName="Desciption" />
+          <ScalarProperty Name="RelationshipName" ColumnName="RelationshipName" />
+          <ScalarProperty Name="Code" ColumnName="Code" />
+          <ScalarProperty Name="RelationshipID" ColumnName="RelationshipID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="SpecializationLKPs">
+      <EntityTypeMapping TypeName="Dev_PPCPModel.SpecializationLKP">
+        <MappingFragment StoreEntitySet="SpecializationLKP">
+          <ScalarProperty Name="IsDelete" ColumnName="IsDelete" />
+          <ScalarProperty Name="SpecializationName" ColumnName="SpecializationName" />
+          <ScalarProperty Name="SpecializationID" ColumnName="SpecializationID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="StatesLKPs">
+      <EntityTypeMapping TypeName="Dev_PPCPModel.StatesLKP">
+        <MappingFragment StoreEntitySet="StatesLKP">
+          <ScalarProperty Name="CountryID" ColumnName="CountryID" />
+          <ScalarProperty Name="StateCode" ColumnName="StateCode" />
+          <ScalarProperty Name="StateName" ColumnName="StateName" />
+          <ScalarProperty Name="StateID" ColumnName="StateID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="sysdiagrams">
+      <EntityTypeMapping TypeName="Dev_PPCPModel.sysdiagram">
+        <MappingFragment StoreEntitySet="sysdiagrams">
+          <ScalarProperty Name="definition" ColumnName="definition" />
+          <ScalarProperty Name="version" ColumnName="version" />
+          <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
+          <ScalarProperty Name="principal_id" ColumnName="principal_id" />
+          <ScalarProperty Name="name" ColumnName="name" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="TimeZonesLKPs">
+      <EntityTypeMapping TypeName="Dev_PPCPModel.TimeZonesLKP">
+        <MappingFragment StoreEntitySet="TimeZonesLKP">
+          <ScalarProperty Name="IsDayLightSaving" ColumnName="IsDayLightSaving" />
+          <ScalarProperty Name="TimeZoneOffset" ColumnName="TimeZoneOffset" />
+          <ScalarProperty Name="TimeZoneName" ColumnName="TimeZoneName" />
+          <ScalarProperty Name="TimeZoneID" ColumnName="TimeZoneID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="UserCredentials">
+      <EntityTypeMapping TypeName="Dev_PPCPModel.UserCredential">
+        <MappingFragment StoreEntitySet="UserCredentials">
+          <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+          <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />
+          <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+          <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+          <ScalarProperty Name="IsTermsAccepted" ColumnName="IsTermsAccepted" />
+          <ScalarProperty Name="UserNameExpiryDate" ColumnName="UserNameExpiryDate" />
+          <ScalarProperty Name="PasswordExpiryDate" ColumnName="PasswordExpiryDate" />
+          <ScalarProperty Name="WrongLoginCount" ColumnName="WrongLoginCount" />
+          <ScalarProperty Name="UserStatus" ColumnName="UserStatus" />
+          <ScalarProperty Name="Userpassword" ColumnName="Userpassword" />
+          <ScalarProperty Name="UserName" ColumnName="UserName" />
+          <ScalarProperty Name="UserID" ColumnName="UserID" />
+          <ScalarProperty Name="CredentialID" ColumnName="CredentialID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Application_Parameter_Config">
+      <EntityTypeMapping TypeName="Dev_PPCPModel.Application_Parameter_Config">
+        <MappingFragment StoreEntitySet="Application_Parameter_Config">
+          <ScalarProperty Name="IS_ENABLED" ColumnName="IS_ENABLED" />
+          <ScalarProperty Name="PARAMETER_DESCRIPTION" ColumnName="PARAMETER_DESCRIPTION" />
+          <ScalarProperty Name="PARAMETER_VALUE" ColumnName="PARAMETER_VALUE" />
+          <ScalarProperty Name="PARAMETER_NAME" ColumnName="PARAMETER_NAME" />
+          <ScalarProperty Name="PARAMETER_ID" ColumnName="PARAMETER_ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="OrganizationPlans">
+      <EntityTypeMapping TypeName="Dev_PPCPModel.OrganizationPlan">
+        <MappingFragment StoreEntitySet="OrganizationPlans">
+          <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+          <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+          <ScalarProperty Name="IsDelete" ColumnName="IsDelete" />
+          <ScalarProperty Name="PlanstartDate" ColumnName="PlanstartDate" />
+          <ScalarProperty Name="OrganizationID" ColumnName="OrganizationID" />
+          <ScalarProperty Name="PlanID" ColumnName="PlanID" />
+          <ScalarProperty Name="OrganizationPlanID" ColumnName="OrganizationPlanID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Plans">
+      <EntityTypeMapping TypeName="Dev_PPCPModel.Plan">
+        <MappingFragment StoreEntitySet="Plans">
+          <ScalarProperty Name="CommPPCP" ColumnName="CommPPCP" />
+          <ScalarProperty Name="ProviderTAndCPath" ColumnName="ProviderTAndCPath" />
+          <ScalarProperty Name="OrganizationTAndCPath" ColumnName="OrganizationTAndCPath" />
+          <ScalarProperty Name="PatientTAndCPath" ColumnName="PatientTAndCPath" />
+          <ScalarProperty Name="UnSubscribedDate" ColumnName="UnSubscribedDate" />
+          <ScalarProperty Name="IsDelete" ColumnName="IsDelete" />
+          <ScalarProperty Name="Patient_Features" ColumnName="Patient_Features" />
+          <ScalarProperty Name="Features" ColumnName="Features" />
+          <ScalarProperty Name="OrganizationName" ColumnName="OrganizationName" />
+          <ScalarProperty Name="OrganizationID" ColumnName="OrganizationID" />
+          <ScalarProperty Name="IsThirdParty" ColumnName="IsThirdParty" />
+          <ScalarProperty Name="CommAdditionalMember" ColumnName="CommAdditionalMember" />
+          <ScalarProperty Name="CommPrimaryMember" ColumnName="CommPrimaryMember" />
+          <ScalarProperty Name="PlanFeeAddMember" ColumnName="PlanFeeAddMember" />
+          <ScalarProperty Name="PlanMemberType" ColumnName="PlanMemberType" />
+          <ScalarProperty Name="EffectiveDate" ColumnName="EffectiveDate" />
+          <ScalarProperty Name="PlanDescription" ColumnName="PlanDescription" />
+          <ScalarProperty Name="PlanEndDate" ColumnName="PlanEndDate" />
+          <ScalarProperty Name="PlanStartDate" ColumnName="PlanStartDate" />
+          <ScalarProperty Name="PlanStatus" ColumnName="PlanStatus" />
+          <ScalarProperty Name="PlanType" ColumnName="PlanType" />
+          <ScalarProperty Name="GenderID" ColumnName="GenderID" />
+          <ScalarProperty Name="ToAge" ColumnName="ToAge" />
+          <ScalarProperty Name="FromAge" ColumnName="FromAge" />
+          <ScalarProperty Name="EnrollFee" ColumnName="EnrollFee" />
+          <ScalarProperty Name="VisitFee" ColumnName="VisitFee" />
+          <ScalarProperty Name="PlanTermMonths" ColumnName="PlanTermMonths" />
+          <ScalarProperty Name="PlanTermName" ColumnName="PlanTermName" />
+          <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+          <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />
+          <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+          <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+          <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+          <ScalarProperty Name="PaymentIntervals" ColumnName="PaymentIntervals" />
+          <ScalarProperty Name="MonthlyFee" ColumnName="MonthlyFee" />
+          <ScalarProperty Name="PlanName" ColumnName="PlanName" />
+          <ScalarProperty Name="PlanCode" ColumnName="PlanCode" />
+          <ScalarProperty Name="PlanID" ColumnName="PlanID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="PaymentDetails">
+      <EntityTypeMapping TypeName="Dev_PPCPModel.PaymentDetail">
+        <MappingFragment StoreEntitySet="PaymentDetails">
+          <ScalarProperty Name="DueAmount" ColumnName="DueAmount" />
+          <ScalarProperty Name="Plan_Code" ColumnName="Plan_Code" />
+          <ScalarProperty Name="TransactionFee" ColumnName="TransactionFee" />
+          <ScalarProperty Name="NetAmount" ColumnName="NetAmount" />
+          <ScalarProperty Name="PaidAmount" ColumnName="PaidAmount" />
+          <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+          <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />
+          <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+          <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+          <ScalarProperty Name="TransactionID" ColumnName="TransactionID" />
+          <ScalarProperty Name="PlanName" ColumnName="PlanName" />
+          <ScalarProperty Name="PlanID" ColumnName="PlanID" />
+          <ScalarProperty Name="Membername" ColumnName="Membername" />
+          <ScalarProperty Name="MemberParentID" ColumnName="MemberParentID" />
+          <ScalarProperty Name="MemberID" ColumnName="MemberID" />
+          <ScalarProperty Name="MemberPlanID" ColumnName="MemberPlanID" />
+          <ScalarProperty Name="PaymentDetailsID" ColumnName="PaymentDetailsID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="PlansMappings">
+      <EntityTypeMapping TypeName="Dev_PPCPModel.PlansMapping">
+        <MappingFragment StoreEntitySet="PlansMapping">
+          <ScalarProperty Name="IsDelete" ColumnName="IsDelete" />
+          <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+          <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+          <ScalarProperty Name="PlanStartDate" ColumnName="PlanStartDate" />
+          <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+          <ScalarProperty Name="Organizationname" ColumnName="Organizationname" />
+          <ScalarProperty Name="OrganizationID" ColumnName="OrganizationID" />
+          <ScalarProperty Name="ProviderName" ColumnName="ProviderName" />
+          <ScalarProperty Name="ProviderID" ColumnName="ProviderID" />
+          <ScalarProperty Name="PlanName" ColumnName="PlanName" />
+          <ScalarProperty Name="PlanID" ColumnName="PlanID" />
+          <ScalarProperty Name="PlanMapID" ColumnName="PlanMapID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="TermsAndConditions">
+      <EntityTypeMapping TypeName="Dev_PPCPModel.TermsAndCondition">
+        <MappingFragment StoreEntitySet="TermsAndConditions">
+          <ScalarProperty Name="Type" ColumnName="Type" />
+          <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+          <ScalarProperty Name="ExpiryDate" ColumnName="ExpiryDate" />
+          <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+          <ScalarProperty Name="TempletPath" ColumnName="TempletPath" />
+          <ScalarProperty Name="TermsAndConditionsName" ColumnName="TermsAndConditionsName" />
+          <ScalarProperty Name="TermsAndConditionsID" ColumnName="TermsAndConditionsID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="OrganizationUsers">
+      <EntityTypeMapping TypeName="Dev_PPCPModel.OrganizationUser">
+        <MappingFragment StoreEntitySet="OrganizationUsers">
+          <ScalarProperty Name="SSN" ColumnName="SSN" />
+          <ScalarProperty Name="TandCAcceptedDate" ColumnName="TandCAcceptedDate" />
+          <ScalarProperty Name="TwoFactorType" ColumnName="TwoFactorType" />
+          <ScalarProperty Name="PreferredIP" ColumnName="PreferredIP" />
+          <ScalarProperty Name="IsTwofactorAuthentication" ColumnName="IsTwofactorAuthentication" />
+          <ScalarProperty Name="Type" ColumnName="Type" />
+          <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+          <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />
+          <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+          <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+          <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+          <ScalarProperty Name="Zip" ColumnName="Zip" />
+          <ScalarProperty Name="Address" ColumnName="Address" />
+          <ScalarProperty Name="CityName" ColumnName="CityName" />
+          <ScalarProperty Name="CityID" ColumnName="CityID" />
+          <ScalarProperty Name="StateName" ColumnName="StateName" />
+          <ScalarProperty Name="StateID" ColumnName="StateID" />
+          <ScalarProperty Name="CountryName" ColumnName="CountryName" />
+          <ScalarProperty Name="CountryID" ColumnName="CountryID" />
+          <ScalarProperty Name="MobileNumber" ColumnName="MobileNumber" />
+          <ScalarProperty Name="CountryCode" ColumnName="CountryCode" />
+          <ScalarProperty Name="Email" ColumnName="Email" />
+          <ScalarProperty Name="Gender" ColumnName="Gender" />
+          <ScalarProperty Name="DOB" ColumnName="DOB" />
+          <ScalarProperty Name="Salutation" ColumnName="Salutation" />
+          <ScalarProperty Name="LastName" ColumnName="LastName" />
+          <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+          <ScalarProperty Name="OrganizationName" ColumnName="OrganizationName" />
+          <ScalarProperty Name="OrganizationID" ColumnName="OrganizationID" />
+          <ScalarProperty Name="UserID" ColumnName="UserID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+      <EntityTypeMapping TypeName="Dev_PPCPModel.OrganizationUser">
+        <ModificationFunctionMapping>
+          <InsertFunction FunctionName="Dev_PPCPModel.Store.Pr_GetProviders">
+            <ScalarProperty Name="OrganizationID" ParameterName="OrganizationID" />
+          </InsertFunction>
+          <UpdateFunction FunctionName="Dev_PPCPModel.Store.Pr_GetProviders">
+            <ScalarProperty Name="OrganizationID" ParameterName="OrganizationID" Version="Current" />
+          </UpdateFunction>
+          <DeleteFunction FunctionName="Dev_PPCPModel.Store.Pr_GetProviders">
+            <ScalarProperty Name="OrganizationID" ParameterName="OrganizationID" />
+          </DeleteFunction>
+        </ModificationFunctionMapping>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Organizations">
+      <EntityTypeMapping TypeName="Dev_PPCPModel.Organization">
+        <MappingFragment StoreEntitySet="Organizations">
+          <ScalarProperty Name="TandCAcceptedDate" ColumnName="TandCAcceptedDate" />
+          <ScalarProperty Name="AccountID" ColumnName="AccountID" />
+          <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+          <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />
+          <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+          <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+          <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+          <ScalarProperty Name="Type" ColumnName="Type" />
+          <ScalarProperty Name="Zip" ColumnName="Zip" />
+          <ScalarProperty Name="Address" ColumnName="Address" />
+          <ScalarProperty Name="CityName" ColumnName="CityName" />
+          <ScalarProperty Name="CityID" ColumnName="CityID" />
+          <ScalarProperty Name="StateName" ColumnName="StateName" />
+          <ScalarProperty Name="StateID" ColumnName="StateID" />
+          <ScalarProperty Name="CountryName" ColumnName="CountryName" />
+          <ScalarProperty Name="CountryID" ColumnName="CountryID" />
+          <ScalarProperty Name="MobileNumber" ColumnName="MobileNumber" />
+          <ScalarProperty Name="CountryCode" ColumnName="CountryCode" />
+          <ScalarProperty Name="Email" ColumnName="Email" />
+          <ScalarProperty Name="TaxID" ColumnName="TaxID" />
+          <ScalarProperty Name="ParentOrganizationID" ColumnName="ParentOrganizationID" />
+          <ScalarProperty Name="OrganizationName" ColumnName="OrganizationName" />
+          <ScalarProperty Name="OrganizationID" ColumnName="OrganizationID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <FunctionImportMapping FunctionImportName="Pr_GetProviders" FunctionName="Dev_PPCPModel.Store.Pr_GetProviders">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="Dev_PPCPModel.Pr_GetProviders_Result">
+          <ScalarProperty Name="ProviderID" ColumnName="ProviderID" />
+          <ScalarProperty Name="ProviderName" ColumnName="ProviderName" />
+          <ScalarProperty Name="UserID" ColumnName="UserID" />
+          <ScalarProperty Name="OrganizationID" ColumnName="OrganizationID" />
+          <ScalarProperty Name="OrganizationName" ColumnName="OrganizationName" />
+          <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+          <ScalarProperty Name="LastName" ColumnName="LastName" />
+          <ScalarProperty Name="Salutation" ColumnName="Salutation" />
+          <ScalarProperty Name="DOB" ColumnName="DOB" />
+          <ScalarProperty Name="Gender" ColumnName="Gender" />
+          <ScalarProperty Name="Email" ColumnName="Email" />
+          <ScalarProperty Name="CountryCode" ColumnName="CountryCode" />
+          <ScalarProperty Name="MobileNumber" ColumnName="MobileNumber" />
+          <ScalarProperty Name="CountryID" ColumnName="CountryID" />
+          <ScalarProperty Name="CountryName" ColumnName="CountryName" />
+          <ScalarProperty Name="StateID" ColumnName="StateID" />
+          <ScalarProperty Name="StateName" ColumnName="StateName" />
+          <ScalarProperty Name="CityID" ColumnName="CityID" />
+          <ScalarProperty Name="CityName" ColumnName="CityName" />
+          <ScalarProperty Name="Address" ColumnName="Address" />
+          <ScalarProperty Name="Zip" ColumnName="Zip" />
+          <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+          <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+          <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+          <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />
+          <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+          <ScalarProperty Name="Type" ColumnName="Type" />
+          <ScalarProperty Name="IsTwofactorAuthentication" ColumnName="IsTwofactorAuthentication" />
+          <ScalarProperty Name="PreferredIP" ColumnName="PreferredIP" />
+          <ScalarProperty Name="TwoFactorType" ColumnName="TwoFactorType" />
+          <ScalarProperty Name="TandCAcceptedDate" ColumnName="TandCAcceptedDate" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="Pr_GetOrganizationUsers" FunctionName="Dev_PPCPModel.Store.Pr_GetOrganizationUsers">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="Dev_PPCPModel.Pr_GetOrganizationUsers_Result">
+          <ScalarProperty Name="OrganizationID" ColumnName="OrganizationID" />
+          <ScalarProperty Name="OrganizationName" ColumnName="OrganizationName" />
+          <ScalarProperty Name="ParentOrganizationID" ColumnName="ParentOrganizationID" />
+          <ScalarProperty Name="TaxID" ColumnName="TaxID" />
+          <ScalarProperty Name="Email" ColumnName="Email" />
+          <ScalarProperty Name="CountryCode" ColumnName="CountryCode" />
+          <ScalarProperty Name="MobileNumber" ColumnName="MobileNumber" />
+          <ScalarProperty Name="CountryID" ColumnName="CountryID" />
+          <ScalarProperty Name="CountryName" ColumnName="CountryName" />
+          <ScalarProperty Name="StateID" ColumnName="StateID" />
+          <ScalarProperty Name="StateName" ColumnName="StateName" />
+          <ScalarProperty Name="CityID" ColumnName="CityID" />
+          <ScalarProperty Name="CityName" ColumnName="CityName" />
+          <ScalarProperty Name="Address" ColumnName="Address" />
+          <ScalarProperty Name="Zip" ColumnName="Zip" />
+          <ScalarProperty Name="Type" ColumnName="Type" />
+          <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+          <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+          <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+          <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />
+          <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+          <ScalarProperty Name="AccountID" ColumnName="AccountID" />
+          <ScalarProperty Name="TandCAcceptedDate" ColumnName="TandCAcceptedDate" />
+          <ScalarProperty Name="UserID" ColumnName="UserID" />
+          <ScalarProperty Name="OrganizationID1" ColumnName="OrganizationID1" />
+          <ScalarProperty Name="OrganizationName1" ColumnName="OrganizationName1" />
+          <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+          <ScalarProperty Name="LastName" ColumnName="LastName" />
+          <ScalarProperty Name="Salutation" ColumnName="Salutation" />
+          <ScalarProperty Name="DOB" ColumnName="DOB" />
+          <ScalarProperty Name="Gender" ColumnName="Gender" />
+          <ScalarProperty Name="Email1" ColumnName="Email1" />
+          <ScalarProperty Name="CountryCode1" ColumnName="CountryCode1" />
+          <ScalarProperty Name="MobileNumber1" ColumnName="MobileNumber1" />
+          <ScalarProperty Name="CountryID1" ColumnName="CountryID1" />
+          <ScalarProperty Name="CountryName1" ColumnName="CountryName1" />
+          <ScalarProperty Name="StateID1" ColumnName="StateID1" />
+          <ScalarProperty Name="StateName1" ColumnName="StateName1" />
+          <ScalarProperty Name="CityID1" ColumnName="CityID1" />
+          <ScalarProperty Name="CityName1" ColumnName="CityName1" />
+          <ScalarProperty Name="Address1" ColumnName="Address1" />
+          <ScalarProperty Name="Zip1" ColumnName="Zip1" />
+          <ScalarProperty Name="IsActive1" ColumnName="IsActive1" />
+          <ScalarProperty Name="CreatedBy1" ColumnName="CreatedBy1" />
+          <ScalarProperty Name="CreatedDate1" ColumnName="CreatedDate1" />
+          <ScalarProperty Name="ModifiedBy1" ColumnName="ModifiedBy1" />
+          <ScalarProperty Name="ModifiedDate1" ColumnName="ModifiedDate1" />
+          <ScalarProperty Name="Type1" ColumnName="Type1" />
+          <ScalarProperty Name="IsTwofactorAuthentication" ColumnName="IsTwofactorAuthentication" />
+          <ScalarProperty Name="PreferredIP" ColumnName="PreferredIP" />
+          <ScalarProperty Name="TwoFactorType" ColumnName="TwoFactorType" />
+          <ScalarProperty Name="TandCAcceptedDate1" ColumnName="TandCAcceptedDate1" />
+          <ScalarProperty Name="OrgEmail" ColumnName="OrgEmail" />
+          <ScalarProperty Name="OrgCountryCode" ColumnName="OrgCountryCode" />
+          <ScalarProperty Name="OrgMobileNumber" ColumnName="OrgMobileNumber" />
+          <ScalarProperty Name="OrgCountryID" ColumnName="OrgCountryID" />
+          <ScalarProperty Name="OrgCountryName" ColumnName="OrgCountryName" />
+          <ScalarProperty Name="OrgStateID" ColumnName="OrgStateID" />
+          <ScalarProperty Name="OrgStateName" ColumnName="OrgStateName" />
+          <ScalarProperty Name="OrgCityID" ColumnName="OrgCityID" />
+          <ScalarProperty Name="OrgCityName" ColumnName="OrgCityName" />
+          <ScalarProperty Name="OrgAddress" ColumnName="OrgAddress" />
+          <ScalarProperty Name="OrgZip" ColumnName="OrgZip" />
+          <ScalarProperty Name="UserEmail" ColumnName="UserEmail" />
+          <ScalarProperty Name="UserCountryCode" ColumnName="UserCountryCode" />
+          <ScalarProperty Name="UserMobileNumber" ColumnName="UserMobileNumber" />
+          <ScalarProperty Name="UserCountryID" ColumnName="UserCountryID" />
+          <ScalarProperty Name="UserCountryName" ColumnName="UserCountryName" />
+          <ScalarProperty Name="UserStateID" ColumnName="UserStateID" />
+          <ScalarProperty Name="UserStateName" ColumnName="UserStateName" />
+          <ScalarProperty Name="UserCityID" ColumnName="UserCityID" />
+          <ScalarProperty Name="UserCityName" ColumnName="UserCityName" />
+          <ScalarProperty Name="UserAddress" ColumnName="UserAddress" />
+          <ScalarProperty Name="UserZip" ColumnName="UserZip" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <EntitySetMapping Name="MemberPlanMappings">
+      <EntityTypeMapping TypeName="Dev_PPCPModel.MemberPlanMapping">
+        <MappingFragment StoreEntitySet="MemberPlanMapping">
+          <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+          <ScalarProperty Name="PlanName" ColumnName="PlanName" />
+          <ScalarProperty Name="PlanID" ColumnName="PlanID" />
+          <ScalarProperty Name="MemberName" ColumnName="MemberName" />
+          <ScalarProperty Name="MemberID" ColumnName="MemberID" />
+          <ScalarProperty Name="MemberParentID" ColumnName="MemberParentID" />
+          <ScalarProperty Name="MemberPlanID" ColumnName="MemberPlanID" />
+          <ScalarProperty Name="MemberPlanMapID" ColumnName="MemberPlanMapID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="MemberPlans">
+      <EntityTypeMapping TypeName="Dev_PPCPModel.MemberPlan">
+        <MappingFragment StoreEntitySet="MemberPlans">
+          <ScalarProperty Name="PlanType" ColumnName="PlanType" />
+          <ScalarProperty Name="Plan_Code" ColumnName="Plan_Code" />
+          <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+          <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />
+          <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+          <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+          <ScalarProperty Name="Duration" ColumnName="Duration" />
+          <ScalarProperty Name="PaymentInterval" ColumnName="PaymentInterval" />
+          <ScalarProperty Name="Discount" ColumnName="Discount" />
+          <ScalarProperty Name="DueAmount" ColumnName="DueAmount" />
+          <ScalarProperty Name="AmountPaid" ColumnName="AmountPaid" />
+          <ScalarProperty Name="TotalAmount" ColumnName="TotalAmount" />
+          <ScalarProperty Name="PlanEndDate" ColumnName="PlanEndDate" />
+          <ScalarProperty Name="PlanStartDate" ColumnName="PlanStartDate" />
+          <ScalarProperty Name="Status" ColumnName="Status" />
+          <ScalarProperty Name="ProviderName" ColumnName="ProviderName" />
+          <ScalarProperty Name="ProviderID" ColumnName="ProviderID" />
+          <ScalarProperty Name="OrganizationName" ColumnName="OrganizationName" />
+          <ScalarProperty Name="OrganizationID" ColumnName="OrganizationID" />
+          <ScalarProperty Name="PlanName" ColumnName="PlanName" />
+          <ScalarProperty Name="PlanID" ColumnName="PlanID" />
+          <ScalarProperty Name="MemberName" ColumnName="MemberName" />
+          <ScalarProperty Name="MemberParentID" ColumnName="MemberParentID" />
+          <ScalarProperty Name="MemberID" ColumnName="MemberID" />
+          <ScalarProperty Name="MemberPlanID" ColumnName="MemberPlanID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="ModuleUseCases">
+      <EntityTypeMapping TypeName="Dev_PPCPModel.ModuleUseCas">
+        <MappingFragment StoreEntitySet="ModuleUseCases">
+          <ScalarProperty Name="IsVisiable" ColumnName="IsVisiable" />
+          <ScalarProperty Name="UseCaseName" ColumnName="UseCaseName" />
+          <ScalarProperty Name="ModuleName" ColumnName="ModuleName" />
+          <ScalarProperty Name="ModuleID" ColumnName="ModuleID" />
+          <ScalarProperty Name="UseCaseID" ColumnName="UseCaseID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="RolesLKPs">
+      <EntityTypeMapping TypeName="Dev_PPCPModel.RolesLKP">
+        <MappingFragment StoreEntitySet="RolesLKP">
+          <ScalarProperty Name="OrganizationID" ColumnName="OrganizationID" />
+          <ScalarProperty Name="RoleName" ColumnName="RoleName" />
+          <ScalarProperty Name="RoleID" ColumnName="RoleID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Providers">
+      <EntityTypeMapping TypeName="Dev_PPCPModel.Provider">
+        <MappingFragment StoreEntitySet="Provider">
+          <ScalarProperty Name="Degree" ColumnName="Degree" />
+          <ScalarProperty Name="Fax" ColumnName="Fax" />
+          <ScalarProperty Name="SpecializationID" ColumnName="SpecializationID" />
+          <ScalarProperty Name="SpecializationName" ColumnName="SpecializationName" />
+          <ScalarProperty Name="Specialization" ColumnName="Specialization" />
+          <ScalarProperty Name="No_of_Patients_Accepting" ColumnName="No_of_Patients_Accepting" />
+          <ScalarProperty Name="Tax_No" ColumnName="Tax_No" />
+          <ScalarProperty Name="IS_TERMS_ACCECPTED" ColumnName="IS_TERMS_ACCECPTED" />
+          <ScalarProperty Name="TwoFactorType" ColumnName="TwoFactorType" />
+          <ScalarProperty Name="PreferredIP" ColumnName="PreferredIP" />
+          <ScalarProperty Name="IsTwofactorAuthentication" ColumnName="IsTwofactorAuthentication" />
+          <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+          <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />
+          <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+          <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+          <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+          <ScalarProperty Name="Zip" ColumnName="Zip" />
+          <ScalarProperty Name="Address" ColumnName="Address" />
+          <ScalarProperty Name="CityName" ColumnName="CityName" />
+          <ScalarProperty Name="CityID" ColumnName="CityID" />
+          <ScalarProperty Name="StateName" ColumnName="StateName" />
+          <ScalarProperty Name="StateID" ColumnName="StateID" />
+          <ScalarProperty Name="CountryName" ColumnName="CountryName" />
+          <ScalarProperty Name="CountryID" ColumnName="CountryID" />
+          <ScalarProperty Name="MobileNumber" ColumnName="MobileNumber" />
+          <ScalarProperty Name="CountryCode" ColumnName="CountryCode" />
+          <ScalarProperty Name="Email" ColumnName="Email" />
+          <ScalarProperty Name="Gender" ColumnName="Gender" />
+          <ScalarProperty Name="DOB" ColumnName="DOB" />
+          <ScalarProperty Name="Salutation" ColumnName="Salutation" />
+          <ScalarProperty Name="LastName" ColumnName="LastName" />
+          <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+          <ScalarProperty Name="NPI" ColumnName="NPI" />
+          <ScalarProperty Name="OrganizationName" ColumnName="OrganizationName" />
+          <ScalarProperty Name="OrganizationID" ColumnName="OrganizationID" />
+          <ScalarProperty Name="ProviderID" ColumnName="ProviderID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="PPCP_CODE_LKP">
+      <EntityTypeMapping TypeName="Dev_PPCPModel.PPCP_CODE_LKP">
+        <MappingFragment StoreEntitySet="PPCP_CODE_LKP">
+          <ScalarProperty Name="CODE_TYPE_ID" ColumnName="CODE_TYPE_ID" />
+          <ScalarProperty Name="DESCRIPTION" ColumnName="DESCRIPTION" />
+          <ScalarProperty Name="TO_DATE" ColumnName="TO_DATE" />
+          <ScalarProperty Name="FROM_DATE" ColumnName="FROM_DATE" />
+          <ScalarProperty Name="SNO_PADDING" ColumnName="SNO_PADDING" />
+          <ScalarProperty Name="SUFFIX" ColumnName="SUFFIX" />
+          <ScalarProperty Name="SNO" ColumnName="SNO" />
+          <ScalarProperty Name="PREFIX" ColumnName="PREFIX" />
+          <ScalarProperty Name="PPCP_CODE_ID" ColumnName="PPCP_CODE_ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="MemberPlanInstallmentMappings">
+      <EntityTypeMapping TypeName="Dev_PPCPModel.MemberPlanInstallmentMapping">
+        <MappingFragment StoreEntitySet="MemberPlanInstallmentMapping">
+          <ScalarProperty Name="PaymentStatus" ColumnName="PaymentStatus" />
+          <ScalarProperty Name="PaidAmount" ColumnName="PaidAmount" />
+          <ScalarProperty Name="PaymentDate" ColumnName="PaymentDate" />
+          <ScalarProperty Name="InstallmentAmount" ColumnName="InstallmentAmount" />
+          <ScalarProperty Name="PaymentAmount" ColumnName="PaymentAmount" />
+          <ScalarProperty Name="PaymentDueDate" ColumnName="PaymentDueDate" />
+          <ScalarProperty Name="PaymentDetailsID" ColumnName="PaymentDetailsID" />
+          <ScalarProperty Name="MemberPlanID" ColumnName="MemberPlanID" />
+          <ScalarProperty Name="MemberPlanInstallmentID" ColumnName="MemberPlanInstallmentID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="TransactionstoPractices">
+      <EntityTypeMapping TypeName="Dev_PPCPModel.TransactionstoPractice">
+        <MappingFragment StoreEntitySet="TransactionstoPractice">
+          <ScalarProperty Name="OrganizationName" ColumnName="OrganizationName" />
+          <ScalarProperty Name="MemberPlanID" ColumnName="MemberPlanID" />
+          <ScalarProperty Name="OrganizationID" ColumnName="OrganizationID" />
+          <ScalarProperty Name="PaymentDate" ColumnName="PaymentDate" />
+          <ScalarProperty Name="AmountPaid" ColumnName="AmountPaid" />
+          <ScalarProperty Name="DoctorName" ColumnName="DoctorName" />
+          <ScalarProperty Name="PlanName" ColumnName="PlanName" />
+          <ScalarProperty Name="DOB" ColumnName="DOB" />
+          <ScalarProperty Name="MemberName" ColumnName="MemberName" />
+          <ScalarProperty Name="MemberID" ColumnName="MemberID" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping>

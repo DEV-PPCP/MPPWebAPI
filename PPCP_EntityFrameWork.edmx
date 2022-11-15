@@ -1,0 +1,2557 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="Dev_PPCPModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'Dev_PPCP.dbo.Application_Parameter_Config' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="Application_Parameter_Config">
+          <Key>
+            <PropertyRef Name="PARAMETER_ID" />
+          </Key>
+          <Property Name="PARAMETER_ID" Type="int" Nullable="false" />
+          <Property Name="PARAMETER_NAME" Type="varchar" MaxLength="50" />
+          <Property Name="PARAMETER_VALUE" Type="nvarchar(max)" />
+          <Property Name="PARAMETER_DESCRIPTION" Type="varchar" MaxLength="100" />
+          <Property Name="IS_ENABLED" Type="bit" />
+        </EntityType>
+        <EntityType Name="CitiesLKP">
+          <Key>
+            <PropertyRef Name="CityID" />
+          </Key>
+          <Property Name="CityID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CityName" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="CountyID" Type="int" />
+          <Property Name="StateID" Type="int" Nullable="false" />
+          <Property Name="TimeZoneID" Type="int" />
+          <Property Name="IsTownship" Type="int" Nullable="false" />
+          <Property Name="ParentTownshipID" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="CountriesLKP">
+          <Key>
+            <PropertyRef Name="CountryID" />
+          </Key>
+          <Property Name="CountryID" Type="int" Nullable="false" />
+          <Property Name="CountryName" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="FamilyMember">
+          <Key>
+            <PropertyRef Name="FamilyMemberID" />
+          </Key>
+          <Property Name="FamilyMemberID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ParentID" Type="int" Nullable="false" />
+          <Property Name="RelationshipID" Type="int" />
+          <Property Name="RelationshipName" Type="varchar" MaxLength="25" />
+          <Property Name="MemberCode" Type="varchar" MaxLength="25" Nullable="false" />
+          <Property Name="FirstName" Type="varchar" MaxLength="50" />
+          <Property Name="LastName" Type="varchar" MaxLength="50" />
+          <Property Name="Salutation" Type="varchar" MaxLength="10" />
+          <Property Name="DOB" Type="date" />
+          <Property Name="Gender" Type="char" MaxLength="1" />
+          <Property Name="Email" Type="varchar" MaxLength="50" />
+          <Property Name="CountryCode" Type="nvarchar" MaxLength="2" />
+          <Property Name="MobileNumber" Type="varchar" MaxLength="15" />
+          <Property Name="CountryID" Type="int" />
+          <Property Name="CountryName" Type="varchar" MaxLength="50" />
+          <Property Name="StateID" Type="int" />
+          <Property Name="StateName" Type="varchar" MaxLength="50" />
+          <Property Name="CityID" Type="int" />
+          <Property Name="CityName" Type="varchar" MaxLength="50" />
+          <Property Name="Address" Type="varchar" MaxLength="150" />
+          <Property Name="Zip" Type="varchar" MaxLength="25" />
+          <Property Name="OrganizationID" Type="int" />
+          <Property Name="Organizationname" Type="varchar" MaxLength="50" />
+          <Property Name="OrganizationType" Type="int" />
+          <Property Name="CreatedBy" Type="int" />
+          <Property Name="CreatedDate" Type="date" />
+          <Property Name="ModifiedBy" Type="int" />
+          <Property Name="ModifiedDate" Type="date" />
+          <Property Name="IsActive" Type="bit" />
+          <Property Name="IsTwofactorAuthentication" Type="bit" />
+          <Property Name="PreferredIP" Type="nvarchar" MaxLength="20" />
+          <Property Name="TwoFactorType" Type="int" />
+        </EntityType>
+        <EntityType Name="Member">
+          <Key>
+            <PropertyRef Name="MemberID" />
+          </Key>
+          <Property Name="MemberID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="MemberParentID" Type="int" />
+          <Property Name="MemberCode" Type="varchar" MaxLength="25" Nullable="false" />
+          <Property Name="RelationshipID" Type="int" />
+          <Property Name="RelationshipName" Type="varchar" MaxLength="20" />
+          <Property Name="FirstName" Type="varchar" MaxLength="50" />
+          <Property Name="LastName" Type="varchar" MaxLength="50" />
+          <Property Name="Salutation" Type="varchar" MaxLength="10" />
+          <Property Name="DOB" Type="date" />
+          <Property Name="Gender" Type="char" MaxLength="1" />
+          <Property Name="Email" Type="varchar" MaxLength="50" />
+          <Property Name="CountryCode" Type="nvarchar" MaxLength="2" />
+          <Property Name="MobileNumber" Type="varchar" MaxLength="15" />
+          <Property Name="CountryID" Type="int" />
+          <Property Name="CountryName" Type="varchar" MaxLength="50" />
+          <Property Name="StateID" Type="int" />
+          <Property Name="StateName" Type="varchar" MaxLength="50" />
+          <Property Name="CityID" Type="int" />
+          <Property Name="CityName" Type="varchar" MaxLength="50" />
+          <Property Name="Address" Type="varchar" MaxLength="150" />
+          <Property Name="Zip" Type="varchar" MaxLength="25" />
+          <Property Name="CreatedBy" Type="int" />
+          <Property Name="CreatedDate" Type="date" />
+          <Property Name="ModifiedBy" Type="int" />
+          <Property Name="ModifiedDate" Type="date" />
+          <Property Name="IsActive" Type="bit" />
+          <Property Name="IsTwofactorAuthentication" Type="bit" />
+          <Property Name="PreferredIP" Type="nvarchar" MaxLength="20" />
+          <Property Name="TwoFactorType" Type="int" />
+          <Property Name="ID" Type="int" />
+          <Property Name="Type" Type="int" />
+          <Property Name="StripeCustomerID" Type="nvarchar" MaxLength="50" />
+          <Property Name="TandCAcceptedDate" Type="datetime" />
+        </EntityType>
+        <EntityType Name="MemberCredentials">
+          <Key>
+            <PropertyRef Name="CredentialID" />
+          </Key>
+          <Property Name="CredentialID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="MemberID" Type="int" Nullable="false" />
+          <Property Name="UserName" Type="varchar" MaxLength="25" Nullable="false" />
+          <Property Name="UserPassword" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="UserStatus" Type="char" MaxLength="1" Nullable="false" />
+          <Property Name="WrongLoginCount" Type="int" />
+          <Property Name="PasswordExpiryDate" Type="date" />
+          <Property Name="UserNameExpiryDate" Type="date" />
+          <Property Name="IsTermsAccepted" Type="bit" />
+          <Property Name="CreatedBy" Type="int" />
+          <Property Name="CreatedDate" Type="date" />
+          <Property Name="ModifiedBy" Type="int" />
+          <Property Name="ModifiedDate" Type="date" />
+        </EntityType>
+        <EntityType Name="MemberPlanInstallmentMapping">
+          <Key>
+            <PropertyRef Name="MemberPlanInstallmentID" />
+          </Key>
+          <Property Name="MemberPlanInstallmentID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="MemberPlanID" Type="int" />
+          <Property Name="PaymentDetailsID" Type="int" />
+          <Property Name="PaymentDueDate" Type="datetime" />
+          <Property Name="PaymentAmount" Type="money" />
+          <Property Name="InstallmentAmount" Type="money" />
+          <Property Name="PaymentDate" Type="datetime" />
+          <Property Name="PaidAmount" Type="money" />
+          <Property Name="PaymentStatus" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="MemberPlanMapping">
+          <Key>
+            <PropertyRef Name="MemberPlanMapID" />
+          </Key>
+          <Property Name="MemberPlanMapID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="MemberPlanID" Type="int" />
+          <Property Name="MemberParentID" Type="int" />
+          <Property Name="MemberID" Type="int" />
+          <Property Name="MemberName" Type="nvarchar" MaxLength="100" />
+          <Property Name="PlanID" Type="int" />
+          <Property Name="PlanName" Type="nvarchar" MaxLength="100" />
+          <Property Name="IsDeleted" Type="bit" />
+        </EntityType>
+        <EntityType Name="MemberPlans">
+          <Key>
+            <PropertyRef Name="MemberPlanID" />
+          </Key>
+          <Property Name="MemberPlanID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="MemberID" Type="int" Nullable="false" />
+          <Property Name="MemberParentID" Type="int" />
+          <Property Name="MemberName" Type="varchar" MaxLength="100" />
+          <Property Name="PlanID" Type="int" Nullable="false" />
+          <Property Name="PlanName" Type="nvarchar" MaxLength="100" />
+          <Property Name="OrganizationID" Type="int" />
+          <Property Name="OrganizationName" Type="varchar" MaxLength="150" />
+          <Property Name="ProviderID" Type="int" />
+          <Property Name="ProviderName" Type="varchar" MaxLength="50" />
+          <Property Name="Status" Type="varchar" MaxLength="10" />
+          <Property Name="PlanStartDate" Type="date" />
+          <Property Name="PlanEndDate" Type="date" />
+          <Property Name="TotalAmount" Type="decimal" Precision="18" Scale="0" />
+          <Property Name="AmountPaid" Type="decimal" Precision="18" Scale="0" />
+          <Property Name="DueAmount" Type="decimal" Precision="18" Scale="0" />
+          <Property Name="Discount" Type="decimal" Precision="18" Scale="0" />
+          <Property Name="PaymentInterval" Type="varchar" MaxLength="150" />
+          <Property Name="Duration" Type="nvarchar" MaxLength="25" />
+          <Property Name="CreatedBy" Type="int" />
+          <Property Name="CreatedDate" Type="datetime" />
+          <Property Name="ModifiedBy" Type="int" />
+          <Property Name="ModifiedDate" Type="datetime" />
+          <Property Name="Plan_Code" Type="int" />
+          <Property Name="PlanType" Type="int" />
+        </EntityType>
+        <EntityType Name="ModuleUseCases">
+          <Key>
+            <PropertyRef Name="UseCaseID" />
+          </Key>
+          <Property Name="UseCaseID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ModuleID" Type="int" />
+          <Property Name="ModuleName" Type="nvarchar" MaxLength="100" />
+          <Property Name="UseCaseName" Type="nvarchar" MaxLength="100" />
+          <Property Name="IsVisiable" Type="bit" />
+        </EntityType>
+        <EntityType Name="OrganizationPlans">
+          <Key>
+            <PropertyRef Name="OrganizationPlanID" />
+          </Key>
+          <Property Name="OrganizationPlanID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="PlanID" Type="int" Nullable="false" />
+          <Property Name="OrganizationID" Type="int" Nullable="false" />
+          <Property Name="PlanstartDate" Type="date" />
+          <Property Name="IsDelete" Type="bit" />
+          <Property Name="CreatedDate" Type="datetime" />
+          <Property Name="ModifiedDate" Type="datetime" />
+        </EntityType>
+        <EntityType Name="Organizations">
+          <Key>
+            <PropertyRef Name="OrganizationID" />
+          </Key>
+          <Property Name="OrganizationID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="OrganizationName" Type="varchar" MaxLength="100" />
+          <Property Name="ParentOrganizationID" Type="int" />
+          <Property Name="TaxID" Type="nvarchar" MaxLength="15" />
+          <Property Name="Email" Type="nvarchar" MaxLength="50" />
+          <Property Name="CountryCode" Type="nvarchar" MaxLength="2" />
+          <Property Name="MobileNumber" Type="nvarchar" MaxLength="15" />
+          <Property Name="CountryID" Type="int" />
+          <Property Name="CountryName" Type="varchar" MaxLength="50" />
+          <Property Name="StateID" Type="int" />
+          <Property Name="StateName" Type="varchar" MaxLength="50" />
+          <Property Name="CityID" Type="int" />
+          <Property Name="CityName" Type="varchar" MaxLength="50" />
+          <Property Name="Address" Type="varchar" MaxLength="150" />
+          <Property Name="Zip" Type="varchar" MaxLength="25" />
+          <Property Name="Type" Type="int" />
+          <Property Name="IsActive" Type="bit" />
+          <Property Name="CreatedBy" Type="int" />
+          <Property Name="CreatedDate" Type="date" />
+          <Property Name="ModifiedBy" Type="int" />
+          <Property Name="ModifiedDate" Type="date" />
+          <Property Name="AccountID" Type="nvarchar" MaxLength="50" />
+          <Property Name="TandCAcceptedDate" Type="datetime" />
+        </EntityType>
+        <EntityType Name="OrganizationUsers">
+          <Key>
+            <PropertyRef Name="UserID" />
+          </Key>
+          <Property Name="UserID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="OrganizationID" Type="int" Nullable="false" />
+          <Property Name="OrganizationName" Type="varchar" MaxLength="150" />
+          <Property Name="FirstName" Type="varchar" MaxLength="50" />
+          <Property Name="LastName" Type="varchar" MaxLength="50" />
+          <Property Name="Salutation" Type="varchar" MaxLength="10" />
+          <Property Name="DOB" Type="date" />
+          <Property Name="Gender" Type="char" MaxLength="1" />
+          <Property Name="Email" Type="varchar" MaxLength="50" />
+          <Property Name="CountryCode" Type="varchar" MaxLength="2" />
+          <Property Name="MobileNumber" Type="varchar" MaxLength="15" />
+          <Property Name="CountryID" Type="int" Nullable="false" />
+          <Property Name="CountryName" Type="varchar" MaxLength="50" />
+          <Property Name="StateID" Type="int" />
+          <Property Name="StateName" Type="varchar" MaxLength="50" />
+          <Property Name="CityID" Type="int" />
+          <Property Name="CityName" Type="varchar" MaxLength="50" />
+          <Property Name="Address" Type="varchar" MaxLength="150" />
+          <Property Name="Zip" Type="varchar" MaxLength="25" />
+          <Property Name="IsActive" Type="bit" />
+          <Property Name="CreatedBy" Type="int" />
+          <Property Name="CreatedDate" Type="date" />
+          <Property Name="ModifiedBy" Type="int" />
+          <Property Name="ModifiedDate" Type="date" />
+          <Property Name="Type" Type="int" />
+          <Property Name="IsTwofactorAuthentication" Type="bit" />
+          <Property Name="PreferredIP" Type="nvarchar" MaxLength="40" />
+          <Property Name="TwoFactorType" Type="int" />
+          <Property Name="TandCAcceptedDate" Type="datetime" />
+          <Property Name="SSN" Type="nvarchar" MaxLength="4" />
+        </EntityType>
+        <EntityType Name="PaymentDetails">
+          <Key>
+            <PropertyRef Name="PaymentDetailsID" />
+          </Key>
+          <Property Name="PaymentDetailsID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="MemberPlanID" Type="int" />
+          <Property Name="MemberID" Type="int" />
+          <Property Name="MemberParentID" Type="int" />
+          <Property Name="Membername" Type="varchar" MaxLength="100" />
+          <Property Name="PlanID" Type="int" />
+          <Property Name="PlanName" Type="varchar" MaxLength="50" />
+          <Property Name="TransactionID" Type="varchar" MaxLength="50" />
+          <Property Name="CreatedBy" Type="int" />
+          <Property Name="CreatedDate" Type="datetime" />
+          <Property Name="ModifiedBy" Type="int" />
+          <Property Name="ModifiedDate" Type="datetime" />
+          <Property Name="PaidAmount" Type="money" />
+          <Property Name="NetAmount" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="TransactionFee" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="Plan_Code" Type="int" />
+          <Property Name="DueAmount" Type="decimal" Precision="18" Scale="2" />
+        </EntityType>
+        <EntityType Name="Plans">
+          <Key>
+            <PropertyRef Name="PlanID" />
+          </Key>
+          <Property Name="PlanID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="PlanCode" Type="nvarchar" MaxLength="50" />
+          <Property Name="PlanName" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="MonthlyFee" Type="money" />
+          <Property Name="PaymentIntervals" Type="varchar(max)" />
+          <Property Name="IsActive" Type="bit" />
+          <Property Name="CreatedBy" Type="int" />
+          <Property Name="CreatedDate" Type="date" />
+          <Property Name="ModifiedBy" Type="int" />
+          <Property Name="ModifiedDate" Type="date" />
+          <Property Name="PlanTermName" Type="nvarchar" MaxLength="50" />
+          <Property Name="PlanTermMonths" Type="int" />
+          <Property Name="VisitFee" Type="money" />
+          <Property Name="EnrollFee" Type="money" />
+          <Property Name="FromAge" Type="int" />
+          <Property Name="ToAge" Type="int" />
+          <Property Name="GenderID" Type="int" />
+          <Property Name="PlanType" Type="int" />
+          <Property Name="PlanStatus" Type="bit" />
+          <Property Name="PlanStartDate" Type="date" />
+          <Property Name="PlanEndDate" Type="date" />
+          <Property Name="PlanDescription" Type="nvarchar" MaxLength="150" />
+          <Property Name="EffectiveDate" Type="date" />
+          <Property Name="PlanMemberType" Type="int" />
+          <Property Name="PlanFeeAddMember" Type="money" />
+          <Property Name="CommPrimaryMember" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="CommAdditionalMember" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="IsThirdParty" Type="bit" />
+          <Property Name="OrganizationID" Type="int" />
+          <Property Name="OrganizationName" Type="varchar" MaxLength="50" />
+          <Property Name="Features" Type="nvarchar(max)" />
+          <Property Name="Patient_Features" Type="nvarchar(max)" />
+          <Property Name="IsDelete" Type="bit" />
+          <Property Name="UnSubscribedDate" Type="date" />
+          <Property Name="PatientTAndCPath" Type="nvarchar(max)" />
+          <Property Name="OrganizationTAndCPath" Type="nvarchar(max)" />
+          <Property Name="ProviderTAndCPath" Type="nvarchar(max)" />
+          <Property Name="CommPPCP" Type="decimal" Precision="18" Scale="2" />
+        </EntityType>
+        <EntityType Name="PlansMapping">
+          <Key>
+            <PropertyRef Name="PlanMapID" />
+          </Key>
+          <Property Name="PlanMapID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="PlanID" Type="int" Nullable="false" />
+          <Property Name="PlanName" Type="varchar" MaxLength="50" />
+          <Property Name="ProviderID" Type="int" />
+          <Property Name="ProviderName" Type="varchar" MaxLength="50" />
+          <Property Name="OrganizationID" Type="int" Nullable="false" />
+          <Property Name="Organizationname" Type="varchar" MaxLength="50" />
+          <Property Name="IsActive" Type="bit" />
+          <Property Name="PlanStartDate" Type="date" />
+          <Property Name="CreatedDate" Type="datetime" />
+          <Property Name="ModifiedDate" Type="datetime" />
+          <Property Name="IsDelete" Type="bit" />
+        </EntityType>
+        <EntityType Name="PlansPriceDetails">
+          <Key>
+            <PropertyRef Name="PriceDetailsID" />
+          </Key>
+          <Property Name="PriceDetailsID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="PlanID" Type="int" Nullable="false" />
+          <Property Name="Planname" Type="int" Nullable="false" />
+          <Property Name="PlanMappingID" Type="int" Nullable="false" />
+          <Property Name="CreatedBy" Type="int" />
+          <Property Name="CreatedDate" Type="date" />
+          <Property Name="ModifiedBy" Type="int" />
+          <Property Name="Modifieddate" Type="date" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'Dev_PPCP.dbo.PPCP_CODE_LKP' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="PPCP_CODE_LKP">
+          <Key>
+            <PropertyRef Name="PPCP_CODE_ID" />
+            <PropertyRef Name="SNO" />
+            <PropertyRef Name="FROM_DATE" />
+            <PropertyRef Name="DESCRIPTION" />
+            <PropertyRef Name="CODE_TYPE_ID" />
+          </Key>
+          <Property Name="PPCP_CODE_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="PREFIX" Type="nvarchar" MaxLength="10" />
+          <Property Name="SNO" Type="int" Nullable="false" />
+          <Property Name="SUFFIX" Type="nvarchar" MaxLength="10" />
+          <Property Name="SNO_PADDING" Type="int" />
+          <Property Name="FROM_DATE" Type="datetime" Nullable="false" />
+          <Property Name="TO_DATE" Type="datetime" />
+          <Property Name="DESCRIPTION" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="CODE_TYPE_ID" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Provider">
+          <Key>
+            <PropertyRef Name="ProviderID" />
+          </Key>
+          <Property Name="ProviderID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="OrganizationID" Type="int" />
+          <Property Name="OrganizationName" Type="varchar" MaxLength="150" />
+          <Property Name="NPI" Type="nvarchar" MaxLength="20" />
+          <Property Name="FirstName" Type="varchar" MaxLength="50" />
+          <Property Name="LastName" Type="varchar" MaxLength="50" />
+          <Property Name="Salutation" Type="varchar" MaxLength="10" />
+          <Property Name="DOB" Type="date" />
+          <Property Name="Gender" Type="nchar" MaxLength="1" />
+          <Property Name="Email" Type="varchar" MaxLength="50" />
+          <Property Name="CountryCode" Type="varchar" MaxLength="2" />
+          <Property Name="MobileNumber" Type="varchar" MaxLength="15" />
+          <Property Name="CountryID" Type="int" />
+          <Property Name="CountryName" Type="varchar" MaxLength="50" />
+          <Property Name="StateID" Type="int" />
+          <Property Name="StateName" Type="varchar" MaxLength="50" />
+          <Property Name="CityID" Type="int" />
+          <Property Name="CityName" Type="varchar" MaxLength="50" />
+          <Property Name="Address" Type="varchar" MaxLength="150" />
+          <Property Name="Zip" Type="varchar" MaxLength="15" />
+          <Property Name="IsActive" Type="bit" />
+          <Property Name="CreatedBy" Type="int" />
+          <Property Name="CreatedDate" Type="date" />
+          <Property Name="ModifiedBy" Type="int" />
+          <Property Name="ModifiedDate" Type="date" />
+          <Property Name="IsTwofactorAuthentication" Type="bit" />
+          <Property Name="PreferredIP" Type="nvarchar" MaxLength="50" />
+          <Property Name="TwoFactorType" Type="int" />
+          <Property Name="IS_TERMS_ACCECPTED" Type="bit" />
+          <Property Name="Tax_No" Type="nvarchar" MaxLength="20" />
+          <Property Name="No_of_Patients_Accepting" Type="int" />
+          <Property Name="Specialization" Type="nvarchar(max)" />
+          <Property Name="SpecializationName" Type="nvarchar(max)" />
+          <Property Name="SpecializationID" Type="nvarchar" MaxLength="50" />
+          <Property Name="Fax" Type="nvarchar" MaxLength="10" />
+          <Property Name="Degree" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="ProviderCredentials">
+          <Key>
+            <PropertyRef Name="CredentialID" />
+          </Key>
+          <Property Name="CredentialID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ProviderID" Type="int" />
+          <Property Name="UserName" Type="varchar" MaxLength="25" />
+          <Property Name="Userpassword" Type="nvarchar" MaxLength="25" />
+          <Property Name="UserStatus" Type="char" MaxLength="1" />
+          <Property Name="WrongLoginCount" Type="int" />
+          <Property Name="PasswordExpiryDate" Type="date" />
+          <Property Name="UserNameExpiryDate" Type="date" />
+          <Property Name="IsTermsAccepted" Type="bit" />
+          <Property Name="CreatedBy" Type="int" />
+          <Property Name="CreatedDate" Type="date" />
+          <Property Name="ModifiedBy" Type="int" />
+          <Property Name="ModifiedDate" Type="date" />
+        </EntityType>
+        <EntityType Name="ProviderSpecialization">
+          <Key>
+            <PropertyRef Name="ProviderSpecializationID" />
+          </Key>
+          <Property Name="ProviderSpecializationID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ProviderID" Type="int" />
+          <Property Name="SpecializationID" Type="int" />
+          <Property Name="IsDelete" Type="bit" />
+        </EntityType>
+        <EntityType Name="RelationshipLkp">
+          <Key>
+            <PropertyRef Name="RelationshipID" />
+          </Key>
+          <Property Name="RelationshipID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Code" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="RelationshipName" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Desciption" Type="varchar" MaxLength="100" />
+          <Property Name="DisplayOrder" Type="int" />
+          <Property Name="IsDeleted" Type="bit" />
+          <Property Name="Gender" Type="nvarchar" MaxLength="2" />
+        </EntityType>
+        <EntityType Name="RolesLKP">
+          <Key>
+            <PropertyRef Name="RoleID" />
+          </Key>
+          <Property Name="RoleID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="RoleName" Type="varchar" MaxLength="50" />
+          <Property Name="OrganizationID" Type="int" />
+        </EntityType>
+        <EntityType Name="SpecializationLKP">
+          <Key>
+            <PropertyRef Name="SpecializationID" />
+          </Key>
+          <Property Name="SpecializationID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="SpecializationName" Type="varchar" MaxLength="50" />
+          <Property Name="IsDelete" Type="bit" />
+        </EntityType>
+        <EntityType Name="StatesLKP">
+          <Key>
+            <PropertyRef Name="StateID" />
+          </Key>
+          <Property Name="StateID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="StateName" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="StateCode" Type="varchar" MaxLength="5" Nullable="false" />
+          <Property Name="CountryID" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="sysdiagrams">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="principal_id" Type="int" Nullable="false" />
+          <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="version" Type="int" />
+          <Property Name="definition" Type="varbinary(max)" />
+        </EntityType>
+        <EntityType Name="TermsAndConditions">
+          <Key>
+            <PropertyRef Name="TermsAndConditionsID" />
+          </Key>
+          <Property Name="TermsAndConditionsID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="TermsAndConditionsName" Type="nvarchar" MaxLength="150" />
+          <Property Name="TempletPath" Type="nvarchar(max)" />
+          <Property Name="CreatedDate" Type="datetime" />
+          <Property Name="ExpiryDate" Type="datetime" />
+          <Property Name="IsActive" Type="bit" />
+          <Property Name="Type" Type="int" />
+        </EntityType>
+        <EntityType Name="TimeZonesLKP">
+          <Key>
+            <PropertyRef Name="TimeZoneID" />
+          </Key>
+          <Property Name="TimeZoneID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="TimeZoneName" Type="varchar" MaxLength="40" Nullable="false" />
+          <Property Name="TimeZoneOffset" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="IsDayLightSaving" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="TransactionstoPractice">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="MemberID" Type="int" />
+          <Property Name="MemberName" Type="nvarchar" MaxLength="100" />
+          <Property Name="DOB" Type="datetime" />
+          <Property Name="PlanName" Type="nvarchar" MaxLength="100" />
+          <Property Name="DoctorName" Type="nvarchar" MaxLength="100" />
+          <Property Name="AmountPaid" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="PaymentDate" Type="datetime" />
+          <Property Name="OrganizationID" Type="int" />
+          <Property Name="OrganizationName" Type="nvarchar" MaxLength="150" />
+          <Property Name="MemberPlanID" Type="int" />
+        </EntityType>
+        <EntityType Name="UserCredentials">
+          <Key>
+            <PropertyRef Name="CredentialID" />
+          </Key>
+          <Property Name="CredentialID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserID" Type="int" Nullable="false" />
+          <Property Name="UserName" Type="varchar" MaxLength="25" Nullable="false" />
+          <Property Name="Userpassword" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="UserStatus" Type="char" MaxLength="1" Nullable="false" />
+          <Property Name="WrongLoginCount" Type="int" />
+          <Property Name="PasswordExpiryDate" Type="date" />
+          <Property Name="UserNameExpiryDate" Type="date" />
+          <Property Name="IsTermsAccepted" Type="bit" />
+          <Property Name="CreatedBy" Type="int" />
+          <Property Name="CreatedDate" Type="date" />
+          <Property Name="ModifiedBy" Type="int" />
+          <Property Name="ModifiedDate" Type="date" />
+        </EntityType>
+        <Association Name="FK_FamilyMember_Member">
+          <End Role="Member" Type="Self.Member" Multiplicity="1" />
+          <End Role="FamilyMember" Type="Self.FamilyMember" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Member">
+              <PropertyRef Name="MemberID" />
+            </Principal>
+            <Dependent Role="FamilyMember">
+              <PropertyRef Name="ParentID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_MemberCredentials_Member">
+          <End Role="Member" Type="Self.Member" Multiplicity="1" />
+          <End Role="MemberCredentials" Type="Self.MemberCredentials" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Member">
+              <PropertyRef Name="MemberID" />
+            </Principal>
+            <Dependent Role="MemberCredentials">
+              <PropertyRef Name="MemberID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_MemberPlanInstallmentMapping_MemberPlans">
+          <End Role="MemberPlans" Type="Self.MemberPlans" Multiplicity="0..1" />
+          <End Role="MemberPlanInstallmentMapping" Type="Self.MemberPlanInstallmentMapping" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="MemberPlans">
+              <PropertyRef Name="MemberPlanID" />
+            </Principal>
+            <Dependent Role="MemberPlanInstallmentMapping">
+              <PropertyRef Name="MemberPlanID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_MemberPlans_Member">
+          <End Role="Member" Type="Self.Member" Multiplicity="1" />
+          <End Role="MemberPlans" Type="Self.MemberPlans" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Member">
+              <PropertyRef Name="MemberID" />
+            </Principal>
+            <Dependent Role="MemberPlans">
+              <PropertyRef Name="MemberID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_OrganizationPlans_Organizations">
+          <End Role="Organizations" Type="Self.Organizations" Multiplicity="1" />
+          <End Role="OrganizationPlans" Type="Self.OrganizationPlans" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Organizations">
+              <PropertyRef Name="OrganizationID" />
+            </Principal>
+            <Dependent Role="OrganizationPlans">
+              <PropertyRef Name="OrganizationID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_OrganizationPlans_Plans1">
+          <End Role="Plans" Type="Self.Plans" Multiplicity="1" />
+          <End Role="OrganizationPlans" Type="Self.OrganizationPlans" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Plans">
+              <PropertyRef Name="PlanID" />
+            </Principal>
+            <Dependent Role="OrganizationPlans">
+              <PropertyRef Name="PlanID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_OrganizationUsers_Organizations">
+          <End Role="Organizations" Type="Self.Organizations" Multiplicity="1" />
+          <End Role="OrganizationUsers" Type="Self.OrganizationUsers" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Organizations">
+              <PropertyRef Name="OrganizationID" />
+            </Principal>
+            <Dependent Role="OrganizationUsers">
+              <PropertyRef Name="OrganizationID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PaymentDetails_Member">
+          <End Role="Member" Type="Self.Member" Multiplicity="0..1" />
+          <End Role="PaymentDetails" Type="Self.PaymentDetails" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Member">
+              <PropertyRef Name="MemberID" />
+            </Principal>
+            <Dependent Role="PaymentDetails">
+              <PropertyRef Name="MemberID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PlansMapping_Organizations">
+          <End Role="Organizations" Type="Self.Organizations" Multiplicity="1" />
+          <End Role="PlansMapping" Type="Self.PlansMapping" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Organizations">
+              <PropertyRef Name="OrganizationID" />
+            </Principal>
+            <Dependent Role="PlansMapping">
+              <PropertyRef Name="OrganizationID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PlansMapping_Plans1">
+          <End Role="Plans" Type="Self.Plans" Multiplicity="1" />
+          <End Role="PlansMapping" Type="Self.PlansMapping" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Plans">
+              <PropertyRef Name="PlanID" />
+            </Principal>
+            <Dependent Role="PlansMapping">
+              <PropertyRef Name="PlanID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ProviderCredentials_Provider">
+          <End Role="Provider" Type="Self.Provider" Multiplicity="0..1" />
+          <End Role="ProviderCredentials" Type="Self.ProviderCredentials" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Provider">
+              <PropertyRef Name="ProviderID" />
+            </Principal>
+            <Dependent Role="ProviderCredentials">
+              <PropertyRef Name="ProviderID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ProviderSpecialization_Provider">
+          <End Role="Provider" Type="Self.Provider" Multiplicity="0..1" />
+          <End Role="ProviderSpecialization" Type="Self.ProviderSpecialization" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Provider">
+              <PropertyRef Name="ProviderID" />
+            </Principal>
+            <Dependent Role="ProviderSpecialization">
+              <PropertyRef Name="ProviderID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ProviderSpecialization_SpecializationLKP">
+          <End Role="SpecializationLKP" Type="Self.SpecializationLKP" Multiplicity="0..1" />
+          <End Role="ProviderSpecialization" Type="Self.ProviderSpecialization" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SpecializationLKP">
+              <PropertyRef Name="SpecializationID" />
+            </Principal>
+            <Dependent Role="ProviderSpecialization">
+              <PropertyRef Name="SpecializationID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UserCredentials_OrganizationUsers">
+          <End Role="OrganizationUsers" Type="Self.OrganizationUsers" Multiplicity="1" />
+          <End Role="UserCredentials" Type="Self.UserCredentials" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="OrganizationUsers">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="UserCredentials">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="R_4">
+          <End Role="CountriesLKP" Type="Self.CountriesLKP" Multiplicity="1" />
+          <End Role="StatesLKP" Type="Self.StatesLKP" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CountriesLKP">
+              <PropertyRef Name="CountryID" />
+            </Principal>
+            <Dependent Role="StatesLKP">
+              <PropertyRef Name="CountryID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Function Name="Pr_GetOrganizationUsers" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="OrganizationID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="Pr_GetProviders" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="OrganizationID" Type="int" Mode="In" />
+        </Function>
+        <EntityContainer Name="Dev_PPCPModelStoreContainer">
+          <EntitySet Name="CitiesLKP" EntityType="Self.CitiesLKP" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CountriesLKP" EntityType="Self.CountriesLKP" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="FamilyMember" EntityType="Self.FamilyMember" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Member" EntityType="Self.Member" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="MemberCredentials" EntityType="Self.MemberCredentials" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="MemberPlanInstallmentMapping" EntityType="Self.MemberPlanInstallmentMapping" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="MemberPlanMapping" EntityType="Self.MemberPlanMapping" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="MemberPlans" EntityType="Self.MemberPlans" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ModuleUseCases" EntityType="Self.ModuleUseCases" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="OrganizationPlans" EntityType="Self.OrganizationPlans" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Organizations" EntityType="Self.Organizations" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="OrganizationUsers" EntityType="Self.OrganizationUsers" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PaymentDetails" EntityType="Self.PaymentDetails" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Plans" EntityType="Self.Plans" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PlansMapping" EntityType="Self.PlansMapping" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PlansPriceDetails" EntityType="Self.PlansPriceDetails" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Provider" EntityType="Self.Provider" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ProviderCredentials" EntityType="Self.ProviderCredentials" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ProviderSpecialization" EntityType="Self.ProviderSpecialization" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="RelationshipLkp" EntityType="Self.RelationshipLkp" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="RolesLKP" EntityType="Self.RolesLKP" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SpecializationLKP" EntityType="Self.SpecializationLKP" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="StatesLKP" EntityType="Self.StatesLKP" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TermsAndConditions" EntityType="Self.TermsAndConditions" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TimeZonesLKP" EntityType="Self.TimeZonesLKP" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TransactionstoPractice" EntityType="Self.TransactionstoPractice" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="UserCredentials" EntityType="Self.UserCredentials" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Application_Parameter_Config" EntityType="Self.Application_Parameter_Config" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [Application_Parameter_Config].[PARAMETER_ID] AS [PARAMETER_ID], 
+    [Application_Parameter_Config].[PARAMETER_NAME] AS [PARAMETER_NAME], 
+    [Application_Parameter_Config].[PARAMETER_VALUE] AS [PARAMETER_VALUE], 
+    [Application_Parameter_Config].[PARAMETER_DESCRIPTION] AS [PARAMETER_DESCRIPTION], 
+    [Application_Parameter_Config].[IS_ENABLED] AS [IS_ENABLED]
+    FROM [dbo].[Application_Parameter_Config] AS [Application_Parameter_Config]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="PPCP_CODE_LKP" EntityType="Self.PPCP_CODE_LKP" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [PPCP_CODE_LKP].[PPCP_CODE_ID] AS [PPCP_CODE_ID], 
+    [PPCP_CODE_LKP].[PREFIX] AS [PREFIX], 
+    [PPCP_CODE_LKP].[SNO] AS [SNO], 
+    [PPCP_CODE_LKP].[SUFFIX] AS [SUFFIX], 
+    [PPCP_CODE_LKP].[SNO_PADDING] AS [SNO_PADDING], 
+    [PPCP_CODE_LKP].[FROM_DATE] AS [FROM_DATE], 
+    [PPCP_CODE_LKP].[TO_DATE] AS [TO_DATE], 
+    [PPCP_CODE_LKP].[DESCRIPTION] AS [DESCRIPTION], 
+    [PPCP_CODE_LKP].[CODE_TYPE_ID] AS [CODE_TYPE_ID]
+    FROM [dbo].[PPCP_CODE_LKP] AS [PPCP_CODE_LKP]</DefiningQuery>
+          </EntitySet>
+          <AssociationSet Name="FK_FamilyMember_Member" Association="Self.FK_FamilyMember_Member">
+            <End Role="Member" EntitySet="Member" />
+            <End Role="FamilyMember" EntitySet="FamilyMember" />
+          </AssociationSet>
+          <AssociationSet Name="FK_MemberCredentials_Member" Association="Self.FK_MemberCredentials_Member">
+            <End Role="Member" EntitySet="Member" />
+            <End Role="MemberCredentials" EntitySet="MemberCredentials" />
+          </AssociationSet>
+          <AssociationSet Name="FK_MemberPlanInstallmentMapping_MemberPlans" Association="Self.FK_MemberPlanInstallmentMapping_MemberPlans">
+            <End Role="MemberPlans" EntitySet="MemberPlans" />
+            <End Role="MemberPlanInstallmentMapping" EntitySet="MemberPlanInstallmentMapping" />
+          </AssociationSet>
+          <AssociationSet Name="FK_MemberPlans_Member" Association="Self.FK_MemberPlans_Member">
+            <End Role="Member" EntitySet="Member" />
+            <End Role="MemberPlans" EntitySet="MemberPlans" />
+          </AssociationSet>
+          <AssociationSet Name="FK_OrganizationPlans_Organizations" Association="Self.FK_OrganizationPlans_Organizations">
+            <End Role="Organizations" EntitySet="Organizations" />
+            <End Role="OrganizationPlans" EntitySet="OrganizationPlans" />
+          </AssociationSet>
+          <AssociationSet Name="FK_OrganizationPlans_Plans1" Association="Self.FK_OrganizationPlans_Plans1">
+            <End Role="Plans" EntitySet="Plans" />
+            <End Role="OrganizationPlans" EntitySet="OrganizationPlans" />
+          </AssociationSet>
+          <AssociationSet Name="FK_OrganizationUsers_Organizations" Association="Self.FK_OrganizationUsers_Organizations">
+            <End Role="Organizations" EntitySet="Organizations" />
+            <End Role="OrganizationUsers" EntitySet="OrganizationUsers" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PaymentDetails_Member" Association="Self.FK_PaymentDetails_Member">
+            <End Role="Member" EntitySet="Member" />
+            <End Role="PaymentDetails" EntitySet="PaymentDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PlansMapping_Organizations" Association="Self.FK_PlansMapping_Organizations">
+            <End Role="Organizations" EntitySet="Organizations" />
+            <End Role="PlansMapping" EntitySet="PlansMapping" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PlansMapping_Plans1" Association="Self.FK_PlansMapping_Plans1">
+            <End Role="Plans" EntitySet="Plans" />
+            <End Role="PlansMapping" EntitySet="PlansMapping" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ProviderCredentials_Provider" Association="Self.FK_ProviderCredentials_Provider">
+            <End Role="Provider" EntitySet="Provider" />
+            <End Role="ProviderCredentials" EntitySet="ProviderCredentials" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ProviderSpecialization_Provider" Association="Self.FK_ProviderSpecialization_Provider">
+            <End Role="Provider" EntitySet="Provider" />
+            <End Role="ProviderSpecialization" EntitySet="ProviderSpecialization" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ProviderSpecialization_SpecializationLKP" Association="Self.FK_ProviderSpecialization_SpecializationLKP">
+            <End Role="SpecializationLKP" EntitySet="SpecializationLKP" />
+            <End Role="ProviderSpecialization" EntitySet="ProviderSpecialization" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UserCredentials_OrganizationUsers" Association="Self.FK_UserCredentials_OrganizationUsers">
+            <End Role="OrganizationUsers" EntitySet="OrganizationUsers" />
+            <End Role="UserCredentials" EntitySet="UserCredentials" />
+          </AssociationSet>
+          <AssociationSet Name="R_4" Association="Self.R_4">
+            <End Role="CountriesLKP" EntitySet="CountriesLKP" />
+            <End Role="StatesLKP" EntitySet="StatesLKP" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="Dev_PPCPModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="Dev_PPCPEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="CitiesLKPs" EntityType="Dev_PPCPModel.CitiesLKP" />
+          <EntitySet Name="CountriesLKPs" EntityType="Dev_PPCPModel.CountriesLKP" />
+          <EntitySet Name="FamilyMembers" EntityType="Dev_PPCPModel.FamilyMember" />
+          <EntitySet Name="Members" EntityType="Dev_PPCPModel.Member" />
+          <EntitySet Name="MemberCredentials" EntityType="Dev_PPCPModel.MemberCredential" />
+          <EntitySet Name="PlansPriceDetails" EntityType="Dev_PPCPModel.PlansPriceDetail" />
+          <EntitySet Name="ProviderCredentials" EntityType="Dev_PPCPModel.ProviderCredential" />
+          <EntitySet Name="ProviderSpecializations" EntityType="Dev_PPCPModel.ProviderSpecialization" />
+          <EntitySet Name="RelationshipLkps" EntityType="Dev_PPCPModel.RelationshipLkp" />
+          <EntitySet Name="SpecializationLKPs" EntityType="Dev_PPCPModel.SpecializationLKP" />
+          <EntitySet Name="StatesLKPs" EntityType="Dev_PPCPModel.StatesLKP" />
+          <EntitySet Name="sysdiagrams" EntityType="Dev_PPCPModel.sysdiagram" />
+          <EntitySet Name="TimeZonesLKPs" EntityType="Dev_PPCPModel.TimeZonesLKP" />
+          <EntitySet Name="UserCredentials" EntityType="Dev_PPCPModel.UserCredential" />
+          <EntitySet Name="Application_Parameter_Config" EntityType="Dev_PPCPModel.Application_Parameter_Config" />
+          <AssociationSet Name="R_4" Association="Dev_PPCPModel.R_4">
+            <End Role="CountriesLKP" EntitySet="CountriesLKPs" />
+            <End Role="StatesLKP" EntitySet="StatesLKPs" />
+          </AssociationSet>
+          <AssociationSet Name="FK_FamilyMember_Member" Association="Dev_PPCPModel.FK_FamilyMember_Member">
+            <End Role="Member" EntitySet="Members" />
+            <End Role="FamilyMember" EntitySet="FamilyMembers" />
+          </AssociationSet>
+          <AssociationSet Name="FK_MemberCredentials_Member" Association="Dev_PPCPModel.FK_MemberCredentials_Member">
+            <End Role="Member" EntitySet="Members" />
+            <End Role="MemberCredential" EntitySet="MemberCredentials" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ProviderSpecialization_SpecializationLKP" Association="Dev_PPCPModel.FK_ProviderSpecialization_SpecializationLKP">
+            <End Role="SpecializationLKP" EntitySet="SpecializationLKPs" />
+            <End Role="ProviderSpecialization" EntitySet="ProviderSpecializations" />
+          </AssociationSet>
+          <EntitySet Name="OrganizationPlans" EntityType="Dev_PPCPModel.OrganizationPlan" />
+          <EntitySet Name="Plans" EntityType="Dev_PPCPModel.Plan" />
+          <AssociationSet Name="FK_OrganizationPlans_Plans1" Association="Dev_PPCPModel.FK_OrganizationPlans_Plans1">
+            <End Role="Plan" EntitySet="Plans" />
+            <End Role="OrganizationPlan" EntitySet="OrganizationPlans" />
+          </AssociationSet>
+          <EntitySet Name="PaymentDetails" EntityType="Dev_PPCPModel.PaymentDetail" />
+          <AssociationSet Name="FK_PaymentDetails_Member" Association="Dev_PPCPModel.FK_PaymentDetails_Member">
+            <End Role="Member" EntitySet="Members" />
+            <End Role="PaymentDetail" EntitySet="PaymentDetails" />
+          </AssociationSet>
+          <EntitySet Name="PlansMappings" EntityType="Dev_PPCPModel.PlansMapping" />
+          <AssociationSet Name="FK_PlansMapping_Plans1" Association="Dev_PPCPModel.FK_PlansMapping_Plans1">
+            <End Role="Plan" EntitySet="Plans" />
+            <End Role="PlansMapping" EntitySet="PlansMappings" />
+          </AssociationSet>
+          <EntitySet Name="TermsAndConditions" EntityType="Dev_PPCPModel.TermsAndCondition" />
+          <EntitySet Name="OrganizationUsers" EntityType="Dev_PPCPModel.OrganizationUser" />
+          <AssociationSet Name="FK_UserCredentials_OrganizationUsers" Association="Dev_PPCPModel.FK_UserCredentials_OrganizationUsers">
+            <End Role="OrganizationUser" EntitySet="OrganizationUsers" />
+            <End Role="UserCredential" EntitySet="UserCredentials" />
+          </AssociationSet>
+          <EntitySet Name="Organizations" EntityType="Dev_PPCPModel.Organization" />
+          <AssociationSet Name="FK_OrganizationPlans_Organizations" Association="Dev_PPCPModel.FK_OrganizationPlans_Organizations">
+            <End Role="Organization" EntitySet="Organizations" />
+            <End Role="OrganizationPlan" EntitySet="OrganizationPlans" />
+          </AssociationSet>
+          <AssociationSet Name="FK_OrganizationUsers_Organizations" Association="Dev_PPCPModel.FK_OrganizationUsers_Organizations">
+            <End Role="Organization" EntitySet="Organizations" />
+            <End Role="OrganizationUser" EntitySet="OrganizationUsers" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PlansMapping_Organizations" Association="Dev_PPCPModel.FK_PlansMapping_Organizations">
+            <End Role="Organization" EntitySet="Organizations" />
+            <End Role="PlansMapping" EntitySet="PlansMappings" />
+          </AssociationSet>
+          <FunctionImport Name="Pr_GetProviders" ReturnType="Collection(Dev_PPCPModel.Pr_GetProviders_Result)">
+          <Parameter Name="OrganizationID" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="Pr_GetOrganizationUsers" ReturnType="Collection(Dev_PPCPModel.Pr_GetOrganizationUsers_Result)">
+          <Parameter Name="OrganizationID" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <EntitySet Name="MemberPlanMappings" EntityType="Dev_PPCPModel.MemberPlanMapping" />
+          <EntitySet Name="MemberPlans" EntityType="Dev_PPCPModel.MemberPlan" />
+          <EntitySet Name="ModuleUseCases" EntityType="Dev_PPCPModel.ModuleUseCas" />
+          <EntitySet Name="RolesLKPs" EntityType="Dev_PPCPModel.RolesLKP" />
+          <AssociationSet Name="FK_MemberPlans_Member" Association="Dev_PPCPModel.FK_MemberPlans_Member">
+            <End Role="Member" EntitySet="Members" />
+            <End Role="MemberPlan" EntitySet="MemberPlans" />
+          </AssociationSet>
+          <EntitySet Name="Providers" EntityType="Dev_PPCPModel.Provider" />
+          <EntitySet Name="PPCP_CODE_LKP" EntityType="Dev_PPCPModel.PPCP_CODE_LKP" />
+          <AssociationSet Name="FK_ProviderCredentials_Provider" Association="Dev_PPCPModel.FK_ProviderCredentials_Provider">
+            <End Role="Provider" EntitySet="Providers" />
+            <End Role="ProviderCredential" EntitySet="ProviderCredentials" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ProviderSpecialization_Provider" Association="Dev_PPCPModel.FK_ProviderSpecialization_Provider">
+            <End Role="Provider" EntitySet="Providers" />
+            <End Role="ProviderSpecialization" EntitySet="ProviderSpecializations" />
+          </AssociationSet>
+          <EntitySet Name="MemberPlanInstallmentMappings" EntityType="Dev_PPCPModel.MemberPlanInstallmentMapping" />
+          <AssociationSet Name="FK_MemberPlanInstallmentMapping_MemberPlans" Association="Dev_PPCPModel.FK_MemberPlanInstallmentMapping_MemberPlans">
+            <End Role="MemberPlan" EntitySet="MemberPlans" />
+            <End Role="MemberPlanInstallmentMapping" EntitySet="MemberPlanInstallmentMappings" />
+          </AssociationSet>
+          <EntitySet Name="TransactionstoPractices" EntityType="Dev_PPCPModel.TransactionstoPractice" />
+          </EntityContainer>
+        <EntityType Name="CitiesLKP">
+          <Key>
+            <PropertyRef Name="CityID" />
+          </Key>
+          <Property Name="CityID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CityName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="CountyID" Type="Int32" />
+          <Property Name="StateID" Type="Int32" Nullable="false" />
+          <Property Name="TimeZoneID" Type="Int32" />
+          <Property Name="IsTownship" Type="Int32" Nullable="false" />
+          <Property Name="ParentTownshipID" Type="Int32" Nullable="false" />
+        </EntityType>
+        <EntityType Name="CountriesLKP">
+          <Key>
+            <PropertyRef Name="CountryID" />
+          </Key>
+          <Property Name="CountryID" Type="Int32" Nullable="false" />
+          <Property Name="CountryName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="StatesLKPs" Relationship="Dev_PPCPModel.R_4" FromRole="CountriesLKP" ToRole="StatesLKP" />
+        </EntityType>
+        <EntityType Name="FamilyMember">
+          <Key>
+            <PropertyRef Name="FamilyMemberID" />
+          </Key>
+          <Property Name="FamilyMemberID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ParentID" Type="Int32" Nullable="false" />
+          <Property Name="RelationshipID" Type="Int32" />
+          <Property Name="RelationshipName" Type="String" MaxLength="25" FixedLength="false" Unicode="false" />
+          <Property Name="MemberCode" Type="String" Nullable="false" MaxLength="25" FixedLength="false" Unicode="false" />
+          <Property Name="FirstName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="LastName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Salutation" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="DOB" Type="DateTime" Precision="0" />
+          <Property Name="Gender" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
+          <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="CountryCode" Type="String" MaxLength="2" FixedLength="false" Unicode="true" />
+          <Property Name="MobileNumber" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
+          <Property Name="CountryID" Type="Int32" />
+          <Property Name="CountryName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="StateID" Type="Int32" />
+          <Property Name="StateName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="CityID" Type="Int32" />
+          <Property Name="CityName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Address" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
+          <Property Name="Zip" Type="String" MaxLength="25" FixedLength="false" Unicode="false" />
+          <Property Name="OrganizationID" Type="Int32" />
+          <Property Name="Organizationname" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="OrganizationType" Type="Int32" />
+          <Property Name="CreatedBy" Type="Int32" />
+          <Property Name="CreatedDate" Type="DateTime" Precision="0" />
+          <Property Name="ModifiedBy" Type="Int32" />
+          <Property Name="ModifiedDate" Type="DateTime" Precision="0" />
+          <Property Name="IsActive" Type="Boolean" />
+          <Property Name="IsTwofactorAuthentication" Type="Boolean" />
+          <Property Name="PreferredIP" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="TwoFactorType" Type="Int32" />
+          <NavigationProperty Name="Member" Relationship="Dev_PPCPModel.FK_FamilyMember_Member" FromRole="FamilyMember" ToRole="Member" />
+        </EntityType>
+        <EntityType Name="Member">
+          <Key>
+            <PropertyRef Name="MemberID" />
+          </Key>
+          <Property Name="MemberID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="MemberParentID" Type="Int32" />
+          <Property Name="MemberCode" Type="String" Nullable="false" MaxLength="25" FixedLength="false" Unicode="false" />
+          <Property Name="RelationshipID" Type="Int32" />
+          <Property Name="RelationshipName" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="FirstName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="LastName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Salutation" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="DOB" Type="DateTime" Precision="0" />
+          <Property Name="Gender" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
+          <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="CountryCode" Type="String" MaxLength="2" FixedLength="false" Unicode="true" />
+          <Property Name="MobileNumber" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
+          <Property Name="CountryID" Type="Int32" />
+          <Property Name="CountryName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="StateID" Type="Int32" />
+          <Property Name="StateName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="CityID" Type="Int32" />
+          <Property Name="CityName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Address" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
+          <Property Name="Zip" Type="String" MaxLength="25" FixedLength="false" Unicode="false" />
+          <Property Name="CreatedBy" Type="Int32" />
+          <Property Name="CreatedDate" Type="DateTime" Precision="0" />
+          <Property Name="ModifiedBy" Type="Int32" />
+          <Property Name="ModifiedDate" Type="DateTime" Precision="0" />
+          <Property Name="IsActive" Type="Boolean" />
+          <Property Name="IsTwofactorAuthentication" Type="Boolean" />
+          <Property Name="PreferredIP" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="TwoFactorType" Type="Int32" />
+          <Property Name="ID" Type="Int32" />
+          <Property Name="Type" Type="Int32" />
+          <NavigationProperty Name="FamilyMembers" Relationship="Dev_PPCPModel.FK_FamilyMember_Member" FromRole="Member" ToRole="FamilyMember" />
+          <NavigationProperty Name="MemberCredentials" Relationship="Dev_PPCPModel.FK_MemberCredentials_Member" FromRole="Member" ToRole="MemberCredential" />
+          <Property Name="StripeCustomerID" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="PaymentDetails" Relationship="Dev_PPCPModel.FK_PaymentDetails_Member" FromRole="Member" ToRole="PaymentDetail" />
+          <Property Name="TandCAcceptedDate" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="MemberPlans" Relationship="Dev_PPCPModel.FK_MemberPlans_Member" FromRole="Member" ToRole="MemberPlan" />
+        </EntityType>
+        <EntityType Name="MemberCredential">
+          <Key>
+            <PropertyRef Name="CredentialID" />
+          </Key>
+          <Property Name="CredentialID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="MemberID" Type="Int32" Nullable="false" />
+          <Property Name="UserName" Type="String" Nullable="false" MaxLength="25" FixedLength="false" Unicode="false" />
+          <Property Name="UserPassword" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="UserStatus" Type="String" Nullable="false" MaxLength="1" FixedLength="true" Unicode="false" />
+          <Property Name="WrongLoginCount" Type="Int32" />
+          <Property Name="PasswordExpiryDate" Type="DateTime" Precision="0" />
+          <Property Name="UserNameExpiryDate" Type="DateTime" Precision="0" />
+          <Property Name="IsTermsAccepted" Type="Boolean" />
+          <Property Name="CreatedBy" Type="Int32" />
+          <Property Name="CreatedDate" Type="DateTime" Precision="0" />
+          <Property Name="ModifiedBy" Type="Int32" />
+          <Property Name="ModifiedDate" Type="DateTime" Precision="0" />
+          <NavigationProperty Name="Member" Relationship="Dev_PPCPModel.FK_MemberCredentials_Member" FromRole="MemberCredential" ToRole="Member" />
+        </EntityType>
+        <EntityType Name="PlansPriceDetail">
+          <Key>
+            <PropertyRef Name="PriceDetailsID" />
+          </Key>
+          <Property Name="PriceDetailsID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="PlanID" Type="Int32" Nullable="false" />
+          <Property Name="Planname" Type="Int32" Nullable="false" />
+          <Property Name="PlanMappingID" Type="Int32" Nullable="false" />
+          <Property Name="CreatedBy" Type="Int32" />
+          <Property Name="CreatedDate" Type="DateTime" Precision="0" />
+          <Property Name="ModifiedBy" Type="Int32" />
+          <Property Name="Modifieddate" Type="DateTime" Precision="0" />
+        </EntityType>
+        <EntityType Name="ProviderCredential">
+          <Key>
+            <PropertyRef Name="CredentialID" />
+          </Key>
+          <Property Name="CredentialID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ProviderID" Type="Int32" />
+          <Property Name="UserName" Type="String" MaxLength="25" FixedLength="false" Unicode="false" />
+          <Property Name="Userpassword" Type="String" MaxLength="25" FixedLength="false" Unicode="true" />
+          <Property Name="UserStatus" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
+          <Property Name="WrongLoginCount" Type="Int32" />
+          <Property Name="PasswordExpiryDate" Type="DateTime" Precision="0" />
+          <Property Name="UserNameExpiryDate" Type="DateTime" Precision="0" />
+          <Property Name="IsTermsAccepted" Type="Boolean" />
+          <Property Name="CreatedBy" Type="Int32" />
+          <Property Name="CreatedDate" Type="DateTime" Precision="0" />
+          <Property Name="ModifiedBy" Type="Int32" />
+          <Property Name="ModifiedDate" Type="DateTime" Precision="0" />
+          <NavigationProperty Name="Provider" Relationship="Dev_PPCPModel.FK_ProviderCredentials_Provider" FromRole="ProviderCredential" ToRole="Provider" />
+        </EntityType>
+        <EntityType Name="ProviderSpecialization">
+          <Key>
+            <PropertyRef Name="ProviderSpecializationID" />
+          </Key>
+          <Property Name="ProviderSpecializationID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ProviderID" Type="Int32" />
+          <Property Name="SpecializationID" Type="Int32" />
+          <Property Name="IsDelete" Type="Boolean" />
+          <NavigationProperty Name="SpecializationLKP" Relationship="Dev_PPCPModel.FK_ProviderSpecialization_SpecializationLKP" FromRole="ProviderSpecialization" ToRole="SpecializationLKP" />
+          <NavigationProperty Name="Provider" Relationship="Dev_PPCPModel.FK_ProviderSpecialization_Provider" FromRole="ProviderSpecialization" ToRole="Provider" />
+        </EntityType>
+        <EntityType Name="RelationshipLkp">
+          <Key>
+            <PropertyRef Name="RelationshipID" />
+          </Key>
+          <Property Name="RelationshipID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Code" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="RelationshipName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Desciption" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="DisplayOrder" Type="Int32" />
+          <Property Name="IsDeleted" Type="Boolean" />
+          <Property Name="Gender" Type="String" MaxLength="2" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="SpecializationLKP">
+          <Key>
+            <PropertyRef Name="SpecializationID" />
+          </Key>
+          <Property Name="SpecializationID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="SpecializationName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="IsDelete" Type="Boolean" />
+          <NavigationProperty Name="ProviderSpecializations" Relationship="Dev_PPCPModel.FK_ProviderSpecialization_SpecializationLKP" FromRole="SpecializationLKP" ToRole="ProviderSpecialization" />
+        </EntityType>
+        <EntityType Name="StatesLKP">
+          <Key>
+            <PropertyRef Name="StateID" />
+          </Key>
+          <Property Name="StateID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="StateName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="StateCode" Type="String" Nullable="false" MaxLength="5" FixedLength="false" Unicode="false" />
+          <Property Name="CountryID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="CountriesLKP" Relationship="Dev_PPCPModel.R_4" FromRole="StatesLKP" ToRole="CountriesLKP" />
+        </EntityType>
+        <EntityType Name="sysdiagram">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="principal_id" Type="Int32" Nullable="false" />
+          <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="version" Type="Int32" />
+          <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+        </EntityType>
+        <EntityType Name="TimeZonesLKP">
+          <Key>
+            <PropertyRef Name="TimeZoneID" />
+          </Key>
+          <Property Name="TimeZoneID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TimeZoneName" Type="String" Nullable="false" MaxLength="40" FixedLength="false" Unicode="false" />
+          <Property Name="TimeZoneOffset" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="IsDayLightSaving" Type="Boolean" Nullable="false" />
+        </EntityType>
+        <EntityType Name="UserCredential">
+          <Key>
+            <PropertyRef Name="CredentialID" />
+          </Key>
+          <Property Name="CredentialID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserID" Type="Int32" Nullable="false" />
+          <Property Name="UserName" Type="String" Nullable="false" MaxLength="25" FixedLength="false" Unicode="false" />
+          <Property Name="Userpassword" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="UserStatus" Type="String" Nullable="false" MaxLength="1" FixedLength="true" Unicode="false" />
+          <Property Name="WrongLoginCount" Type="Int32" />
+          <Property Name="PasswordExpiryDate" Type="DateTime" Precision="0" />
+          <Property Name="UserNameExpiryDate" Type="DateTime" Precision="0" />
+          <Property Name="IsTermsAccepted" Type="Boolean" />
+          <Property Name="CreatedBy" Type="Int32" />
+          <Property Name="CreatedDate" Type="DateTime" Precision="0" />
+          <Property Name="ModifiedBy" Type="Int32" />
+          <Property Name="ModifiedDate" Type="DateTime" Precision="0" />
+          <NavigationProperty Name="OrganizationUser" Relationship="Dev_PPCPModel.FK_UserCredentials_OrganizationUsers" FromRole="UserCredential" ToRole="OrganizationUser" />
+        </EntityType>
+        <EntityType Name="Application_Parameter_Config">
+          <Key>
+            <PropertyRef Name="PARAMETER_ID" />
+          </Key>
+          <Property Name="PARAMETER_ID" Type="Int32" Nullable="false" />
+          <Property Name="PARAMETER_NAME" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="PARAMETER_VALUE" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="PARAMETER_DESCRIPTION" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="IS_ENABLED" Type="Boolean" />
+        </EntityType>
+        <Association Name="R_4">
+          <End Type="Dev_PPCPModel.CountriesLKP" Role="CountriesLKP" Multiplicity="1" />
+          <End Type="Dev_PPCPModel.StatesLKP" Role="StatesLKP" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CountriesLKP">
+              <PropertyRef Name="CountryID" />
+            </Principal>
+            <Dependent Role="StatesLKP">
+              <PropertyRef Name="CountryID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_FamilyMember_Member">
+          <End Type="Dev_PPCPModel.Member" Role="Member" Multiplicity="1" />
+          <End Type="Dev_PPCPModel.FamilyMember" Role="FamilyMember" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Member">
+              <PropertyRef Name="MemberID" />
+            </Principal>
+            <Dependent Role="FamilyMember">
+              <PropertyRef Name="ParentID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_MemberCredentials_Member">
+          <End Type="Dev_PPCPModel.Member" Role="Member" Multiplicity="1" />
+          <End Type="Dev_PPCPModel.MemberCredential" Role="MemberCredential" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Member">
+              <PropertyRef Name="MemberID" />
+            </Principal>
+            <Dependent Role="MemberCredential">
+              <PropertyRef Name="MemberID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ProviderSpecialization_SpecializationLKP">
+          <End Type="Dev_PPCPModel.SpecializationLKP" Role="SpecializationLKP" Multiplicity="0..1" />
+          <End Type="Dev_PPCPModel.ProviderSpecialization" Role="ProviderSpecialization" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SpecializationLKP">
+              <PropertyRef Name="SpecializationID" />
+            </Principal>
+            <Dependent Role="ProviderSpecialization">
+              <PropertyRef Name="SpecializationID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="OrganizationPlan">
+          <Key>
+            <PropertyRef Name="OrganizationPlanID" />
+          </Key>
+          <Property Name="OrganizationPlanID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="PlanID" Type="Int32" Nullable="false" />
+          <Property Name="OrganizationID" Type="Int32" Nullable="false" />
+          <Property Name="PlanstartDate" Type="DateTime" Precision="0" />
+          <Property Name="IsDelete" Type="Boolean" />
+          <NavigationProperty Name="Plan" Relationship="Dev_PPCPModel.FK_OrganizationPlans_Plans1" FromRole="OrganizationPlan" ToRole="Plan" />
+          <Property Name="CreatedDate" Type="DateTime" Precision="3" />
+          <Property Name="ModifiedDate" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="Organization" Relationship="Dev_PPCPModel.FK_OrganizationPlans_Organizations" FromRole="OrganizationPlan" ToRole="Organization" />
+        </EntityType>
+        <EntityType Name="Plan">
+          <Key>
+            <PropertyRef Name="PlanID" />
+          </Key>
+          <Property Name="PlanID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="PlanCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="PlanName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="MonthlyFee" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="PaymentIntervals" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="IsActive" Type="Boolean" />
+          <Property Name="CreatedBy" Type="Int32" />
+          <Property Name="CreatedDate" Type="DateTime" Precision="0" />
+          <Property Name="ModifiedBy" Type="Int32" />
+          <Property Name="ModifiedDate" Type="DateTime" Precision="0" />
+          <Property Name="PlanTermName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="PlanTermMonths" Type="Int32" />
+          <Property Name="VisitFee" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="EnrollFee" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="FromAge" Type="Int32" />
+          <Property Name="ToAge" Type="Int32" />
+          <Property Name="GenderID" Type="Int32" />
+          <Property Name="PlanType" Type="Int32" />
+          <Property Name="PlanStatus" Type="Boolean" />
+          <Property Name="PlanStartDate" Type="DateTime" Precision="0" />
+          <Property Name="PlanEndDate" Type="DateTime" Precision="0" />
+          <Property Name="PlanDescription" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="EffectiveDate" Type="DateTime" Precision="0" />
+          <Property Name="PlanMemberType" Type="Int32" />
+          <Property Name="PlanFeeAddMember" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="CommPrimaryMember" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="CommAdditionalMember" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="IsThirdParty" Type="Boolean" />
+          <Property Name="OrganizationID" Type="Int32" />
+          <Property Name="OrganizationName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Features" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Patient_Features" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="IsDelete" Type="Boolean" />
+          <Property Name="UnSubscribedDate" Type="DateTime" Precision="0" />
+          <NavigationProperty Name="OrganizationPlans" Relationship="Dev_PPCPModel.FK_OrganizationPlans_Plans1" FromRole="Plan" ToRole="OrganizationPlan" />
+          <Property Name="PatientTAndCPath" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="OrganizationTAndCPath" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ProviderTAndCPath" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="PlansMappings" Relationship="Dev_PPCPModel.FK_PlansMapping_Plans1" FromRole="Plan" ToRole="PlansMapping" />
+          <Property Name="CommPPCP" Type="Decimal" Precision="18" Scale="2" />
+        </EntityType>
+        <Association Name="FK_OrganizationPlans_Plans1">
+          <End Type="Dev_PPCPModel.Plan" Role="Plan" Multiplicity="1" />
+          <End Type="Dev_PPCPModel.OrganizationPlan" Role="OrganizationPlan" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Plan">
+              <PropertyRef Name="PlanID" />
+            </Principal>
+            <Dependent Role="OrganizationPlan">
+              <PropertyRef Name="PlanID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="PaymentDetail">
+          <Key>
+            <PropertyRef Name="PaymentDetailsID" />
+          </Key>
+          <Property Name="PaymentDetailsID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="MemberPlanID" Type="Int32" />
+          <Property Name="MemberID" Type="Int32" />
+          <Property Name="MemberParentID" Type="Int32" />
+          <Property Name="Membername" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="PlanID" Type="Int32" />
+          <Property Name="PlanName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="TransactionID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="CreatedBy" Type="Int32" />
+          <Property Name="CreatedDate" Type="DateTime" Precision="3" />
+          <Property Name="ModifiedBy" Type="Int32" />
+          <Property Name="ModifiedDate" Type="DateTime" Precision="3" />
+          <Property Name="PaidAmount" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="NetAmount" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="TransactionFee" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="Plan_Code" Type="Int32" />
+          <Property Name="DueAmount" Type="Decimal" Precision="18" Scale="2" />
+          <NavigationProperty Name="Member" Relationship="Dev_PPCPModel.FK_PaymentDetails_Member" FromRole="PaymentDetail" ToRole="Member" />
+        </EntityType>
+        <Association Name="FK_PaymentDetails_Member">
+          <End Type="Dev_PPCPModel.Member" Role="Member" Multiplicity="0..1" />
+          <End Type="Dev_PPCPModel.PaymentDetail" Role="PaymentDetail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Member">
+              <PropertyRef Name="MemberID" />
+            </Principal>
+            <Dependent Role="PaymentDetail">
+              <PropertyRef Name="MemberID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="PlansMapping">
+          <Key>
+            <PropertyRef Name="PlanMapID" />
+          </Key>
+          <Property Name="PlanMapID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="PlanID" Type="Int32" Nullable="false" />
+          <Property Name="PlanName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ProviderID" Type="Int32" />
+          <Property Name="ProviderName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="OrganizationID" Type="Int32" Nullable="false" />
+          <Property Name="Organizationname" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="IsActive" Type="Boolean" />
+          <Property Name="PlanStartDate" Type="DateTime" Precision="0" />
+          <NavigationProperty Name="Plan" Relationship="Dev_PPCPModel.FK_PlansMapping_Plans1" FromRole="PlansMapping" ToRole="Plan" />
+          <Property Name="CreatedDate" Type="DateTime" Precision="3" />
+          <Property Name="ModifiedDate" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="Organization" Relationship="Dev_PPCPModel.FK_PlansMapping_Organizations" FromRole="PlansMapping" ToRole="Organization" />
+          <Property Name="IsDelete" Type="Boolean" />
+        </EntityType>
+        <Association Name="FK_PlansMapping_Plans1">
+          <End Type="Dev_PPCPModel.Plan" Role="Plan" Multiplicity="1" />
+          <End Type="Dev_PPCPModel.PlansMapping" Role="PlansMapping" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Plan">
+              <PropertyRef Name="PlanID" />
+            </Principal>
+            <Dependent Role="PlansMapping">
+              <PropertyRef Name="PlanID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="TermsAndCondition">
+          <Key>
+            <PropertyRef Name="TermsAndConditionsID" />
+          </Key>
+          <Property Name="TermsAndConditionsID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TermsAndConditionsName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="TempletPath" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="CreatedDate" Type="DateTime" Precision="3" />
+          <Property Name="ExpiryDate" Type="DateTime" Precision="3" />
+          <Property Name="IsActive" Type="Boolean" />
+          <Property Name="Type" Type="Int32" />
+        </EntityType>
+        <EntityType Name="OrganizationUser">
+          <Key>
+            <PropertyRef Name="UserID" />
+          </Key>
+          <Property Name="UserID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="OrganizationID" Type="Int32" Nullable="false" />
+          <Property Name="OrganizationName" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
+          <Property Name="FirstName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="LastName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Salutation" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="DOB" Type="DateTime" Precision="0" />
+          <Property Name="Gender" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
+          <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="CountryCode" Type="String" MaxLength="2" FixedLength="false" Unicode="false" />
+          <Property Name="MobileNumber" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
+          <Property Name="CountryID" Type="Int32" Nullable="false" />
+          <Property Name="CountryName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="StateID" Type="Int32" />
+          <Property Name="StateName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="CityID" Type="Int32" />
+          <Property Name="CityName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Address" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
+          <Property Name="Zip" Type="String" MaxLength="25" FixedLength="false" Unicode="false" />
+          <Property Name="IsActive" Type="Boolean" />
+          <Property Name="CreatedBy" Type="Int32" />
+          <Property Name="CreatedDate" Type="DateTime" Precision="0" />
+          <Property Name="ModifiedBy" Type="Int32" />
+          <Property Name="ModifiedDate" Type="DateTime" Precision="0" />
+          <Property Name="Type" Type="Int32" />
+          <Property Name="IsTwofactorAuthentication" Type="Boolean" />
+          <Property Name="PreferredIP" Type="String" MaxLength="40" FixedLength="false" Unicode="true" />
+          <Property Name="TwoFactorType" Type="Int32" />
+          <Property Name="TandCAcceptedDate" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="UserCredentials" Relationship="Dev_PPCPModel.FK_UserCredentials_OrganizationUsers" FromRole="OrganizationUser" ToRole="UserCredential" />
+          <NavigationProperty Name="Organization" Relationship="Dev_PPCPModel.FK_OrganizationUsers_Organizations" FromRole="OrganizationUser" ToRole="Organization" />
+          <Property Name="SSN" Type="String" MaxLength="4" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <Association Name="FK_UserCredentials_OrganizationUsers">
+          <End Type="Dev_PPCPModel.OrganizationUser" Role="OrganizationUser" Multiplicity="1" />
+          <End Type="Dev_PPCPModel.UserCredential" Role="UserCredential" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="OrganizationUser">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="UserCredential">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="Organization">
+          <Key>
+            <PropertyRef Name="OrganizationID" />
+          </Key>
+          <Property Name="OrganizationID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="OrganizationName" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="ParentOrganizationID" Type="Int32" />
+          <Property Name="TaxID" Type="String" MaxLength="15" FixedLength="false" Unicode="true" />
+          <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CountryCode" Type="String" MaxLength="2" FixedLength="false" Unicode="true" />
+          <Property Name="MobileNumber" Type="String" MaxLength="15" FixedLength="false" Unicode="true" />
+          <Property Name="CountryID" Type="Int32" />
+          <Property Name="CountryName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="StateID" Type="Int32" />
+          <Property Name="StateName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="CityID" Type="Int32" />
+          <Property Name="CityName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Address" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
+          <Property Name="Zip" Type="String" MaxLength="25" FixedLength="false" Unicode="false" />
+          <Property Name="Type" Type="Int32" />
+          <Property Name="IsActive" Type="Boolean" />
+          <Property Name="CreatedBy" Type="Int32" />
+          <Property Name="CreatedDate" Type="DateTime" Precision="0" />
+          <Property Name="ModifiedBy" Type="Int32" />
+          <Property Name="ModifiedDate" Type="DateTime" Precision="0" />
+          <Property Name="AccountID" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="TandCAcceptedDate" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="OrganizationPlans" Relationship="Dev_PPCPModel.FK_OrganizationPlans_Organizations" FromRole="Organization" ToRole="OrganizationPlan" />
+          <NavigationProperty Name="OrganizationUsers" Relationship="Dev_PPCPModel.FK_OrganizationUsers_Organizations" FromRole="Organization" ToRole="OrganizationUser" />
+          <NavigationProperty Name="PlansMappings" Relationship="Dev_PPCPModel.FK_PlansMapping_Organizations" FromRole="Organization" ToRole="PlansMapping" />
+        </EntityType>
+        <Association Name="FK_OrganizationPlans_Organizations">
+          <End Type="Dev_PPCPModel.Organization" Role="Organization" Multiplicity="1" />
+          <End Type="Dev_PPCPModel.OrganizationPlan" Role="OrganizationPlan" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Organization">
+              <PropertyRef Name="OrganizationID" />
+            </Principal>
+            <Dependent Role="OrganizationPlan">
+              <PropertyRef Name="OrganizationID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_OrganizationUsers_Organizations">
+          <End Type="Dev_PPCPModel.Organization" Role="Organization" Multiplicity="1" />
+          <End Type="Dev_PPCPModel.OrganizationUser" Role="OrganizationUser" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Organization">
+              <PropertyRef Name="OrganizationID" />
+            </Principal>
+            <Dependent Role="OrganizationUser">
+              <PropertyRef Name="OrganizationID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PlansMapping_Organizations">
+          <End Type="Dev_PPCPModel.Organization" Role="Organization" Multiplicity="1" />
+          <End Type="Dev_PPCPModel.PlansMapping" Role="PlansMapping" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Organization">
+              <PropertyRef Name="OrganizationID" />
+            </Principal>
+            <Dependent Role="PlansMapping">
+              <PropertyRef Name="OrganizationID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <ComplexType Name="Pr_GetProviders_Result">
+          <Property Type="Int32" Name="ProviderID" Nullable="false" />
+          <Property Type="String" Name="ProviderName" Nullable="true" MaxLength="101" />
+          <Property Type="Int32" Name="UserID" Nullable="false" />
+          <Property Type="Int32" Name="OrganizationID" Nullable="false" />
+          <Property Type="String" Name="OrganizationName" Nullable="true" MaxLength="150" />
+          <Property Type="String" Name="FirstName" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="LastName" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Salutation" Nullable="true" MaxLength="10" />
+          <Property Type="DateTime" Name="DOB" Nullable="true" />
+          <Property Type="String" Name="Gender" Nullable="true" MaxLength="1" />
+          <Property Type="String" Name="Email" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="CountryCode" Nullable="true" MaxLength="2" />
+          <Property Type="String" Name="MobileNumber" Nullable="true" MaxLength="15" />
+          <Property Type="Int32" Name="CountryID" Nullable="false" />
+          <Property Type="String" Name="CountryName" Nullable="true" MaxLength="50" />
+          <Property Type="Int32" Name="StateID" Nullable="true" />
+          <Property Type="String" Name="StateName" Nullable="true" MaxLength="50" />
+          <Property Type="Int32" Name="CityID" Nullable="true" />
+          <Property Type="String" Name="CityName" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Address" Nullable="true" MaxLength="150" />
+          <Property Type="String" Name="Zip" Nullable="true" MaxLength="25" />
+          <Property Type="Boolean" Name="IsActive" Nullable="true" />
+          <Property Type="Int32" Name="CreatedBy" Nullable="true" />
+          <Property Type="DateTime" Name="CreatedDate" Nullable="true" />
+          <Property Type="Int32" Name="ModifiedBy" Nullable="true" />
+          <Property Type="DateTime" Name="ModifiedDate" Nullable="true" />
+          <Property Type="Int32" Name="Type" Nullable="true" />
+          <Property Type="Boolean" Name="IsTwofactorAuthentication" Nullable="true" />
+          <Property Type="String" Name="PreferredIP" Nullable="true" MaxLength="40" />
+          <Property Type="Int32" Name="TwoFactorType" Nullable="true" />
+          <Property Type="DateTime" Name="TandCAcceptedDate" Nullable="true" Precision="23" />
+        </ComplexType>
+        <ComplexType Name="Pr_GetOrganizationUsers_Result">
+          <Property Type="Int32" Name="OrganizationID" Nullable="false" />
+          <Property Type="String" Name="OrganizationName" Nullable="true" MaxLength="100" />
+          <Property Type="Int32" Name="ParentOrganizationID" Nullable="true" />
+          <Property Type="String" Name="TaxID" Nullable="true" MaxLength="15" />
+          <Property Type="String" Name="Email" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="CountryCode" Nullable="true" MaxLength="2" />
+          <Property Type="String" Name="MobileNumber" Nullable="true" MaxLength="15" />
+          <Property Type="Int32" Name="CountryID" Nullable="true" />
+          <Property Type="String" Name="CountryName" Nullable="true" MaxLength="50" />
+          <Property Type="Int32" Name="StateID" Nullable="true" />
+          <Property Type="String" Name="StateName" Nullable="true" MaxLength="50" />
+          <Property Type="Int32" Name="CityID" Nullable="true" />
+          <Property Type="String" Name="CityName" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Address" Nullable="true" MaxLength="150" />
+          <Property Type="String" Name="Zip" Nullable="true" MaxLength="25" />
+          <Property Type="Int32" Name="Type" Nullable="true" />
+          <Property Type="Boolean" Name="IsActive" Nullable="true" />
+          <Property Type="Int32" Name="CreatedBy" Nullable="true" />
+          <Property Type="DateTime" Name="CreatedDate" Nullable="true" />
+          <Property Type="Int32" Name="ModifiedBy" Nullable="true" />
+          <Property Type="DateTime" Name="ModifiedDate" Nullable="true" />
+          <Property Type="String" Name="AccountID" Nullable="true" MaxLength="50" />
+          <Property Type="DateTime" Name="TandCAcceptedDate" Nullable="true" Precision="23" />
+          <Property Type="Int32" Name="UserID" Nullable="false" />
+          <Property Type="Int32" Name="OrganizationID1" Nullable="false" />
+          <Property Type="String" Name="OrganizationName1" Nullable="true" MaxLength="150" />
+          <Property Type="String" Name="FirstName" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="LastName" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Salutation" Nullable="true" MaxLength="10" />
+          <Property Type="DateTime" Name="DOB" Nullable="true" />
+          <Property Type="String" Name="Gender" Nullable="true" MaxLength="1" />
+          <Property Type="String" Name="Email1" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="CountryCode1" Nullable="true" MaxLength="2" />
+          <Property Type="String" Name="MobileNumber1" Nullable="true" MaxLength="15" />
+          <Property Type="Int32" Name="CountryID1" Nullable="false" />
+          <Property Type="String" Name="CountryName1" Nullable="true" MaxLength="50" />
+          <Property Type="Int32" Name="StateID1" Nullable="true" />
+          <Property Type="String" Name="StateName1" Nullable="true" MaxLength="50" />
+          <Property Type="Int32" Name="CityID1" Nullable="true" />
+          <Property Type="String" Name="CityName1" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Address1" Nullable="true" MaxLength="150" />
+          <Property Type="String" Name="Zip1" Nullable="true" MaxLength="25" />
+          <Property Type="Boolean" Name="IsActive1" Nullable="true" />
+          <Property Type="Int32" Name="CreatedBy1" Nullable="true" />
+          <Property Type="DateTime" Name="CreatedDate1" Nullable="true" />
+          <Property Type="Int32" Name="ModifiedBy1" Nullable="true" />
+          <Property Type="DateTime" Name="ModifiedDate1" Nullable="true" />
+          <Property Type="Int32" Name="Type1" Nullable="true" />
+          <Property Type="Boolean" Name="IsTwofactorAuthentication" Nullable="true" />
+          <Property Type="String" Name="PreferredIP" Nullable="true" MaxLength="40" />
+          <Property Type="Int32" Name="TwoFactorType" Nullable="true" />
+          <Property Type="DateTime" Name="TandCAcceptedDate1" Nullable="true" Precision="23" />
+          <Property Type="String" Name="OrgEmail" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="OrgCountryCode" Nullable="true" MaxLength="2" />
+          <Property Type="String" Name="OrgMobileNumber" Nullable="true" MaxLength="15" />
+          <Property Type="Int32" Name="OrgCountryID" Nullable="true" />
+          <Property Type="String" Name="OrgCountryName" Nullable="true" MaxLength="50" />
+          <Property Type="Int32" Name="OrgStateID" Nullable="true" />
+          <Property Type="String" Name="OrgStateName" Nullable="true" MaxLength="50" />
+          <Property Type="Int32" Name="OrgCityID" Nullable="true" />
+          <Property Type="String" Name="OrgCityName" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="OrgAddress" Nullable="true" MaxLength="150" />
+          <Property Type="String" Name="OrgZip" Nullable="true" MaxLength="25" />
+          <Property Type="String" Name="UserEmail" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="UserCountryCode" Nullable="true" MaxLength="2" />
+          <Property Type="String" Name="UserMobileNumber" Nullable="true" MaxLength="15" />
+          <Property Type="Int32" Name="UserCountryID" Nullable="false" />
+          <Property Type="String" Name="UserCountryName" Nullable="true" MaxLength="50" />
+          <Property Type="Int32" Name="UserStateID" Nullable="true" />
+          <Property Type="String" Name="UserStateName" Nullable="true" MaxLength="50" />
+          <Property Type="Int32" Name="UserCityID" Nullable="true" />
+          <Property Type="String" Name="UserCityName" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="UserAddress" Nullable="true" MaxLength="150" />
+          <Property Type="String" Name="UserZip" Nullable="true" MaxLength="25" />
+        </ComplexType>
+        <EntityType Name="MemberPlanMapping">
+          <Key>
+            <PropertyRef Name="MemberPlanMapID" />
+          </Key>
+          <Property Name="MemberPlanMapID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="MemberPlanID" Type="Int32" />
+          <Property Name="MemberParentID" Type="Int32" />
+          <Property Name="MemberID" Type="Int32" />
+          <Property Name="MemberName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="PlanID" Type="Int32" />
+          <Property Name="PlanName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="IsDeleted" Type="Boolean" />
+        </EntityType>
+        <EntityType Name="MemberPlan">
+          <Key>
+            <PropertyRef Name="MemberPlanID" />
+          </Key>
+          <Property Name="MemberPlanID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="MemberID" Type="Int32" Nullable="false" />
+          <Property Name="MemberParentID" Type="Int32" />
+          <Property Name="MemberName" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="PlanID" Type="Int32" Nullable="false" />
+          <Property Name="PlanName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="OrganizationID" Type="Int32" />
+          <Property Name="OrganizationName" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
+          <Property Name="ProviderID" Type="Int32" />
+          <Property Name="ProviderName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Status" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="PlanStartDate" Type="DateTime" Precision="0" />
+          <Property Name="PlanEndDate" Type="DateTime" Precision="0" />
+          <Property Name="TotalAmount" Type="Decimal" Precision="18" Scale="0" />
+          <Property Name="AmountPaid" Type="Decimal" Precision="18" Scale="0" />
+          <Property Name="DueAmount" Type="Decimal" Precision="18" Scale="0" />
+          <Property Name="Discount" Type="Decimal" Precision="18" Scale="0" />
+          <Property Name="PaymentInterval" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
+          <Property Name="Duration" Type="String" MaxLength="25" FixedLength="false" Unicode="true" />
+          <Property Name="CreatedBy" Type="Int32" />
+          <Property Name="CreatedDate" Type="DateTime" Precision="3" />
+          <Property Name="ModifiedBy" Type="Int32" />
+          <Property Name="ModifiedDate" Type="DateTime" Precision="3" />
+          <Property Name="Plan_Code" Type="Int32" />
+          <Property Name="PlanType" Type="Int32" />
+          <NavigationProperty Name="Member" Relationship="Dev_PPCPModel.FK_MemberPlans_Member" FromRole="MemberPlan" ToRole="Member" />
+          <NavigationProperty Name="MemberPlanInstallmentMappings" Relationship="Dev_PPCPModel.FK_MemberPlanInstallmentMapping_MemberPlans" FromRole="MemberPlan" ToRole="MemberPlanInstallmentMapping" />
+        </EntityType>
+        <EntityType Name="ModuleUseCas">
+          <Key>
+            <PropertyRef Name="UseCaseID" />
+          </Key>
+          <Property Name="UseCaseID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ModuleID" Type="Int32" />
+          <Property Name="ModuleName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="UseCaseName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="IsVisiable" Type="Boolean" />
+        </EntityType>
+        <EntityType Name="RolesLKP">
+          <Key>
+            <PropertyRef Name="RoleID" />
+          </Key>
+          <Property Name="RoleID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="RoleName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="OrganizationID" Type="Int32" />
+        </EntityType>
+        <Association Name="FK_MemberPlans_Member">
+          <End Type="Dev_PPCPModel.Member" Role="Member" Multiplicity="1" />
+          <End Type="Dev_PPCPModel.MemberPlan" Role="MemberPlan" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Member">
+              <PropertyRef Name="MemberID" />
+            </Principal>
+            <Dependent Role="MemberPlan">
+              <PropertyRef Name="MemberID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="Provider">
+          <Key>
+            <PropertyRef Name="ProviderID" />
+          </Key>
+          <Property Name="ProviderID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="OrganizationID" Type="Int32" />
+          <Property Name="OrganizationName" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
+          <Property Name="NPI" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="FirstName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="LastName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Salutation" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="DOB" Type="DateTime" Precision="0" />
+          <Property Name="Gender" Type="String" MaxLength="1" FixedLength="true" Unicode="true" />
+          <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="CountryCode" Type="String" MaxLength="2" FixedLength="false" Unicode="false" />
+          <Property Name="MobileNumber" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
+          <Property Name="CountryID" Type="Int32" />
+          <Property Name="CountryName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="StateID" Type="Int32" />
+          <Property Name="StateName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="CityID" Type="Int32" />
+          <Property Name="CityName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Address" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
+          <Property Name="Zip" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
+          <Property Name="IsActive" Type="Boolean" />
+          <Property Name="CreatedBy" Type="Int32" />
+          <Property Name="CreatedDate" Type="DateTime" Precision="0" />
+          <Property Name="ModifiedBy" Type="Int32" />
+          <Property Name="ModifiedDate" Type="DateTime" Precision="0" />
+          <Property Name="IsTwofactorAuthentication" Type="Boolean" />
+          <Property Name="PreferredIP" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="TwoFactorType" Type="Int32" />
+          <Property Name="IS_TERMS_ACCECPTED" Type="Boolean" />
+          <Property Name="Tax_No" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="No_of_Patients_Accepting" Type="Int32" />
+          <Property Name="Specialization" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="SpecializationName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="SpecializationID" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Fax" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="Degree" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="ProviderCredentials" Relationship="Dev_PPCPModel.FK_ProviderCredentials_Provider" FromRole="Provider" ToRole="ProviderCredential" />
+          <NavigationProperty Name="ProviderSpecializations" Relationship="Dev_PPCPModel.FK_ProviderSpecialization_Provider" FromRole="Provider" ToRole="ProviderSpecialization" />
+        </EntityType>
+        <EntityType Name="PPCP_CODE_LKP">
+          <Key>
+            <PropertyRef Name="PPCP_CODE_ID" />
+            <PropertyRef Name="SNO" />
+            <PropertyRef Name="FROM_DATE" />
+            <PropertyRef Name="DESCRIPTION" />
+            <PropertyRef Name="CODE_TYPE_ID" />
+          </Key>
+          <Property Name="PPCP_CODE_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="PREFIX" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="SNO" Type="Int32" Nullable="false" />
+          <Property Name="SUFFIX" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="SNO_PADDING" Type="Int32" />
+          <Property Name="FROM_DATE" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="TO_DATE" Type="DateTime" Precision="3" />
+          <Property Name="DESCRIPTION" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="CODE_TYPE_ID" Type="Int32" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_ProviderCredentials_Provider">
+          <End Type="Dev_PPCPModel.Provider" Role="Provider" Multiplicity="0..1" />
+          <End Type="Dev_PPCPModel.ProviderCredential" Role="ProviderCredential" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Provider">
+              <PropertyRef Name="ProviderID" />
+            </Principal>
+            <Dependent Role="ProviderCredential">
+              <PropertyRef Name="ProviderID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ProviderSpecialization_Provider">
+          <End Type="Dev_PPCPModel.Provider" Role="Provider" Multiplicity="0..1" />
+          <End Type="Dev_PPCPModel.ProviderSpecialization" Role="ProviderSpecialization" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Provider">
+              <PropertyRef Name="ProviderID" />
+            </Principal>
+            <Dependent Role="ProviderSpecialization">
+              <PropertyRef Name="ProviderID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="MemberPlanInstallmentMapping">
+          <Key>
+            <PropertyRef Name="MemberPlanInstallmentID" />
+          </Key>
+          <Property Name="MemberPlanInstallmentID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="MemberPlanID" Type="Int32" />
+          <Property Name="PaymentDetailsID" Type="Int32" />
+          <Property Name="PaymentDueDate" Type="DateTime" Precision="3" />
+          <Property Name="PaymentAmount" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="InstallmentAmount" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="PaymentDate" Type="DateTime" Precision="3" />
+          <Property Name="PaidAmount" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="PaymentStatus" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="MemberPlan" Relationship="Dev_PPCPModel.FK_MemberPlanInstallmentMapping_MemberPlans" FromRole="MemberPlanInstallmentMapping" ToRole="MemberPlan" />
+        </EntityType>
+        <Association Name="FK_MemberPlanInstallmentMapping_MemberPlans">
+          <End Type="Dev_PPCPModel.MemberPlan" Role="MemberPlan" Multiplicity="0..1" />
+          <End Type="Dev_PPCPModel.MemberPlanInstallmentMapping" Role="MemberPlanInstallmentMapping" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="MemberPlan">
+              <PropertyRef Name="MemberPlanID" />
+            </Principal>
+            <Dependent Role="MemberPlanInstallmentMapping">
+              <PropertyRef Name="MemberPlanID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="TransactionstoPractice">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="MemberID" Type="Int32" />
+          <Property Name="MemberName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="DOB" Type="DateTime" Precision="3" />
+          <Property Name="PlanName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="DoctorName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="AmountPaid" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="PaymentDate" Type="DateTime" Precision="3" />
+          <Property Name="OrganizationID" Type="Int32" />
+          <Property Name="MemberPlanID" Type="Int32" />
+          <Property Name="OrganizationName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+        </EntityType>
+        </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="Dev_PPCPModelStoreContainer" CdmEntityContainer="Dev_PPCPEntities">
+          <EntitySetMapping Name="CitiesLKPs">
+            <EntityTypeMapping TypeName="Dev_PPCPModel.CitiesLKP">
+              <MappingFragment StoreEntitySet="CitiesLKP">
+                <ScalarProperty Name="ParentTownshipID" ColumnName="ParentTownshipID" />
+                <ScalarProperty Name="IsTownship" ColumnName="IsTownship" />
+                <ScalarProperty Name="TimeZoneID" ColumnName="TimeZoneID" />
+                <ScalarProperty Name="StateID" ColumnName="StateID" />
+                <ScalarProperty Name="CountyID" ColumnName="CountyID" />
+                <ScalarProperty Name="CityName" ColumnName="CityName" />
+                <ScalarProperty Name="CityID" ColumnName="CityID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CountriesLKPs">
+            <EntityTypeMapping TypeName="Dev_PPCPModel.CountriesLKP">
+              <MappingFragment StoreEntitySet="CountriesLKP">
+                <ScalarProperty Name="CountryName" ColumnName="CountryName" />
+                <ScalarProperty Name="CountryID" ColumnName="CountryID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="FamilyMembers">
+            <EntityTypeMapping TypeName="Dev_PPCPModel.FamilyMember">
+              <MappingFragment StoreEntitySet="FamilyMember">
+                <ScalarProperty Name="TwoFactorType" ColumnName="TwoFactorType" />
+                <ScalarProperty Name="PreferredIP" ColumnName="PreferredIP" />
+                <ScalarProperty Name="IsTwofactorAuthentication" ColumnName="IsTwofactorAuthentication" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+                <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="OrganizationType" ColumnName="OrganizationType" />
+                <ScalarProperty Name="Organizationname" ColumnName="Organizationname" />
+                <ScalarProperty Name="OrganizationID" ColumnName="OrganizationID" />
+                <ScalarProperty Name="Zip" ColumnName="Zip" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="CityName" ColumnName="CityName" />
+                <ScalarProperty Name="CityID" ColumnName="CityID" />
+                <ScalarProperty Name="StateName" ColumnName="StateName" />
+                <ScalarProperty Name="StateID" ColumnName="StateID" />
+                <ScalarProperty Name="CountryName" ColumnName="CountryName" />
+                <ScalarProperty Name="CountryID" ColumnName="CountryID" />
+                <ScalarProperty Name="MobileNumber" ColumnName="MobileNumber" />
+                <ScalarProperty Name="CountryCode" ColumnName="CountryCode" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Gender" ColumnName="Gender" />
+                <ScalarProperty Name="DOB" ColumnName="DOB" />
+                <ScalarProperty Name="Salutation" ColumnName="Salutation" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="MemberCode" ColumnName="MemberCode" />
+                <ScalarProperty Name="RelationshipName" ColumnName="RelationshipName" />
+                <ScalarProperty Name="RelationshipID" ColumnName="RelationshipID" />
+                <ScalarProperty Name="ParentID" ColumnName="ParentID" />
+                <ScalarProperty Name="FamilyMemberID" ColumnName="FamilyMemberID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Members">
+            <EntityTypeMapping TypeName="Dev_PPCPModel.Member">
+              <MappingFragment StoreEntitySet="Member">
+                <ScalarProperty Name="TandCAcceptedDate" ColumnName="TandCAcceptedDate" />
+                <ScalarProperty Name="StripeCustomerID" ColumnName="StripeCustomerID" />
+                <ScalarProperty Name="Type" ColumnName="Type" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="TwoFactorType" ColumnName="TwoFactorType" />
+                <ScalarProperty Name="PreferredIP" ColumnName="PreferredIP" />
+                <ScalarProperty Name="IsTwofactorAuthentication" ColumnName="IsTwofactorAuthentication" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+                <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="Zip" ColumnName="Zip" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="CityName" ColumnName="CityName" />
+                <ScalarProperty Name="CityID" ColumnName="CityID" />
+                <ScalarProperty Name="StateName" ColumnName="StateName" />
+                <ScalarProperty Name="StateID" ColumnName="StateID" />
+                <ScalarProperty Name="CountryName" ColumnName="CountryName" />
+                <ScalarProperty Name="CountryID" ColumnName="CountryID" />
+                <ScalarProperty Name="MobileNumber" ColumnName="MobileNumber" />
+                <ScalarProperty Name="CountryCode" ColumnName="CountryCode" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Gender" ColumnName="Gender" />
+                <ScalarProperty Name="DOB" ColumnName="DOB" />
+                <ScalarProperty Name="Salutation" ColumnName="Salutation" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="RelationshipName" ColumnName="RelationshipName" />
+                <ScalarProperty Name="RelationshipID" ColumnName="RelationshipID" />
+                <ScalarProperty Name="MemberCode" ColumnName="MemberCode" />
+                <ScalarProperty Name="MemberParentID" ColumnName="MemberParentID" />
+                <ScalarProperty Name="MemberID" ColumnName="MemberID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="MemberCredentials">
+            <EntityTypeMapping TypeName="Dev_PPCPModel.MemberCredential">
+              <MappingFragment StoreEntitySet="MemberCredentials">
+                <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+                <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="IsTermsAccepted" ColumnName="IsTermsAccepted" />
+                <ScalarProperty Name="UserNameExpiryDate" ColumnName="UserNameExpiryDate" />
+                <ScalarProperty Name="PasswordExpiryDate" ColumnName="PasswordExpiryDate" />
+                <ScalarProperty Name="WrongLoginCount" ColumnName="WrongLoginCount" />
+                <ScalarProperty Name="UserStatus" ColumnName="UserStatus" />
+                <ScalarProperty Name="UserPassword" ColumnName="UserPassword" />
+                <ScalarProperty Name="UserName" ColumnName="UserName" />
+                <ScalarProperty Name="MemberID" ColumnName="MemberID" />
+                <ScalarProperty Name="CredentialID" ColumnName="CredentialID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PlansPriceDetails">
+            <EntityTypeMapping TypeName="Dev_PPCPModel.PlansPriceDetail">
+              <MappingFragment StoreEntitySet="PlansPriceDetails">
+                <ScalarProperty Name="Modifieddate" ColumnName="Modifieddate" />
+                <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="PlanMappingID" ColumnName="PlanMappingID" />
+                <ScalarProperty Name="Planname" ColumnName="Planname" />
+                <ScalarProperty Name="PlanID" ColumnName="PlanID" />
+                <ScalarProperty Name="PriceDetailsID" ColumnName="PriceDetailsID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ProviderCredentials">
+            <EntityTypeMapping TypeName="Dev_PPCPModel.ProviderCredential">
+              <MappingFragment StoreEntitySet="ProviderCredentials">
+                <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+                <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="IsTermsAccepted" ColumnName="IsTermsAccepted" />
+                <ScalarProperty Name="UserNameExpiryDate" ColumnName="UserNameExpiryDate" />
+                <ScalarProperty Name="PasswordExpiryDate" ColumnName="PasswordExpiryDate" />
+                <ScalarProperty Name="WrongLoginCount" ColumnName="WrongLoginCount" />
+                <ScalarProperty Name="UserStatus" ColumnName="UserStatus" />
+                <ScalarProperty Name="Userpassword" ColumnName="Userpassword" />
+                <ScalarProperty Name="UserName" ColumnName="UserName" />
+                <ScalarProperty Name="ProviderID" ColumnName="ProviderID" />
+                <ScalarProperty Name="CredentialID" ColumnName="CredentialID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ProviderSpecializations">
+            <EntityTypeMapping TypeName="Dev_PPCPModel.ProviderSpecialization">
+              <MappingFragment StoreEntitySet="ProviderSpecialization">
+                <ScalarProperty Name="IsDelete" ColumnName="IsDelete" />
+                <ScalarProperty Name="SpecializationID" ColumnName="SpecializationID" />
+                <ScalarProperty Name="ProviderID" ColumnName="ProviderID" />
+                <ScalarProperty Name="ProviderSpecializationID" ColumnName="ProviderSpecializationID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="RelationshipLkps">
+            <EntityTypeMapping TypeName="Dev_PPCPModel.RelationshipLkp">
+              <MappingFragment StoreEntitySet="RelationshipLkp">
+                <ScalarProperty Name="Gender" ColumnName="Gender" />
+                <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+                <ScalarProperty Name="DisplayOrder" ColumnName="DisplayOrder" />
+                <ScalarProperty Name="Desciption" ColumnName="Desciption" />
+                <ScalarProperty Name="RelationshipName" ColumnName="RelationshipName" />
+                <ScalarProperty Name="Code" ColumnName="Code" />
+                <ScalarProperty Name="RelationshipID" ColumnName="RelationshipID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SpecializationLKPs">
+            <EntityTypeMapping TypeName="Dev_PPCPModel.SpecializationLKP">
+              <MappingFragment StoreEntitySet="SpecializationLKP">
+                <ScalarProperty Name="IsDelete" ColumnName="IsDelete" />
+                <ScalarProperty Name="SpecializationName" ColumnName="SpecializationName" />
+                <ScalarProperty Name="SpecializationID" ColumnName="SpecializationID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="StatesLKPs">
+            <EntityTypeMapping TypeName="Dev_PPCPModel.StatesLKP">
+              <MappingFragment StoreEntitySet="StatesLKP">
+                <ScalarProperty Name="CountryID" ColumnName="CountryID" />
+                <ScalarProperty Name="StateCode" ColumnName="StateCode" />
+                <ScalarProperty Name="StateName" ColumnName="StateName" />
+                <ScalarProperty Name="StateID" ColumnName="StateID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="sysdiagrams">
+            <EntityTypeMapping TypeName="Dev_PPCPModel.sysdiagram">
+              <MappingFragment StoreEntitySet="sysdiagrams">
+                <ScalarProperty Name="definition" ColumnName="definition" />
+                <ScalarProperty Name="version" ColumnName="version" />
+                <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
+                <ScalarProperty Name="principal_id" ColumnName="principal_id" />
+                <ScalarProperty Name="name" ColumnName="name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TimeZonesLKPs">
+            <EntityTypeMapping TypeName="Dev_PPCPModel.TimeZonesLKP">
+              <MappingFragment StoreEntitySet="TimeZonesLKP">
+                <ScalarProperty Name="IsDayLightSaving" ColumnName="IsDayLightSaving" />
+                <ScalarProperty Name="TimeZoneOffset" ColumnName="TimeZoneOffset" />
+                <ScalarProperty Name="TimeZoneName" ColumnName="TimeZoneName" />
+                <ScalarProperty Name="TimeZoneID" ColumnName="TimeZoneID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="UserCredentials">
+            <EntityTypeMapping TypeName="Dev_PPCPModel.UserCredential">
+              <MappingFragment StoreEntitySet="UserCredentials">
+                <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+                <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="IsTermsAccepted" ColumnName="IsTermsAccepted" />
+                <ScalarProperty Name="UserNameExpiryDate" ColumnName="UserNameExpiryDate" />
+                <ScalarProperty Name="PasswordExpiryDate" ColumnName="PasswordExpiryDate" />
+                <ScalarProperty Name="WrongLoginCount" ColumnName="WrongLoginCount" />
+                <ScalarProperty Name="UserStatus" ColumnName="UserStatus" />
+                <ScalarProperty Name="Userpassword" ColumnName="Userpassword" />
+                <ScalarProperty Name="UserName" ColumnName="UserName" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="CredentialID" ColumnName="CredentialID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Application_Parameter_Config">
+            <EntityTypeMapping TypeName="Dev_PPCPModel.Application_Parameter_Config">
+              <MappingFragment StoreEntitySet="Application_Parameter_Config">
+                <ScalarProperty Name="IS_ENABLED" ColumnName="IS_ENABLED" />
+                <ScalarProperty Name="PARAMETER_DESCRIPTION" ColumnName="PARAMETER_DESCRIPTION" />
+                <ScalarProperty Name="PARAMETER_VALUE" ColumnName="PARAMETER_VALUE" />
+                <ScalarProperty Name="PARAMETER_NAME" ColumnName="PARAMETER_NAME" />
+                <ScalarProperty Name="PARAMETER_ID" ColumnName="PARAMETER_ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="OrganizationPlans">
+            <EntityTypeMapping TypeName="Dev_PPCPModel.OrganizationPlan">
+              <MappingFragment StoreEntitySet="OrganizationPlans">
+                <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="IsDelete" ColumnName="IsDelete" />
+                <ScalarProperty Name="PlanstartDate" ColumnName="PlanstartDate" />
+                <ScalarProperty Name="OrganizationID" ColumnName="OrganizationID" />
+                <ScalarProperty Name="PlanID" ColumnName="PlanID" />
+                <ScalarProperty Name="OrganizationPlanID" ColumnName="OrganizationPlanID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Plans">
+            <EntityTypeMapping TypeName="Dev_PPCPModel.Plan">
+              <MappingFragment StoreEntitySet="Plans">
+                <ScalarProperty Name="CommPPCP" ColumnName="CommPPCP" />
+                <ScalarProperty Name="ProviderTAndCPath" ColumnName="ProviderTAndCPath" />
+                <ScalarProperty Name="OrganizationTAndCPath" ColumnName="OrganizationTAndCPath" />
+                <ScalarProperty Name="PatientTAndCPath" ColumnName="PatientTAndCPath" />
+                <ScalarProperty Name="UnSubscribedDate" ColumnName="UnSubscribedDate" />
+                <ScalarProperty Name="IsDelete" ColumnName="IsDelete" />
+                <ScalarProperty Name="Patient_Features" ColumnName="Patient_Features" />
+                <ScalarProperty Name="Features" ColumnName="Features" />
+                <ScalarProperty Name="OrganizationName" ColumnName="OrganizationName" />
+                <ScalarProperty Name="OrganizationID" ColumnName="OrganizationID" />
+                <ScalarProperty Name="IsThirdParty" ColumnName="IsThirdParty" />
+                <ScalarProperty Name="CommAdditionalMember" ColumnName="CommAdditionalMember" />
+                <ScalarProperty Name="CommPrimaryMember" ColumnName="CommPrimaryMember" />
+                <ScalarProperty Name="PlanFeeAddMember" ColumnName="PlanFeeAddMember" />
+                <ScalarProperty Name="PlanMemberType" ColumnName="PlanMemberType" />
+                <ScalarProperty Name="EffectiveDate" ColumnName="EffectiveDate" />
+                <ScalarProperty Name="PlanDescription" ColumnName="PlanDescription" />
+                <ScalarProperty Name="PlanEndDate" ColumnName="PlanEndDate" />
+                <ScalarProperty Name="PlanStartDate" ColumnName="PlanStartDate" />
+                <ScalarProperty Name="PlanStatus" ColumnName="PlanStatus" />
+                <ScalarProperty Name="PlanType" ColumnName="PlanType" />
+                <ScalarProperty Name="GenderID" ColumnName="GenderID" />
+                <ScalarProperty Name="ToAge" ColumnName="ToAge" />
+                <ScalarProperty Name="FromAge" ColumnName="FromAge" />
+                <ScalarProperty Name="EnrollFee" ColumnName="EnrollFee" />
+                <ScalarProperty Name="VisitFee" ColumnName="VisitFee" />
+                <ScalarProperty Name="PlanTermMonths" ColumnName="PlanTermMonths" />
+                <ScalarProperty Name="PlanTermName" ColumnName="PlanTermName" />
+                <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+                <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="PaymentIntervals" ColumnName="PaymentIntervals" />
+                <ScalarProperty Name="MonthlyFee" ColumnName="MonthlyFee" />
+                <ScalarProperty Name="PlanName" ColumnName="PlanName" />
+                <ScalarProperty Name="PlanCode" ColumnName="PlanCode" />
+                <ScalarProperty Name="PlanID" ColumnName="PlanID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PaymentDetails">
+            <EntityTypeMapping TypeName="Dev_PPCPModel.PaymentDetail">
+              <MappingFragment StoreEntitySet="PaymentDetails">
+                <ScalarProperty Name="DueAmount" ColumnName="DueAmount" />
+                <ScalarProperty Name="Plan_Code" ColumnName="Plan_Code" />
+                <ScalarProperty Name="TransactionFee" ColumnName="TransactionFee" />
+                <ScalarProperty Name="NetAmount" ColumnName="NetAmount" />
+                <ScalarProperty Name="PaidAmount" ColumnName="PaidAmount" />
+                <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+                <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="TransactionID" ColumnName="TransactionID" />
+                <ScalarProperty Name="PlanName" ColumnName="PlanName" />
+                <ScalarProperty Name="PlanID" ColumnName="PlanID" />
+                <ScalarProperty Name="Membername" ColumnName="Membername" />
+                <ScalarProperty Name="MemberParentID" ColumnName="MemberParentID" />
+                <ScalarProperty Name="MemberID" ColumnName="MemberID" />
+                <ScalarProperty Name="MemberPlanID" ColumnName="MemberPlanID" />
+                <ScalarProperty Name="PaymentDetailsID" ColumnName="PaymentDetailsID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PlansMappings">
+            <EntityTypeMapping TypeName="Dev_PPCPModel.PlansMapping">
+              <MappingFragment StoreEntitySet="PlansMapping">
+                <ScalarProperty Name="IsDelete" ColumnName="IsDelete" />
+                <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="PlanStartDate" ColumnName="PlanStartDate" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="Organizationname" ColumnName="Organizationname" />
+                <ScalarProperty Name="OrganizationID" ColumnName="OrganizationID" />
+                <ScalarProperty Name="ProviderName" ColumnName="ProviderName" />
+                <ScalarProperty Name="ProviderID" ColumnName="ProviderID" />
+                <ScalarProperty Name="PlanName" ColumnName="PlanName" />
+                <ScalarProperty Name="PlanID" ColumnName="PlanID" />
+                <ScalarProperty Name="PlanMapID" ColumnName="PlanMapID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TermsAndConditions">
+            <EntityTypeMapping TypeName="Dev_PPCPModel.TermsAndCondition">
+              <MappingFragment StoreEntitySet="TermsAndConditions">
+                <ScalarProperty Name="Type" ColumnName="Type" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="ExpiryDate" ColumnName="ExpiryDate" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="TempletPath" ColumnName="TempletPath" />
+                <ScalarProperty Name="TermsAndConditionsName" ColumnName="TermsAndConditionsName" />
+                <ScalarProperty Name="TermsAndConditionsID" ColumnName="TermsAndConditionsID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="OrganizationUsers">
+            <EntityTypeMapping TypeName="Dev_PPCPModel.OrganizationUser">
+              <MappingFragment StoreEntitySet="OrganizationUsers">
+                <ScalarProperty Name="SSN" ColumnName="SSN" />
+                <ScalarProperty Name="TandCAcceptedDate" ColumnName="TandCAcceptedDate" />
+                <ScalarProperty Name="TwoFactorType" ColumnName="TwoFactorType" />
+                <ScalarProperty Name="PreferredIP" ColumnName="PreferredIP" />
+                <ScalarProperty Name="IsTwofactorAuthentication" ColumnName="IsTwofactorAuthentication" />
+                <ScalarProperty Name="Type" ColumnName="Type" />
+                <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+                <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="Zip" ColumnName="Zip" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="CityName" ColumnName="CityName" />
+                <ScalarProperty Name="CityID" ColumnName="CityID" />
+                <ScalarProperty Name="StateName" ColumnName="StateName" />
+                <ScalarProperty Name="StateID" ColumnName="StateID" />
+                <ScalarProperty Name="CountryName" ColumnName="CountryName" />
+                <ScalarProperty Name="CountryID" ColumnName="CountryID" />
+                <ScalarProperty Name="MobileNumber" ColumnName="MobileNumber" />
+                <ScalarProperty Name="CountryCode" ColumnName="CountryCode" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Gender" ColumnName="Gender" />
+                <ScalarProperty Name="DOB" ColumnName="DOB" />
+                <ScalarProperty Name="Salutation" ColumnName="Salutation" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="OrganizationName" ColumnName="OrganizationName" />
+                <ScalarProperty Name="OrganizationID" ColumnName="OrganizationID" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+            <EntityTypeMapping TypeName="Dev_PPCPModel.OrganizationUser">
+              <ModificationFunctionMapping>
+                <InsertFunction FunctionName="Dev_PPCPModel.Store.Pr_GetProviders">
+                  <ScalarProperty Name="OrganizationID" ParameterName="OrganizationID" />
+                </InsertFunction>
+                <UpdateFunction FunctionName="Dev_PPCPModel.Store.Pr_GetProviders">
+                  <ScalarProperty Name="OrganizationID" ParameterName="OrganizationID" Version="Current" />
+                </UpdateFunction>
+                <DeleteFunction FunctionName="Dev_PPCPModel.Store.Pr_GetProviders">
+                  <ScalarProperty Name="OrganizationID" ParameterName="OrganizationID" />
+                </DeleteFunction>
+              </ModificationFunctionMapping>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Organizations">
+            <EntityTypeMapping TypeName="Dev_PPCPModel.Organization">
+              <MappingFragment StoreEntitySet="Organizations">
+                <ScalarProperty Name="TandCAcceptedDate" ColumnName="TandCAcceptedDate" />
+                <ScalarProperty Name="AccountID" ColumnName="AccountID" />
+                <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+                <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="Type" ColumnName="Type" />
+                <ScalarProperty Name="Zip" ColumnName="Zip" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="CityName" ColumnName="CityName" />
+                <ScalarProperty Name="CityID" ColumnName="CityID" />
+                <ScalarProperty Name="StateName" ColumnName="StateName" />
+                <ScalarProperty Name="StateID" ColumnName="StateID" />
+                <ScalarProperty Name="CountryName" ColumnName="CountryName" />
+                <ScalarProperty Name="CountryID" ColumnName="CountryID" />
+                <ScalarProperty Name="MobileNumber" ColumnName="MobileNumber" />
+                <ScalarProperty Name="CountryCode" ColumnName="CountryCode" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="TaxID" ColumnName="TaxID" />
+                <ScalarProperty Name="ParentOrganizationID" ColumnName="ParentOrganizationID" />
+                <ScalarProperty Name="OrganizationName" ColumnName="OrganizationName" />
+                <ScalarProperty Name="OrganizationID" ColumnName="OrganizationID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="Pr_GetProviders" FunctionName="Dev_PPCPModel.Store.Pr_GetProviders">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="Dev_PPCPModel.Pr_GetProviders_Result">
+                <ScalarProperty Name="ProviderID" ColumnName="ProviderID" />
+                <ScalarProperty Name="ProviderName" ColumnName="ProviderName" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="OrganizationID" ColumnName="OrganizationID" />
+                <ScalarProperty Name="OrganizationName" ColumnName="OrganizationName" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="Salutation" ColumnName="Salutation" />
+                <ScalarProperty Name="DOB" ColumnName="DOB" />
+                <ScalarProperty Name="Gender" ColumnName="Gender" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="CountryCode" ColumnName="CountryCode" />
+                <ScalarProperty Name="MobileNumber" ColumnName="MobileNumber" />
+                <ScalarProperty Name="CountryID" ColumnName="CountryID" />
+                <ScalarProperty Name="CountryName" ColumnName="CountryName" />
+                <ScalarProperty Name="StateID" ColumnName="StateID" />
+                <ScalarProperty Name="StateName" ColumnName="StateName" />
+                <ScalarProperty Name="CityID" ColumnName="CityID" />
+                <ScalarProperty Name="CityName" ColumnName="CityName" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="Zip" ColumnName="Zip" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />
+                <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+                <ScalarProperty Name="Type" ColumnName="Type" />
+                <ScalarProperty Name="IsTwofactorAuthentication" ColumnName="IsTwofactorAuthentication" />
+                <ScalarProperty Name="PreferredIP" ColumnName="PreferredIP" />
+                <ScalarProperty Name="TwoFactorType" ColumnName="TwoFactorType" />
+                <ScalarProperty Name="TandCAcceptedDate" ColumnName="TandCAcceptedDate" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="Pr_GetOrganizationUsers" FunctionName="Dev_PPCPModel.Store.Pr_GetOrganizationUsers">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="Dev_PPCPModel.Pr_GetOrganizationUsers_Result">
+                <ScalarProperty Name="OrganizationID" ColumnName="OrganizationID" />
+                <ScalarProperty Name="OrganizationName" ColumnName="OrganizationName" />
+                <ScalarProperty Name="ParentOrganizationID" ColumnName="ParentOrganizationID" />
+                <ScalarProperty Name="TaxID" ColumnName="TaxID" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="CountryCode" ColumnName="CountryCode" />
+                <ScalarProperty Name="MobileNumber" ColumnName="MobileNumber" />
+                <ScalarProperty Name="CountryID" ColumnName="CountryID" />
+                <ScalarProperty Name="CountryName" ColumnName="CountryName" />
+                <ScalarProperty Name="StateID" ColumnName="StateID" />
+                <ScalarProperty Name="StateName" ColumnName="StateName" />
+                <ScalarProperty Name="CityID" ColumnName="CityID" />
+                <ScalarProperty Name="CityName" ColumnName="CityName" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="Zip" ColumnName="Zip" />
+                <ScalarProperty Name="Type" ColumnName="Type" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />
+                <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+                <ScalarProperty Name="AccountID" ColumnName="AccountID" />
+                <ScalarProperty Name="TandCAcceptedDate" ColumnName="TandCAcceptedDate" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="OrganizationID1" ColumnName="OrganizationID1" />
+                <ScalarProperty Name="OrganizationName1" ColumnName="OrganizationName1" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="Salutation" ColumnName="Salutation" />
+                <ScalarProperty Name="DOB" ColumnName="DOB" />
+                <ScalarProperty Name="Gender" ColumnName="Gender" />
+                <ScalarProperty Name="Email1" ColumnName="Email1" />
+                <ScalarProperty Name="CountryCode1" ColumnName="CountryCode1" />
+                <ScalarProperty Name="MobileNumber1" ColumnName="MobileNumber1" />
+                <ScalarProperty Name="CountryID1" ColumnName="CountryID1" />
+                <ScalarProperty Name="CountryName1" ColumnName="CountryName1" />
+                <ScalarProperty Name="StateID1" ColumnName="StateID1" />
+                <ScalarProperty Name="StateName1" ColumnName="StateName1" />
+                <ScalarProperty Name="CityID1" ColumnName="CityID1" />
+                <ScalarProperty Name="CityName1" ColumnName="CityName1" />
+                <ScalarProperty Name="Address1" ColumnName="Address1" />
+                <ScalarProperty Name="Zip1" ColumnName="Zip1" />
+                <ScalarProperty Name="IsActive1" ColumnName="IsActive1" />
+                <ScalarProperty Name="CreatedBy1" ColumnName="CreatedBy1" />
+                <ScalarProperty Name="CreatedDate1" ColumnName="CreatedDate1" />
+                <ScalarProperty Name="ModifiedBy1" ColumnName="ModifiedBy1" />
+                <ScalarProperty Name="ModifiedDate1" ColumnName="ModifiedDate1" />
+                <ScalarProperty Name="Type1" ColumnName="Type1" />
+                <ScalarProperty Name="IsTwofactorAuthentication" ColumnName="IsTwofactorAuthentication" />
+                <ScalarProperty Name="PreferredIP" ColumnName="PreferredIP" />
+                <ScalarProperty Name="TwoFactorType" ColumnName="TwoFactorType" />
+                <ScalarProperty Name="TandCAcceptedDate1" ColumnName="TandCAcceptedDate1" />
+                <ScalarProperty Name="OrgEmail" ColumnName="OrgEmail" />
+                <ScalarProperty Name="OrgCountryCode" ColumnName="OrgCountryCode" />
+                <ScalarProperty Name="OrgMobileNumber" ColumnName="OrgMobileNumber" />
+                <ScalarProperty Name="OrgCountryID" ColumnName="OrgCountryID" />
+                <ScalarProperty Name="OrgCountryName" ColumnName="OrgCountryName" />
+                <ScalarProperty Name="OrgStateID" ColumnName="OrgStateID" />
+                <ScalarProperty Name="OrgStateName" ColumnName="OrgStateName" />
+                <ScalarProperty Name="OrgCityID" ColumnName="OrgCityID" />
+                <ScalarProperty Name="OrgCityName" ColumnName="OrgCityName" />
+                <ScalarProperty Name="OrgAddress" ColumnName="OrgAddress" />
+                <ScalarProperty Name="OrgZip" ColumnName="OrgZip" />
+                <ScalarProperty Name="UserEmail" ColumnName="UserEmail" />
+                <ScalarProperty Name="UserCountryCode" ColumnName="UserCountryCode" />
+                <ScalarProperty Name="UserMobileNumber" ColumnName="UserMobileNumber" />
+                <ScalarProperty Name="UserCountryID" ColumnName="UserCountryID" />
+                <ScalarProperty Name="UserCountryName" ColumnName="UserCountryName" />
+                <ScalarProperty Name="UserStateID" ColumnName="UserStateID" />
+                <ScalarProperty Name="UserStateName" ColumnName="UserStateName" />
+                <ScalarProperty Name="UserCityID" ColumnName="UserCityID" />
+                <ScalarProperty Name="UserCityName" ColumnName="UserCityName" />
+                <ScalarProperty Name="UserAddress" ColumnName="UserAddress" />
+                <ScalarProperty Name="UserZip" ColumnName="UserZip" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <EntitySetMapping Name="MemberPlanMappings">
+            <EntityTypeMapping TypeName="Dev_PPCPModel.MemberPlanMapping">
+              <MappingFragment StoreEntitySet="MemberPlanMapping">
+                <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+                <ScalarProperty Name="PlanName" ColumnName="PlanName" />
+                <ScalarProperty Name="PlanID" ColumnName="PlanID" />
+                <ScalarProperty Name="MemberName" ColumnName="MemberName" />
+                <ScalarProperty Name="MemberID" ColumnName="MemberID" />
+                <ScalarProperty Name="MemberParentID" ColumnName="MemberParentID" />
+                <ScalarProperty Name="MemberPlanID" ColumnName="MemberPlanID" />
+                <ScalarProperty Name="MemberPlanMapID" ColumnName="MemberPlanMapID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="MemberPlans">
+            <EntityTypeMapping TypeName="Dev_PPCPModel.MemberPlan">
+              <MappingFragment StoreEntitySet="MemberPlans">
+                <ScalarProperty Name="PlanType" ColumnName="PlanType" />
+                <ScalarProperty Name="Plan_Code" ColumnName="Plan_Code" />
+                <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+                <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="Duration" ColumnName="Duration" />
+                <ScalarProperty Name="PaymentInterval" ColumnName="PaymentInterval" />
+                <ScalarProperty Name="Discount" ColumnName="Discount" />
+                <ScalarProperty Name="DueAmount" ColumnName="DueAmount" />
+                <ScalarProperty Name="AmountPaid" ColumnName="AmountPaid" />
+                <ScalarProperty Name="TotalAmount" ColumnName="TotalAmount" />
+                <ScalarProperty Name="PlanEndDate" ColumnName="PlanEndDate" />
+                <ScalarProperty Name="PlanStartDate" ColumnName="PlanStartDate" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="ProviderName" ColumnName="ProviderName" />
+                <ScalarProperty Name="ProviderID" ColumnName="ProviderID" />
+                <ScalarProperty Name="OrganizationName" ColumnName="OrganizationName" />
+                <ScalarProperty Name="OrganizationID" ColumnName="OrganizationID" />
+                <ScalarProperty Name="PlanName" ColumnName="PlanName" />
+                <ScalarProperty Name="PlanID" ColumnName="PlanID" />
+                <ScalarProperty Name="MemberName" ColumnName="MemberName" />
+                <ScalarProperty Name="MemberParentID" ColumnName="MemberParentID" />
+                <ScalarProperty Name="MemberID" ColumnName="MemberID" />
+                <ScalarProperty Name="MemberPlanID" ColumnName="MemberPlanID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ModuleUseCases">
+            <EntityTypeMapping TypeName="Dev_PPCPModel.ModuleUseCas">
+              <MappingFragment StoreEntitySet="ModuleUseCases">
+                <ScalarProperty Name="IsVisiable" ColumnName="IsVisiable" />
+                <ScalarProperty Name="UseCaseName" ColumnName="UseCaseName" />
+                <ScalarProperty Name="ModuleName" ColumnName="ModuleName" />
+                <ScalarProperty Name="ModuleID" ColumnName="ModuleID" />
+                <ScalarProperty Name="UseCaseID" ColumnName="UseCaseID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="RolesLKPs">
+            <EntityTypeMapping TypeName="Dev_PPCPModel.RolesLKP">
+              <MappingFragment StoreEntitySet="RolesLKP">
+                <ScalarProperty Name="OrganizationID" ColumnName="OrganizationID" />
+                <ScalarProperty Name="RoleName" ColumnName="RoleName" />
+                <ScalarProperty Name="RoleID" ColumnName="RoleID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Providers">
+            <EntityTypeMapping TypeName="Dev_PPCPModel.Provider">
+              <MappingFragment StoreEntitySet="Provider">
+                <ScalarProperty Name="Degree" ColumnName="Degree" />
+                <ScalarProperty Name="Fax" ColumnName="Fax" />
+                <ScalarProperty Name="SpecializationID" ColumnName="SpecializationID" />
+                <ScalarProperty Name="SpecializationName" ColumnName="SpecializationName" />
+                <ScalarProperty Name="Specialization" ColumnName="Specialization" />
+                <ScalarProperty Name="No_of_Patients_Accepting" ColumnName="No_of_Patients_Accepting" />
+                <ScalarProperty Name="Tax_No" ColumnName="Tax_No" />
+                <ScalarProperty Name="IS_TERMS_ACCECPTED" ColumnName="IS_TERMS_ACCECPTED" />
+                <ScalarProperty Name="TwoFactorType" ColumnName="TwoFactorType" />
+                <ScalarProperty Name="PreferredIP" ColumnName="PreferredIP" />
+                <ScalarProperty Name="IsTwofactorAuthentication" ColumnName="IsTwofactorAuthentication" />
+                <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+                <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="Zip" ColumnName="Zip" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="CityName" ColumnName="CityName" />
+                <ScalarProperty Name="CityID" ColumnName="CityID" />
+                <ScalarProperty Name="StateName" ColumnName="StateName" />
+                <ScalarProperty Name="StateID" ColumnName="StateID" />
+                <ScalarProperty Name="CountryName" ColumnName="CountryName" />
+                <ScalarProperty Name="CountryID" ColumnName="CountryID" />
+                <ScalarProperty Name="MobileNumber" ColumnName="MobileNumber" />
+                <ScalarProperty Name="CountryCode" ColumnName="CountryCode" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Gender" ColumnName="Gender" />
+                <ScalarProperty Name="DOB" ColumnName="DOB" />
+                <ScalarProperty Name="Salutation" ColumnName="Salutation" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="NPI" ColumnName="NPI" />
+                <ScalarProperty Name="OrganizationName" ColumnName="OrganizationName" />
+                <ScalarProperty Name="OrganizationID" ColumnName="OrganizationID" />
+                <ScalarProperty Name="ProviderID" ColumnName="ProviderID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PPCP_CODE_LKP">
+            <EntityTypeMapping TypeName="Dev_PPCPModel.PPCP_CODE_LKP">
+              <MappingFragment StoreEntitySet="PPCP_CODE_LKP">
+                <ScalarProperty Name="CODE_TYPE_ID" ColumnName="CODE_TYPE_ID" />
+                <ScalarProperty Name="DESCRIPTION" ColumnName="DESCRIPTION" />
+                <ScalarProperty Name="TO_DATE" ColumnName="TO_DATE" />
+                <ScalarProperty Name="FROM_DATE" ColumnName="FROM_DATE" />
+                <ScalarProperty Name="SNO_PADDING" ColumnName="SNO_PADDING" />
+                <ScalarProperty Name="SUFFIX" ColumnName="SUFFIX" />
+                <ScalarProperty Name="SNO" ColumnName="SNO" />
+                <ScalarProperty Name="PREFIX" ColumnName="PREFIX" />
+                <ScalarProperty Name="PPCP_CODE_ID" ColumnName="PPCP_CODE_ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="MemberPlanInstallmentMappings">
+            <EntityTypeMapping TypeName="Dev_PPCPModel.MemberPlanInstallmentMapping">
+              <MappingFragment StoreEntitySet="MemberPlanInstallmentMapping">
+                <ScalarProperty Name="PaymentStatus" ColumnName="PaymentStatus" />
+                <ScalarProperty Name="PaidAmount" ColumnName="PaidAmount" />
+                <ScalarProperty Name="PaymentDate" ColumnName="PaymentDate" />
+                <ScalarProperty Name="InstallmentAmount" ColumnName="InstallmentAmount" />
+                <ScalarProperty Name="PaymentAmount" ColumnName="PaymentAmount" />
+                <ScalarProperty Name="PaymentDueDate" ColumnName="PaymentDueDate" />
+                <ScalarProperty Name="PaymentDetailsID" ColumnName="PaymentDetailsID" />
+                <ScalarProperty Name="MemberPlanID" ColumnName="MemberPlanID" />
+                <ScalarProperty Name="MemberPlanInstallmentID" ColumnName="MemberPlanInstallmentID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TransactionstoPractices">
+            <EntityTypeMapping TypeName="Dev_PPCPModel.TransactionstoPractice">
+              <MappingFragment StoreEntitySet="TransactionstoPractice">
+                <ScalarProperty Name="OrganizationName" ColumnName="OrganizationName" />
+                <ScalarProperty Name="MemberPlanID" ColumnName="MemberPlanID" />
+                <ScalarProperty Name="OrganizationID" ColumnName="OrganizationID" />
+                <ScalarProperty Name="PaymentDate" ColumnName="PaymentDate" />
+                <ScalarProperty Name="AmountPaid" ColumnName="AmountPaid" />
+                <ScalarProperty Name="DoctorName" ColumnName="DoctorName" />
+                <ScalarProperty Name="PlanName" ColumnName="PlanName" />
+                <ScalarProperty Name="DOB" ColumnName="DOB" />
+                <ScalarProperty Name="MemberName" ColumnName="MemberName" />
+                <ScalarProperty Name="MemberID" ColumnName="MemberID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
