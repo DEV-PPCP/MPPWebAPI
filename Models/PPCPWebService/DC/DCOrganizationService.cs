@@ -328,6 +328,7 @@ namespace PPCPWebApiServices.Models.PPCPWebService.DC
         public string RelationshipName { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
+        public string MemberName { get; set; }
         public string Salutation { get; set; }
         public Nullable<System.DateTime> DOB { get; set; }
         public string Gender { get; set; }

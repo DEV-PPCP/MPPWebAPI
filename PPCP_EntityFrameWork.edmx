@@ -111,6 +111,7 @@ warning 6002: The table/view 'Dev_PPCP_200722.dbo.Application_Parameter_Config' 
           <Property Name="StripeCustomerID" Type="nvarchar" MaxLength="50" />
           <Property Name="TandCAcceptedDate" Type="datetime" />
           <Property Name="UserId" Type="int" />
+          <Property Name="MemberCardID" Type="varchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="MemberCredentials">
           <Key>
@@ -1067,6 +1068,7 @@ warning 6002: The table/view 'Dev_PPCP_200722.dbo.Application_Parameter_Config' 
           <Property Name="TandCAcceptedDate" Type="DateTime" Precision="3" />
           <Property Name="UserId" Type="Int32" />
           <NavigationProperty Name="MemberPlans" Relationship="Dev_PPCPModel.FK_MemberPlans_Member" FromRole="Member" ToRole="MemberPlan" />
+          <Property Name="MemberCardID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="MemberCredential">
           <Key>
@@ -1922,6 +1924,7 @@ warning 6002: The table/view 'Dev_PPCP_200722.dbo.Application_Parameter_Config' 
           <EntitySetMapping Name="Members">
             <EntityTypeMapping TypeName="Dev_PPCPModel.Member">
               <MappingFragment StoreEntitySet="Member">
+                <ScalarProperty Name="MemberCardID" ColumnName="MemberCardID" />
                 <ScalarProperty Name="UserId" ColumnName="UserId" />
                 <ScalarProperty Name="TandCAcceptedDate" ColumnName="TandCAcceptedDate" />
                 <ScalarProperty Name="StripeCustomerID" ColumnName="StripeCustomerID" />

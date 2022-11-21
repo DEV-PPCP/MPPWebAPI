@@ -16,6 +16,7 @@ using System.Configuration;
 using System.Data;
 using Dapper;
 using PPCPWebApiServices.CustomEntities;
+using System.Web.UI.WebControls;
 
 namespace PPCPWebApiServices.Models.PPCPWebService.DAL
 {
@@ -858,40 +859,7 @@ namespace PPCPWebApiServices.Models.PPCPWebService.DAL
 
             return obj;
         }
-        public object GetMembersAutoComplete(int OrganizationID, string Text)
-        {
-            using (var Context = new Dev_PPCPEntities(1))
-            {
-                if (OrganizationID != 0)
-                {
-                    var dataset = Context.Members
-                   .Where(x => x.ID == OrganizationID).Where(x => x.FirstName.Contains(Text) || x.LastName.Contains(Text) || x.MobileNumber.Contains(Text))
-                   .Select(x => new
-                   {
-                       MemberName = x.FirstName + " " + x.LastName + "," + x.MobileNumber,
-                       MemberID = x.MemberID,
-
-                   }).ToList();
-                    return dataset;
-                }
-                else
-                {
-                    var dataset = Context.Members
-                  .Where(x => x.FirstName.Contains(Text) || x.LastName.Contains(Text) || x.MobileNumber.Contains(Text))
-                  .Select(x => new
-                  {
-                      MemberName = x.FirstName + " " + x.LastName + "," + x.MobileNumber,
-                      MemberID = x.MemberID,
-
-                  }).ToList();
-                    return dataset;
-                }
-
-            }
-
-
-
-        }
+       
 
         /// <summary>
         /// Returning Oject of the searched text values to ViewProviders in Organization Module -- Ragini

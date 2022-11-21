@@ -457,7 +457,7 @@ namespace PPCPWebApiServices.ServiceAccess
             return GetpaymentDetails;
 
         }
-        public object GetMembersList(string OrganizationID, string strMemberID)
+        public object GetMembersList(string OrganizationID, string strMemberID, string searchtext)
         {
             int memberid = 0;
             if (!string.IsNullOrEmpty(strMemberID))
@@ -468,7 +468,7 @@ namespace PPCPWebApiServices.ServiceAccess
 
             object GetDetails = new List<MembersList>();
 
-            GetDetails = objdal.GetMembersList(orgid, memberid);
+            GetDetails = objdal.GetMembersList(orgid, memberid, searchtext);
 
             return GetDetails;
 

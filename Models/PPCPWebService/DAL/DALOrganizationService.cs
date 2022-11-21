@@ -1320,7 +1320,7 @@ namespace PPCPWebApiServices.Models.PPCPWebService.DAL
 
 
 
-        public object GetMembersList(int intOrganizationID, int intMemberID)
+        public object GetMembersList(int intOrganizationID, int intMemberID, string searchtext)
         {
 
             List<MembersList> getorganizationProviderDetail = new List<MembersList>();
@@ -1330,8 +1330,8 @@ namespace PPCPWebApiServices.Models.PPCPWebService.DAL
                 {                    
                     SqlParameter memberID = new SqlParameter("@MemberID", intMemberID);
                     SqlParameter OrganizationID = new SqlParameter("@OrganizationID", intOrganizationID);
-                    getorganizationProviderDetail = context.Database.SqlQuery<MembersList>("Pr_GetMembersList @MemberID,@OrganizationID", memberID, OrganizationID ).ToList();
-                    
+                    SqlParameter SearchText = new SqlParameter("@SearchText", searchtext ?? string.Empty);
+                    getorganizationProviderDetail = context.Database.SqlQuery<MembersList>("Pr_GetMembersList @MemberID, @OrganizationID, @SearchText", memberID, OrganizationID, SearchText).ToList();                    
                 }
             }
             catch (Exception ex)

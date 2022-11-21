@@ -619,17 +619,6 @@ namespace PPCPWebApiServices.ServiceAccess
         }
         
         /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="OrganizationID"></param>
-        /// <param name="Text"></param>
-        /// <returns></returns>
-        public object GetMembersAutoComplete(string OrganizationID, string Text)
-        {
-            object memberDetails = objdal.GetMembersAutoComplete(Convert.ToInt32(OrganizationID), Text);
-            return memberDetails;
-        }
-        /// <summary>
         /// Search Provider Details in Organizaton Module -- By Ragini 
         /// </summary>
         /// <param name="OrganizationID"></param>
