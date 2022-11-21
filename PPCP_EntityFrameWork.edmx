@@ -6,7 +6,7 @@
     <edmx:StorageModels>
     <Schema Namespace="Dev_PPCPModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <!--Errors Found During Generation:
-warning 6002: The table/view 'Dev_PPCP.dbo.Application_Parameter_Config' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'Dev_PPCP_200722.dbo.Application_Parameter_Config' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="Application_Parameter_Config">
           <Key>
             <PropertyRef Name="PARAMETER_ID" />
@@ -110,6 +110,7 @@ warning 6002: The table/view 'Dev_PPCP.dbo.Application_Parameter_Config' does no
           <Property Name="Type" Type="int" />
           <Property Name="StripeCustomerID" Type="nvarchar" MaxLength="50" />
           <Property Name="TandCAcceptedDate" Type="datetime" />
+          <Property Name="UserId" Type="int" />
         </EntityType>
         <EntityType Name="MemberCredentials">
           <Key>
@@ -173,10 +174,10 @@ warning 6002: The table/view 'Dev_PPCP.dbo.Application_Parameter_Config' does no
           <Property Name="Status" Type="varchar" MaxLength="10" />
           <Property Name="PlanStartDate" Type="date" />
           <Property Name="PlanEndDate" Type="date" />
-          <Property Name="TotalAmount" Type="decimal" Precision="18" Scale="0" />
-          <Property Name="AmountPaid" Type="decimal" Precision="18" Scale="0" />
-          <Property Name="DueAmount" Type="decimal" Precision="18" Scale="0" />
-          <Property Name="Discount" Type="decimal" Precision="18" Scale="0" />
+          <Property Name="TotalAmount" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="AmountPaid" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="DueAmount" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="Discount" Type="decimal" Precision="18" Scale="2" />
           <Property Name="PaymentInterval" Type="varchar" MaxLength="150" />
           <Property Name="Duration" Type="nvarchar" MaxLength="25" />
           <Property Name="CreatedBy" Type="int" />
@@ -235,6 +236,7 @@ warning 6002: The table/view 'Dev_PPCP.dbo.Application_Parameter_Config' does no
           <Property Name="ModifiedDate" Type="date" />
           <Property Name="AccountID" Type="nvarchar" MaxLength="50" />
           <Property Name="TandCAcceptedDate" Type="datetime" />
+          <Property Name="UserId" Type="int" />
         </EntityType>
         <EntityType Name="OrganizationUsers">
           <Key>
@@ -287,7 +289,7 @@ warning 6002: The table/view 'Dev_PPCP.dbo.Application_Parameter_Config' does no
           <Property Name="CreatedDate" Type="datetime" />
           <Property Name="ModifiedBy" Type="int" />
           <Property Name="ModifiedDate" Type="datetime" />
-          <Property Name="PaidAmount" Type="money" />
+          <Property Name="PaidAmount" Type="decimal" Precision="18" Scale="2" />
           <Property Name="NetAmount" Type="decimal" Precision="18" Scale="2" />
           <Property Name="TransactionFee" Type="decimal" Precision="18" Scale="2" />
           <Property Name="Plan_Code" Type="int" />
@@ -366,26 +368,6 @@ warning 6002: The table/view 'Dev_PPCP.dbo.Application_Parameter_Config' does no
           <Property Name="ModifiedBy" Type="int" />
           <Property Name="Modifieddate" Type="date" />
         </EntityType>
-        <!--Errors Found During Generation:
-warning 6002: The table/view 'Dev_PPCP.dbo.PPCP_CODE_LKP' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
-        <EntityType Name="PPCP_CODE_LKP">
-          <Key>
-            <PropertyRef Name="PPCP_CODE_ID" />
-            <PropertyRef Name="SNO" />
-            <PropertyRef Name="FROM_DATE" />
-            <PropertyRef Name="DESCRIPTION" />
-            <PropertyRef Name="CODE_TYPE_ID" />
-          </Key>
-          <Property Name="PPCP_CODE_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="PREFIX" Type="nvarchar" MaxLength="10" />
-          <Property Name="SNO" Type="int" Nullable="false" />
-          <Property Name="SUFFIX" Type="nvarchar" MaxLength="10" />
-          <Property Name="SNO_PADDING" Type="int" />
-          <Property Name="FROM_DATE" Type="datetime" Nullable="false" />
-          <Property Name="TO_DATE" Type="datetime" />
-          <Property Name="DESCRIPTION" Type="nvarchar" MaxLength="100" Nullable="false" />
-          <Property Name="CODE_TYPE_ID" Type="int" Nullable="false" />
-        </EntityType>
         <EntityType Name="Provider">
           <Key>
             <PropertyRef Name="ProviderID" />
@@ -426,6 +408,7 @@ warning 6002: The table/view 'Dev_PPCP.dbo.PPCP_CODE_LKP' does not have a primar
           <Property Name="SpecializationID" Type="nvarchar" MaxLength="50" />
           <Property Name="Fax" Type="nvarchar" MaxLength="10" />
           <Property Name="Degree" Type="nvarchar" MaxLength="50" />
+          <Property Name="UserId" Type="int" />
         </EntityType>
         <EntityType Name="ProviderCredentials">
           <Key>
@@ -466,14 +449,6 @@ warning 6002: The table/view 'Dev_PPCP.dbo.PPCP_CODE_LKP' does not have a primar
           <Property Name="IsDeleted" Type="bit" />
           <Property Name="Gender" Type="nvarchar" MaxLength="2" />
         </EntityType>
-        <EntityType Name="RolesLKP">
-          <Key>
-            <PropertyRef Name="RoleID" />
-          </Key>
-          <Property Name="RoleID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="RoleName" Type="varchar" MaxLength="50" />
-          <Property Name="OrganizationID" Type="int" />
-        </EntityType>
         <EntityType Name="SpecializationLKP">
           <Key>
             <PropertyRef Name="SpecializationID" />
@@ -490,16 +465,6 @@ warning 6002: The table/view 'Dev_PPCP.dbo.PPCP_CODE_LKP' does not have a primar
           <Property Name="StateName" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="StateCode" Type="varchar" MaxLength="5" Nullable="false" />
           <Property Name="CountryID" Type="int" Nullable="false" />
-        </EntityType>
-        <EntityType Name="sysdiagrams">
-          <Key>
-            <PropertyRef Name="diagram_id" />
-          </Key>
-          <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
-          <Property Name="principal_id" Type="int" Nullable="false" />
-          <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="version" Type="int" />
-          <Property Name="definition" Type="varbinary(max)" />
         </EntityType>
         <EntityType Name="TermsAndConditions">
           <Key>
@@ -538,6 +503,37 @@ warning 6002: The table/view 'Dev_PPCP.dbo.PPCP_CODE_LKP' does not have a primar
           <Property Name="OrganizationName" Type="nvarchar" MaxLength="150" />
           <Property Name="MemberPlanID" Type="int" />
         </EntityType>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="UserID" />
+          </Key>
+          <Property Name="UserID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserName" Type="varchar" MaxLength="25" Nullable="false" />
+          <Property Name="Password" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="FirstName" Type="varchar" MaxLength="50" />
+          <Property Name="LastName" Type="varchar" MaxLength="50" />
+          <Property Name="Email" Type="varchar" MaxLength="200" Nullable="false" />
+          <Property Name="CountryCode" Type="varchar" MaxLength="5" />
+          <Property Name="MobileNumber" Type="varchar" MaxLength="50" />
+          <Property Name="LastIPAddress" Type="varchar" MaxLength="50" />
+          <Property Name="UserStatus" Type="char" MaxLength="1" Nullable="false" />
+          <Property Name="Timezone" Type="varchar" MaxLength="50" />
+          <Property Name="FailedLoginCount" Type="int" />
+          <Property Name="IsAccountLocked" Type="bit" Nullable="false" />
+          <Property Name="LastPasswordChangeDate" Type="date" />
+          <Property Name="IsTwoFactorEnabled" Type="bit" />
+          <Property Name="TwoFactorType" Type="int" />
+          <Property Name="IsTermsAccepted" Type="bit" />
+          <Property Name="TermsAcceptDate" Type="date" />
+          <Property Name="IsActive" Type="bit" />
+          <Property Name="DeactivationDate" Type="datetime" />
+          <Property Name="LastLoginDate" Type="datetime" />
+          <Property Name="CreatedBy" Type="int" />
+          <Property Name="CreatedDate" Type="date" />
+          <Property Name="ModifiedBy" Type="int" />
+          <Property Name="ModifiedDate" Type="date" />
+          <Property Name="AssociatedEntityId" Type="int" />
+        </EntityType>
         <EntityType Name="UserCredentials">
           <Key>
             <PropertyRef Name="CredentialID" />
@@ -555,6 +551,15 @@ warning 6002: The table/view 'Dev_PPCP.dbo.PPCP_CODE_LKP' does not have a primar
           <Property Name="CreatedDate" Type="date" />
           <Property Name="ModifiedBy" Type="int" />
           <Property Name="ModifiedDate" Type="date" />
+        </EntityType>
+        <EntityType Name="UserRole">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserId" Type="int" />
+          <Property Name="RoleID" Type="int" />
+          <Property Name="AssociatedEntityId" Type="int" />
         </EntityType>
         <Association Name="FK_FamilyMember_Member">
           <End Role="Member" Type="Self.Member" Multiplicity="1" />
@@ -724,6 +729,18 @@ warning 6002: The table/view 'Dev_PPCP.dbo.PPCP_CODE_LKP' does not have a primar
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_UserRole_User">
+          <End Role="User" Type="Self.User" Multiplicity="0..1" />
+          <End Role="UserRole" Type="Self.UserRole" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="UserRole">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="R_4">
           <End Role="CountriesLKP" Type="Self.CountriesLKP" Multiplicity="1" />
           <End Role="StatesLKP" Type="Self.StatesLKP" Multiplicity="*" />
@@ -763,14 +780,14 @@ warning 6002: The table/view 'Dev_PPCP.dbo.PPCP_CODE_LKP' does not have a primar
           <EntitySet Name="ProviderCredentials" EntityType="Self.ProviderCredentials" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ProviderSpecialization" EntityType="Self.ProviderSpecialization" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="RelationshipLkp" EntityType="Self.RelationshipLkp" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="RolesLKP" EntityType="Self.RolesLKP" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SpecializationLKP" EntityType="Self.SpecializationLKP" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="StatesLKP" EntityType="Self.StatesLKP" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TermsAndConditions" EntityType="Self.TermsAndConditions" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TimeZonesLKP" EntityType="Self.TimeZonesLKP" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TransactionstoPractice" EntityType="Self.TransactionstoPractice" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="User" EntityType="Self.User" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="UserCredentials" EntityType="Self.UserCredentials" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="UserRole" EntityType="Self.UserRole" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Application_Parameter_Config" EntityType="Self.Application_Parameter_Config" store:Type="Tables" store:Schema="dbo">
             <DefiningQuery>SELECT 
     [Application_Parameter_Config].[PARAMETER_ID] AS [PARAMETER_ID], 
@@ -779,19 +796,6 @@ warning 6002: The table/view 'Dev_PPCP.dbo.PPCP_CODE_LKP' does not have a primar
     [Application_Parameter_Config].[PARAMETER_DESCRIPTION] AS [PARAMETER_DESCRIPTION], 
     [Application_Parameter_Config].[IS_ENABLED] AS [IS_ENABLED]
     FROM [dbo].[Application_Parameter_Config] AS [Application_Parameter_Config]</DefiningQuery>
-          </EntitySet>
-          <EntitySet Name="PPCP_CODE_LKP" EntityType="Self.PPCP_CODE_LKP" store:Type="Tables" store:Schema="dbo">
-            <DefiningQuery>SELECT 
-    [PPCP_CODE_LKP].[PPCP_CODE_ID] AS [PPCP_CODE_ID], 
-    [PPCP_CODE_LKP].[PREFIX] AS [PREFIX], 
-    [PPCP_CODE_LKP].[SNO] AS [SNO], 
-    [PPCP_CODE_LKP].[SUFFIX] AS [SUFFIX], 
-    [PPCP_CODE_LKP].[SNO_PADDING] AS [SNO_PADDING], 
-    [PPCP_CODE_LKP].[FROM_DATE] AS [FROM_DATE], 
-    [PPCP_CODE_LKP].[TO_DATE] AS [TO_DATE], 
-    [PPCP_CODE_LKP].[DESCRIPTION] AS [DESCRIPTION], 
-    [PPCP_CODE_LKP].[CODE_TYPE_ID] AS [CODE_TYPE_ID]
-    FROM [dbo].[PPCP_CODE_LKP] AS [PPCP_CODE_LKP]</DefiningQuery>
           </EntitySet>
           <AssociationSet Name="FK_FamilyMember_Member" Association="Self.FK_FamilyMember_Member">
             <End Role="Member" EntitySet="Member" />
@@ -849,6 +853,10 @@ warning 6002: The table/view 'Dev_PPCP.dbo.PPCP_CODE_LKP' does not have a primar
             <End Role="OrganizationUsers" EntitySet="OrganizationUsers" />
             <End Role="UserCredentials" EntitySet="UserCredentials" />
           </AssociationSet>
+          <AssociationSet Name="FK_UserRole_User" Association="Self.FK_UserRole_User">
+            <End Role="User" EntitySet="User" />
+            <End Role="UserRole" EntitySet="UserRole" />
+          </AssociationSet>
           <AssociationSet Name="R_4" Association="Self.R_4">
             <End Role="CountriesLKP" EntitySet="CountriesLKP" />
             <End Role="StatesLKP" EntitySet="StatesLKP" />
@@ -870,7 +878,6 @@ warning 6002: The table/view 'Dev_PPCP.dbo.PPCP_CODE_LKP' does not have a primar
           <EntitySet Name="RelationshipLkps" EntityType="Dev_PPCPModel.RelationshipLkp" />
           <EntitySet Name="SpecializationLKPs" EntityType="Dev_PPCPModel.SpecializationLKP" />
           <EntitySet Name="StatesLKPs" EntityType="Dev_PPCPModel.StatesLKP" />
-          <EntitySet Name="sysdiagrams" EntityType="Dev_PPCPModel.sysdiagram" />
           <EntitySet Name="TimeZonesLKPs" EntityType="Dev_PPCPModel.TimeZonesLKP" />
           <EntitySet Name="UserCredentials" EntityType="Dev_PPCPModel.UserCredential" />
           <EntitySet Name="Application_Parameter_Config" EntityType="Dev_PPCPModel.Application_Parameter_Config" />
@@ -932,15 +939,8 @@ warning 6002: The table/view 'Dev_PPCP.dbo.PPCP_CODE_LKP' does not have a primar
           <Parameter Name="OrganizationID" Mode="In" Type="Int32" />
           </FunctionImport>
           <EntitySet Name="MemberPlanMappings" EntityType="Dev_PPCPModel.MemberPlanMapping" />
-          <EntitySet Name="MemberPlans" EntityType="Dev_PPCPModel.MemberPlan" />
           <EntitySet Name="ModuleUseCases" EntityType="Dev_PPCPModel.ModuleUseCas" />
-          <EntitySet Name="RolesLKPs" EntityType="Dev_PPCPModel.RolesLKP" />
-          <AssociationSet Name="FK_MemberPlans_Member" Association="Dev_PPCPModel.FK_MemberPlans_Member">
-            <End Role="Member" EntitySet="Members" />
-            <End Role="MemberPlan" EntitySet="MemberPlans" />
-          </AssociationSet>
           <EntitySet Name="Providers" EntityType="Dev_PPCPModel.Provider" />
-          <EntitySet Name="PPCP_CODE_LKP" EntityType="Dev_PPCPModel.PPCP_CODE_LKP" />
           <AssociationSet Name="FK_ProviderCredentials_Provider" Association="Dev_PPCPModel.FK_ProviderCredentials_Provider">
             <End Role="Provider" EntitySet="Providers" />
             <End Role="ProviderCredential" EntitySet="ProviderCredentials" />
@@ -950,11 +950,22 @@ warning 6002: The table/view 'Dev_PPCP.dbo.PPCP_CODE_LKP' does not have a primar
             <End Role="ProviderSpecialization" EntitySet="ProviderSpecializations" />
           </AssociationSet>
           <EntitySet Name="MemberPlanInstallmentMappings" EntityType="Dev_PPCPModel.MemberPlanInstallmentMapping" />
+          <EntitySet Name="TransactionstoPractices" EntityType="Dev_PPCPModel.TransactionstoPractice" />
+          <EntitySet Name="Users" EntityType="Dev_PPCPModel.User" />
+          <EntitySet Name="UserRoles" EntityType="Dev_PPCPModel.UserRole" />
+          <AssociationSet Name="FK_UserRole_User" Association="Dev_PPCPModel.FK_UserRole_User">
+            <End Role="User" EntitySet="Users" />
+            <End Role="UserRole" EntitySet="UserRoles" />
+          </AssociationSet>
+          <EntitySet Name="MemberPlans" EntityType="Dev_PPCPModel.MemberPlan" />
+          <AssociationSet Name="FK_MemberPlans_Member" Association="Dev_PPCPModel.FK_MemberPlans_Member">
+            <End Role="Member" EntitySet="Members" />
+            <End Role="MemberPlan" EntitySet="MemberPlans" />
+          </AssociationSet>
           <AssociationSet Name="FK_MemberPlanInstallmentMapping_MemberPlans" Association="Dev_PPCPModel.FK_MemberPlanInstallmentMapping_MemberPlans">
             <End Role="MemberPlan" EntitySet="MemberPlans" />
             <End Role="MemberPlanInstallmentMapping" EntitySet="MemberPlanInstallmentMappings" />
           </AssociationSet>
-          <EntitySet Name="TransactionstoPractices" EntityType="Dev_PPCPModel.TransactionstoPractice" />
           </EntityContainer>
         <EntityType Name="CitiesLKP">
           <Key>
@@ -1054,6 +1065,7 @@ warning 6002: The table/view 'Dev_PPCP.dbo.PPCP_CODE_LKP' does not have a primar
           <Property Name="StripeCustomerID" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="PaymentDetails" Relationship="Dev_PPCPModel.FK_PaymentDetails_Member" FromRole="Member" ToRole="PaymentDetail" />
           <Property Name="TandCAcceptedDate" Type="DateTime" Precision="3" />
+          <Property Name="UserId" Type="Int32" />
           <NavigationProperty Name="MemberPlans" Relationship="Dev_PPCPModel.FK_MemberPlans_Member" FromRole="Member" ToRole="MemberPlan" />
         </EntityType>
         <EntityType Name="MemberCredential">
@@ -1148,16 +1160,6 @@ warning 6002: The table/view 'Dev_PPCP.dbo.PPCP_CODE_LKP' does not have a primar
           <Property Name="StateCode" Type="String" Nullable="false" MaxLength="5" FixedLength="false" Unicode="false" />
           <Property Name="CountryID" Type="Int32" Nullable="false" />
           <NavigationProperty Name="CountriesLKP" Relationship="Dev_PPCPModel.R_4" FromRole="StatesLKP" ToRole="CountriesLKP" />
-        </EntityType>
-        <EntityType Name="sysdiagram">
-          <Key>
-            <PropertyRef Name="diagram_id" />
-          </Key>
-          <Property Name="name" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
-          <Property Name="principal_id" Type="Int32" Nullable="false" />
-          <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="version" Type="Int32" />
-          <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
         </EntityType>
         <EntityType Name="TimeZonesLKP">
           <Key>
@@ -1332,7 +1334,7 @@ warning 6002: The table/view 'Dev_PPCP.dbo.PPCP_CODE_LKP' does not have a primar
           <Property Name="CreatedDate" Type="DateTime" Precision="3" />
           <Property Name="ModifiedBy" Type="Int32" />
           <Property Name="ModifiedDate" Type="DateTime" Precision="3" />
-          <Property Name="PaidAmount" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="PaidAmount" Type="Decimal" Precision="18" Scale="2" />
           <Property Name="NetAmount" Type="Decimal" Precision="18" Scale="2" />
           <Property Name="TransactionFee" Type="Decimal" Precision="18" Scale="2" />
           <Property Name="Plan_Code" Type="Int32" />
@@ -1473,6 +1475,7 @@ warning 6002: The table/view 'Dev_PPCP.dbo.PPCP_CODE_LKP' does not have a primar
           <NavigationProperty Name="OrganizationPlans" Relationship="Dev_PPCPModel.FK_OrganizationPlans_Organizations" FromRole="Organization" ToRole="OrganizationPlan" />
           <NavigationProperty Name="OrganizationUsers" Relationship="Dev_PPCPModel.FK_OrganizationUsers_Organizations" FromRole="Organization" ToRole="OrganizationUser" />
           <NavigationProperty Name="PlansMappings" Relationship="Dev_PPCPModel.FK_PlansMapping_Organizations" FromRole="Organization" ToRole="PlansMapping" />
+          <Property Name="UserId" Type="Int32" />
         </EntityType>
         <Association Name="FK_OrganizationPlans_Organizations">
           <End Type="Dev_PPCPModel.Organization" Role="Organization" Multiplicity="1" />
@@ -1632,38 +1635,6 @@ warning 6002: The table/view 'Dev_PPCP.dbo.PPCP_CODE_LKP' does not have a primar
           <Property Name="PlanName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="IsDeleted" Type="Boolean" />
         </EntityType>
-        <EntityType Name="MemberPlan">
-          <Key>
-            <PropertyRef Name="MemberPlanID" />
-          </Key>
-          <Property Name="MemberPlanID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="MemberID" Type="Int32" Nullable="false" />
-          <Property Name="MemberParentID" Type="Int32" />
-          <Property Name="MemberName" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="PlanID" Type="Int32" Nullable="false" />
-          <Property Name="PlanName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="OrganizationID" Type="Int32" />
-          <Property Name="OrganizationName" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
-          <Property Name="ProviderID" Type="Int32" />
-          <Property Name="ProviderName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="Status" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Name="PlanStartDate" Type="DateTime" Precision="0" />
-          <Property Name="PlanEndDate" Type="DateTime" Precision="0" />
-          <Property Name="TotalAmount" Type="Decimal" Precision="18" Scale="0" />
-          <Property Name="AmountPaid" Type="Decimal" Precision="18" Scale="0" />
-          <Property Name="DueAmount" Type="Decimal" Precision="18" Scale="0" />
-          <Property Name="Discount" Type="Decimal" Precision="18" Scale="0" />
-          <Property Name="PaymentInterval" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
-          <Property Name="Duration" Type="String" MaxLength="25" FixedLength="false" Unicode="true" />
-          <Property Name="CreatedBy" Type="Int32" />
-          <Property Name="CreatedDate" Type="DateTime" Precision="3" />
-          <Property Name="ModifiedBy" Type="Int32" />
-          <Property Name="ModifiedDate" Type="DateTime" Precision="3" />
-          <Property Name="Plan_Code" Type="Int32" />
-          <Property Name="PlanType" Type="Int32" />
-          <NavigationProperty Name="Member" Relationship="Dev_PPCPModel.FK_MemberPlans_Member" FromRole="MemberPlan" ToRole="Member" />
-          <NavigationProperty Name="MemberPlanInstallmentMappings" Relationship="Dev_PPCPModel.FK_MemberPlanInstallmentMapping_MemberPlans" FromRole="MemberPlan" ToRole="MemberPlanInstallmentMapping" />
-        </EntityType>
         <EntityType Name="ModuleUseCas">
           <Key>
             <PropertyRef Name="UseCaseID" />
@@ -1674,26 +1645,6 @@ warning 6002: The table/view 'Dev_PPCP.dbo.PPCP_CODE_LKP' does not have a primar
           <Property Name="UseCaseName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="IsVisiable" Type="Boolean" />
         </EntityType>
-        <EntityType Name="RolesLKP">
-          <Key>
-            <PropertyRef Name="RoleID" />
-          </Key>
-          <Property Name="RoleID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="RoleName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="OrganizationID" Type="Int32" />
-        </EntityType>
-        <Association Name="FK_MemberPlans_Member">
-          <End Type="Dev_PPCPModel.Member" Role="Member" Multiplicity="1" />
-          <End Type="Dev_PPCPModel.MemberPlan" Role="MemberPlan" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Member">
-              <PropertyRef Name="MemberID" />
-            </Principal>
-            <Dependent Role="MemberPlan">
-              <PropertyRef Name="MemberID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <EntityType Name="Provider">
           <Key>
             <PropertyRef Name="ProviderID" />
@@ -1736,24 +1687,7 @@ warning 6002: The table/view 'Dev_PPCP.dbo.PPCP_CODE_LKP' does not have a primar
           <Property Name="Degree" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="ProviderCredentials" Relationship="Dev_PPCPModel.FK_ProviderCredentials_Provider" FromRole="Provider" ToRole="ProviderCredential" />
           <NavigationProperty Name="ProviderSpecializations" Relationship="Dev_PPCPModel.FK_ProviderSpecialization_Provider" FromRole="Provider" ToRole="ProviderSpecialization" />
-        </EntityType>
-        <EntityType Name="PPCP_CODE_LKP">
-          <Key>
-            <PropertyRef Name="PPCP_CODE_ID" />
-            <PropertyRef Name="SNO" />
-            <PropertyRef Name="FROM_DATE" />
-            <PropertyRef Name="DESCRIPTION" />
-            <PropertyRef Name="CODE_TYPE_ID" />
-          </Key>
-          <Property Name="PPCP_CODE_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="PREFIX" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
-          <Property Name="SNO" Type="Int32" Nullable="false" />
-          <Property Name="SUFFIX" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
-          <Property Name="SNO_PADDING" Type="Int32" />
-          <Property Name="FROM_DATE" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="TO_DATE" Type="DateTime" Precision="3" />
-          <Property Name="DESCRIPTION" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="CODE_TYPE_ID" Type="Int32" Nullable="false" />
+          <Property Name="UserId" Type="Int32" />
         </EntityType>
         <Association Name="FK_ProviderCredentials_Provider">
           <End Type="Dev_PPCPModel.Provider" Role="Provider" Multiplicity="0..1" />
@@ -1794,18 +1728,6 @@ warning 6002: The table/view 'Dev_PPCP.dbo.PPCP_CODE_LKP' does not have a primar
           <Property Name="PaymentStatus" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="MemberPlan" Relationship="Dev_PPCPModel.FK_MemberPlanInstallmentMapping_MemberPlans" FromRole="MemberPlanInstallmentMapping" ToRole="MemberPlan" />
         </EntityType>
-        <Association Name="FK_MemberPlanInstallmentMapping_MemberPlans">
-          <End Type="Dev_PPCPModel.MemberPlan" Role="MemberPlan" Multiplicity="0..1" />
-          <End Type="Dev_PPCPModel.MemberPlanInstallmentMapping" Role="MemberPlanInstallmentMapping" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="MemberPlan">
-              <PropertyRef Name="MemberPlanID" />
-            </Principal>
-            <Dependent Role="MemberPlanInstallmentMapping">
-              <PropertyRef Name="MemberPlanID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <EntityType Name="TransactionstoPractice">
           <Key>
             <PropertyRef Name="ID" />
@@ -1822,6 +1744,116 @@ warning 6002: The table/view 'Dev_PPCP.dbo.PPCP_CODE_LKP' does not have a primar
           <Property Name="MemberPlanID" Type="Int32" />
           <Property Name="OrganizationName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
         </EntityType>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="UserID" />
+          </Key>
+          <Property Name="UserID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserName" Type="String" Nullable="false" MaxLength="25" FixedLength="false" Unicode="false" />
+          <Property Name="Password" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="FirstName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="LastName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Email" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="CountryCode" Type="String" MaxLength="5" FixedLength="false" Unicode="false" />
+          <Property Name="MobileNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="LastIPAddress" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="UserStatus" Type="String" Nullable="false" MaxLength="1" FixedLength="true" Unicode="false" />
+          <Property Name="FailedLoginCount" Type="Int32" />
+          <Property Name="IsAccountLocked" Type="Boolean" Nullable="false" />
+          <Property Name="LastPasswordChangeDate" Type="DateTime" Precision="0" />
+          <Property Name="IsTwoFactorEnabled" Type="Boolean" />
+          <Property Name="TwoFactorType" Type="Int32" />
+          <Property Name="IsTermsAccepted" Type="Boolean" />
+          <Property Name="TermsAcceptDate" Type="DateTime" Precision="0" />
+          <Property Name="IsActive" Type="Boolean" />
+          <Property Name="DeactivationDate" Type="DateTime" Precision="3" />
+          <Property Name="LastLoginDate" Type="DateTime" Precision="3" />
+          <Property Name="CreatedBy" Type="Int32" />
+          <Property Name="CreatedDate" Type="DateTime" Precision="0" />
+          <Property Name="ModifiedBy" Type="Int32" />
+          <Property Name="ModifiedDate" Type="DateTime" Precision="0" />
+          <Property Name="AssociatedEntityId" Type="Int32" />
+          <Property Name="Timezone" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="UserRoles" Relationship="Dev_PPCPModel.FK_UserRole_User" FromRole="User" ToRole="UserRole" />
+        </EntityType>
+        <EntityType Name="UserRole">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserId" Type="Int32" />
+          <Property Name="RoleID" Type="Int32" />
+          <Property Name="AssociatedEntityId" Type="Int32" />
+          <NavigationProperty Name="User" Relationship="Dev_PPCPModel.FK_UserRole_User" FromRole="UserRole" ToRole="User" />
+        </EntityType>
+        <Association Name="FK_UserRole_User">
+          <End Type="Dev_PPCPModel.User" Role="User" Multiplicity="0..1" />
+          <End Type="Dev_PPCPModel.UserRole" Role="UserRole" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="UserRole">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="MemberPlan">
+          <Key>
+            <PropertyRef Name="MemberPlanID" />
+          </Key>
+          <Property Name="MemberPlanID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="MemberID" Type="Int32" Nullable="false" />
+          <Property Name="MemberParentID" Type="Int32" />
+          <Property Name="MemberName" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="PlanID" Type="Int32" Nullable="false" />
+          <Property Name="PlanName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="OrganizationID" Type="Int32" />
+          <Property Name="OrganizationName" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
+          <Property Name="ProviderID" Type="Int32" />
+          <Property Name="ProviderName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Status" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="PlanStartDate" Type="DateTime" Precision="0" />
+          <Property Name="PlanEndDate" Type="DateTime" Precision="0" />
+          <Property Name="TotalAmount" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="AmountPaid" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="DueAmount" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="Discount" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="PaymentInterval" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
+          <Property Name="Duration" Type="String" MaxLength="25" FixedLength="false" Unicode="true" />
+          <Property Name="CreatedBy" Type="Int32" />
+          <Property Name="CreatedDate" Type="DateTime" Precision="3" />
+          <Property Name="ModifiedBy" Type="Int32" />
+          <Property Name="ModifiedDate" Type="DateTime" Precision="3" />
+          <Property Name="Plan_Code" Type="Int32" />
+          <Property Name="PlanType" Type="Int32" />
+          <NavigationProperty Name="Member" Relationship="Dev_PPCPModel.FK_MemberPlans_Member" FromRole="MemberPlan" ToRole="Member" />
+          <NavigationProperty Name="MemberPlanInstallmentMappings" Relationship="Dev_PPCPModel.FK_MemberPlanInstallmentMapping_MemberPlans" FromRole="MemberPlan" ToRole="MemberPlanInstallmentMapping" />
+        </EntityType>
+        <Association Name="FK_MemberPlans_Member">
+          <End Type="Dev_PPCPModel.Member" Role="Member" Multiplicity="1" />
+          <End Type="Dev_PPCPModel.MemberPlan" Role="MemberPlan" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Member">
+              <PropertyRef Name="MemberID" />
+            </Principal>
+            <Dependent Role="MemberPlan">
+              <PropertyRef Name="MemberID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_MemberPlanInstallmentMapping_MemberPlans">
+          <End Type="Dev_PPCPModel.MemberPlan" Role="MemberPlan" Multiplicity="0..1" />
+          <End Type="Dev_PPCPModel.MemberPlanInstallmentMapping" Role="MemberPlanInstallmentMapping" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="MemberPlan">
+              <PropertyRef Name="MemberPlanID" />
+            </Principal>
+            <Dependent Role="MemberPlanInstallmentMapping">
+              <PropertyRef Name="MemberPlanID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1890,6 +1922,7 @@ warning 6002: The table/view 'Dev_PPCP.dbo.PPCP_CODE_LKP' does not have a primar
           <EntitySetMapping Name="Members">
             <EntityTypeMapping TypeName="Dev_PPCPModel.Member">
               <MappingFragment StoreEntitySet="Member">
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
                 <ScalarProperty Name="TandCAcceptedDate" ColumnName="TandCAcceptedDate" />
                 <ScalarProperty Name="StripeCustomerID" ColumnName="StripeCustomerID" />
                 <ScalarProperty Name="Type" ColumnName="Type" />
@@ -2017,17 +2050,6 @@ warning 6002: The table/view 'Dev_PPCP.dbo.PPCP_CODE_LKP' does not have a primar
                 <ScalarProperty Name="StateCode" ColumnName="StateCode" />
                 <ScalarProperty Name="StateName" ColumnName="StateName" />
                 <ScalarProperty Name="StateID" ColumnName="StateID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="sysdiagrams">
-            <EntityTypeMapping TypeName="Dev_PPCPModel.sysdiagram">
-              <MappingFragment StoreEntitySet="sysdiagrams">
-                <ScalarProperty Name="definition" ColumnName="definition" />
-                <ScalarProperty Name="version" ColumnName="version" />
-                <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
-                <ScalarProperty Name="principal_id" ColumnName="principal_id" />
-                <ScalarProperty Name="name" ColumnName="name" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -2234,6 +2256,7 @@ warning 6002: The table/view 'Dev_PPCP.dbo.PPCP_CODE_LKP' does not have a primar
           <EntitySetMapping Name="Organizations">
             <EntityTypeMapping TypeName="Dev_PPCPModel.Organization">
               <MappingFragment StoreEntitySet="Organizations">
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
                 <ScalarProperty Name="TandCAcceptedDate" ColumnName="TandCAcceptedDate" />
                 <ScalarProperty Name="AccountID" ColumnName="AccountID" />
                 <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
@@ -2391,37 +2414,6 @@ warning 6002: The table/view 'Dev_PPCP.dbo.PPCP_CODE_LKP' does not have a primar
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="MemberPlans">
-            <EntityTypeMapping TypeName="Dev_PPCPModel.MemberPlan">
-              <MappingFragment StoreEntitySet="MemberPlans">
-                <ScalarProperty Name="PlanType" ColumnName="PlanType" />
-                <ScalarProperty Name="Plan_Code" ColumnName="Plan_Code" />
-                <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
-                <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />
-                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
-                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
-                <ScalarProperty Name="Duration" ColumnName="Duration" />
-                <ScalarProperty Name="PaymentInterval" ColumnName="PaymentInterval" />
-                <ScalarProperty Name="Discount" ColumnName="Discount" />
-                <ScalarProperty Name="DueAmount" ColumnName="DueAmount" />
-                <ScalarProperty Name="AmountPaid" ColumnName="AmountPaid" />
-                <ScalarProperty Name="TotalAmount" ColumnName="TotalAmount" />
-                <ScalarProperty Name="PlanEndDate" ColumnName="PlanEndDate" />
-                <ScalarProperty Name="PlanStartDate" ColumnName="PlanStartDate" />
-                <ScalarProperty Name="Status" ColumnName="Status" />
-                <ScalarProperty Name="ProviderName" ColumnName="ProviderName" />
-                <ScalarProperty Name="ProviderID" ColumnName="ProviderID" />
-                <ScalarProperty Name="OrganizationName" ColumnName="OrganizationName" />
-                <ScalarProperty Name="OrganizationID" ColumnName="OrganizationID" />
-                <ScalarProperty Name="PlanName" ColumnName="PlanName" />
-                <ScalarProperty Name="PlanID" ColumnName="PlanID" />
-                <ScalarProperty Name="MemberName" ColumnName="MemberName" />
-                <ScalarProperty Name="MemberParentID" ColumnName="MemberParentID" />
-                <ScalarProperty Name="MemberID" ColumnName="MemberID" />
-                <ScalarProperty Name="MemberPlanID" ColumnName="MemberPlanID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="ModuleUseCases">
             <EntityTypeMapping TypeName="Dev_PPCPModel.ModuleUseCas">
               <MappingFragment StoreEntitySet="ModuleUseCases">
@@ -2433,18 +2425,10 @@ warning 6002: The table/view 'Dev_PPCP.dbo.PPCP_CODE_LKP' does not have a primar
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="RolesLKPs">
-            <EntityTypeMapping TypeName="Dev_PPCPModel.RolesLKP">
-              <MappingFragment StoreEntitySet="RolesLKP">
-                <ScalarProperty Name="OrganizationID" ColumnName="OrganizationID" />
-                <ScalarProperty Name="RoleName" ColumnName="RoleName" />
-                <ScalarProperty Name="RoleID" ColumnName="RoleID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="Providers">
             <EntityTypeMapping TypeName="Dev_PPCPModel.Provider">
               <MappingFragment StoreEntitySet="Provider">
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
                 <ScalarProperty Name="Degree" ColumnName="Degree" />
                 <ScalarProperty Name="Fax" ColumnName="Fax" />
                 <ScalarProperty Name="SpecializationID" ColumnName="SpecializationID" />
@@ -2484,21 +2468,6 @@ warning 6002: The table/view 'Dev_PPCP.dbo.PPCP_CODE_LKP' does not have a primar
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="PPCP_CODE_LKP">
-            <EntityTypeMapping TypeName="Dev_PPCPModel.PPCP_CODE_LKP">
-              <MappingFragment StoreEntitySet="PPCP_CODE_LKP">
-                <ScalarProperty Name="CODE_TYPE_ID" ColumnName="CODE_TYPE_ID" />
-                <ScalarProperty Name="DESCRIPTION" ColumnName="DESCRIPTION" />
-                <ScalarProperty Name="TO_DATE" ColumnName="TO_DATE" />
-                <ScalarProperty Name="FROM_DATE" ColumnName="FROM_DATE" />
-                <ScalarProperty Name="SNO_PADDING" ColumnName="SNO_PADDING" />
-                <ScalarProperty Name="SUFFIX" ColumnName="SUFFIX" />
-                <ScalarProperty Name="SNO" ColumnName="SNO" />
-                <ScalarProperty Name="PREFIX" ColumnName="PREFIX" />
-                <ScalarProperty Name="PPCP_CODE_ID" ColumnName="PPCP_CODE_ID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="MemberPlanInstallmentMappings">
             <EntityTypeMapping TypeName="Dev_PPCPModel.MemberPlanInstallmentMapping">
               <MappingFragment StoreEntitySet="MemberPlanInstallmentMapping">
@@ -2528,6 +2497,79 @@ warning 6002: The table/view 'Dev_PPCP.dbo.PPCP_CODE_LKP' does not have a primar
                 <ScalarProperty Name="MemberName" ColumnName="MemberName" />
                 <ScalarProperty Name="MemberID" ColumnName="MemberID" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Users">
+            <EntityTypeMapping TypeName="Dev_PPCPModel.User">
+              <MappingFragment StoreEntitySet="User">
+                <ScalarProperty Name="Timezone" ColumnName="Timezone" />
+                <ScalarProperty Name="AssociatedEntityId" ColumnName="AssociatedEntityId" />
+                <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+                <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="LastLoginDate" ColumnName="LastLoginDate" />
+                <ScalarProperty Name="DeactivationDate" ColumnName="DeactivationDate" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="TermsAcceptDate" ColumnName="TermsAcceptDate" />
+                <ScalarProperty Name="IsTermsAccepted" ColumnName="IsTermsAccepted" />
+                <ScalarProperty Name="TwoFactorType" ColumnName="TwoFactorType" />
+                <ScalarProperty Name="IsTwoFactorEnabled" ColumnName="IsTwoFactorEnabled" />
+                <ScalarProperty Name="LastPasswordChangeDate" ColumnName="LastPasswordChangeDate" />
+                <ScalarProperty Name="IsAccountLocked" ColumnName="IsAccountLocked" />
+                <ScalarProperty Name="FailedLoginCount" ColumnName="FailedLoginCount" />
+                <ScalarProperty Name="UserStatus" ColumnName="UserStatus" />
+                <ScalarProperty Name="LastIPAddress" ColumnName="LastIPAddress" />
+                <ScalarProperty Name="MobileNumber" ColumnName="MobileNumber" />
+                <ScalarProperty Name="CountryCode" ColumnName="CountryCode" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="UserName" ColumnName="UserName" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="UserRoles">
+            <EntityTypeMapping TypeName="Dev_PPCPModel.UserRole">
+              <MappingFragment StoreEntitySet="UserRole">
+                <ScalarProperty Name="AssociatedEntityId" ColumnName="AssociatedEntityId" />
+                <ScalarProperty Name="RoleID" ColumnName="RoleID" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="MemberPlans">
+            <EntityTypeMapping TypeName="Dev_PPCPModel.MemberPlan">
+              <MappingFragment StoreEntitySet="MemberPlans">
+                <ScalarProperty Name="PlanType" ColumnName="PlanType" />
+                <ScalarProperty Name="Plan_Code" ColumnName="Plan_Code" />
+                <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+                <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="Duration" ColumnName="Duration" />
+                <ScalarProperty Name="PaymentInterval" ColumnName="PaymentInterval" />
+                <ScalarProperty Name="Discount" ColumnName="Discount" />
+                <ScalarProperty Name="DueAmount" ColumnName="DueAmount" />
+                <ScalarProperty Name="AmountPaid" ColumnName="AmountPaid" />
+                <ScalarProperty Name="TotalAmount" ColumnName="TotalAmount" />
+                <ScalarProperty Name="PlanEndDate" ColumnName="PlanEndDate" />
+                <ScalarProperty Name="PlanStartDate" ColumnName="PlanStartDate" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="ProviderName" ColumnName="ProviderName" />
+                <ScalarProperty Name="ProviderID" ColumnName="ProviderID" />
+                <ScalarProperty Name="OrganizationName" ColumnName="OrganizationName" />
+                <ScalarProperty Name="OrganizationID" ColumnName="OrganizationID" />
+                <ScalarProperty Name="PlanName" ColumnName="PlanName" />
+                <ScalarProperty Name="PlanID" ColumnName="PlanID" />
+                <ScalarProperty Name="MemberName" ColumnName="MemberName" />
+                <ScalarProperty Name="MemberParentID" ColumnName="MemberParentID" />
+                <ScalarProperty Name="MemberID" ColumnName="MemberID" />
+                <ScalarProperty Name="MemberPlanID" ColumnName="MemberPlanID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

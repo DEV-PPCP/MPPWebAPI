@@ -31,7 +31,7 @@ namespace PPCPWebApiServices.Models.PPCPWebService.DAL
                 OrganizationDetails objDCOrganizationService = (OrganizationDetails)serializer.Deserialize(rdr);
                 string AccountId = "";
                 string stripeApiKey = System.Configuration.ConfigurationManager.AppSettings["StripeApiKey"];
-                StripeConfiguration.SetApiKey(stripeApiKey);
+                StripeConfiguration.ApiKey = stripeApiKey;
                 Account account = stripeMethods.CreateStripeCustomer(objDCOrganizationService.AccountHolderName,
                                                                                 objDCOrganizationService.AccountNumber,
                                                                                  objDCOrganizationService.RoutingNumber,
@@ -302,40 +302,40 @@ namespace PPCPWebApiServices.Models.PPCPWebService.DAL
             return getOrganizationUsersDetails;
         }
 
-        public List<ValidateOrgForgotCredentials> ValidateOrgForgotCredentials(string Username, string Firstname, string Lastname, string Mobilenumber, string Countrycode, string email, string type)
-        {
-            List<ValidateOrgForgotCredentials> getOrganizationUsersDetails = new List<ValidateOrgForgotCredentials>();
-            try
-            {
+        //public List<ValidateOrgForgotCredentials> ValidateOrgForgotCredentials(string Username, string Firstname, string Lastname, string Mobilenumber, string Countrycode, string email, string type)
+        //{
+        //    List<ValidateOrgForgotCredentials> getOrganizationUsersDetails = new List<ValidateOrgForgotCredentials>();
+        //    try
+        //    {
 
-                using (var context = new DALDefaultService())
-                {
-                    SqlParameter UserName = new SqlParameter("@UserName", Username);
-                    SqlParameter FirstName = new SqlParameter("@FirstName", Firstname);
-                    SqlParameter LastName = new SqlParameter("@LastName", Lastname);
-                    SqlParameter MobileNumber = new SqlParameter("@MobileNumber", Mobilenumber);
-                    SqlParameter CountryCode = new SqlParameter("@CountryCode", Countrycode);
-                    SqlParameter Email = new SqlParameter("@Email", email);
-                    SqlParameter TempType = new SqlParameter("@TempType", type);
-                    getOrganizationUsersDetails = context.Database.SqlQuery<ValidateOrgForgotCredentials>("Pr_ValidateOrgForgotCredentials @UserName,@FirstName,@LastName,@MobileNumber,@CountryCode,@Email,@TempType ", UserName, FirstName, LastName, MobileNumber, CountryCode, Email, TempType).ToList();
-                }
-                if (getOrganizationUsersDetails.Count > 0)
-                {
-                    DALDefaultService dal = new DALDefaultService();
-                    string OTP = dal.randamNumber();
-                    string Message = "Dear " + getOrganizationUsersDetails[0].FirstName + " " + getOrganizationUsersDetails[0].LastName + ", Your one time password is : " + OTP;
-                    dal.SendMessageByText(Message, getOrganizationUsersDetails[0].MobileNumber, getOrganizationUsersDetails[0].CountryCode);
-                    getOrganizationUsersDetails[0].Otp = OTP;
-                }
+        //        using (var context = new DALDefaultService())
+        //        {
+        //            SqlParameter UserName = new SqlParameter("@UserName", Username);
+        //            SqlParameter FirstName = new SqlParameter("@FirstName", Firstname);
+        //            SqlParameter LastName = new SqlParameter("@LastName", Lastname);
+        //            SqlParameter MobileNumber = new SqlParameter("@MobileNumber", Mobilenumber);
+        //            SqlParameter CountryCode = new SqlParameter("@CountryCode", Countrycode);
+        //            SqlParameter Email = new SqlParameter("@Email", email);
+        //            SqlParameter TempType = new SqlParameter("@TempType", type);
+        //            getOrganizationUsersDetails = context.Database.SqlQuery<ValidateOrgForgotCredentials>("Pr_ValidateOrgForgotCredentials @UserName,@FirstName,@LastName,@MobileNumber,@CountryCode,@Email,@TempType ", UserName, FirstName, LastName, MobileNumber, CountryCode, Email, TempType).ToList();
+        //        }
+        //        if (getOrganizationUsersDetails.Count > 0)
+        //        {
+        //            DALDefaultService dal = new DALDefaultService();
+        //            string OTP = dal.randamNumber();
+        //            string Message = "Dear " + getOrganizationUsersDetails[0].FirstName + " " + getOrganizationUsersDetails[0].LastName + ", Your one time password is : " + OTP;
+        //            dal.SendMessageByText(Message, getOrganizationUsersDetails[0].MobileNumber, getOrganizationUsersDetails[0].CountryCode);
+        //            getOrganizationUsersDetails[0].Otp = OTP;
+        //        }
 
 
-            }
-            catch (Exception ex)
-            {
+        //    }
+        //    catch (Exception ex)
+        //    {
 
-            }
-            return getOrganizationUsersDetails;
-        }
+        //    }
+        //    return getOrganizationUsersDetails;
+        //}
 
         public int UpdateOrgCredentials(int userID, string Password)
         {
@@ -374,9 +374,14 @@ namespace PPCPWebApiServices.Models.PPCPWebService.DAL
                 XmlDocument xmlDoc = new XmlDocument();
                 xmlDoc.LoadXml(xml);
                 XmlNode node = xmlDoc.SelectSingleNode("/OrganizationDetails ");
-                string UserPassword = node["Password"].InnerText;
-                byte[] bytes = Encoding.UTF8.GetBytes(UserPassword);
-                string Encryptpassword = Convert.ToBase64String(bytes);
+                string UserPassword = "";
+                string Encryptpassword = "";
+                if (node["Password"] != null)
+                {
+                    UserPassword = node["Password"].InnerText;
+                    byte[] bytes = Encoding.UTF8.GetBytes(UserPassword);
+                    Encryptpassword = Convert.ToBase64String(bytes);
+                }
                 try
                 {
                     if (xml != "")
@@ -501,7 +506,11 @@ namespace PPCPWebApiServices.Models.PPCPWebService.DAL
             {
                 if(MemberID==0 && OrganizationID!=0)
                 {
-                    getMemberDetails = Context.Members.Where(m => m.ID == OrganizationID && m.Type == 2).ToList();
+                    //getMemberDetails = Context.Members.Where(m => m.ID == OrganizationID && m.Type == 2).ToList();
+                    getMemberDetails = (from mp in Context.MemberPlans
+                                        join m in Context.Members on mp.MemberID equals m.MemberID
+                                        where mp.OrganizationID == OrganizationID
+                                        select m).ToList();
                 }
                 else if (MemberID == 0 && OrganizationID == 0)
                 {
@@ -703,7 +712,8 @@ namespace PPCPWebApiServices.Models.PPCPWebService.DAL
                     objsys.OrganizationID = intOrgId;
                     objsys.PlanstartDate = strStartDate;
                     objsys.IsDelete = false;
-                    objsys.CreatedDate = DateTime.Parse(Convert.ToString(DateTime.Now), new CultureInfo("en-US"));
+                    objsys.CreatedDate = DateTime.Parse(Convert.ToString(DateTime.UtcNow), new CultureInfo("en-US"));
+                    objsys.ModifiedDate = DateTime.Parse(Convert.ToString(DateTime.UtcNow), new CultureInfo("en-US"));
                     Context.OrganizationPlans.Add(objsys);
                     res = Context.SaveChanges();
                 }
@@ -776,6 +786,7 @@ namespace PPCPWebApiServices.Models.PPCPWebService.DAL
                     if (providerDetails.ProviderID != 0)
                     {
                         Provider objProvider = Context.Providers.First(m => m.ProviderID == providerDetails.ProviderID);
+                        int? ProviderUserId = objProvider.UserId;
                         objProvider.FirstName = providerDetails.FirstName;
                         objProvider.LastName = providerDetails.LastName;
                         objProvider.DOB = providerDetails.DOB;
@@ -798,10 +809,26 @@ namespace PPCPWebApiServices.Models.PPCPWebService.DAL
                         objProvider.Address = providerDetails.Address;
                         objProvider.Fax = providerDetails.Fax;
                         objProvider.Degree = providerDetails.Degree;
+                        objProvider.ModifiedDate = DateTime.Parse(Convert.ToString(DateTime.UtcNow), new CultureInfo("en-US"));
                         int result = Context.SaveChanges();
                         Result objresult = new Result();
                         objresult.ResultID = result;
                         res.Add(objresult);
+
+                        Context.PlansMappings.Where(x => x.ProviderID == providerDetails.ProviderID).ToList().ForEach(x =>
+                        {
+                            x.ProviderName = providerDetails.FirstName + " " + providerDetails.LastName; 
+                            x.ModifiedDate = DateTime.Parse(Convert.ToString(DateTime.UtcNow), new CultureInfo("en-US"));
+                        });
+                        Context.SaveChanges();
+
+                        User objuser = Context.Users.First(m => m.UserID == ProviderUserId);
+                        objuser.FirstName = providerDetails.FirstName; ;
+                        objuser.LastName = providerDetails.LastName;
+                        objuser.Email = providerDetails.Email;
+                        objuser.CountryCode = providerDetails.CountryCode;
+                        objuser.MobileNumber= providerDetails.MobileNumber;
+                        Context.SaveChanges();
                     }
                 }
 
@@ -914,7 +941,10 @@ namespace PPCPWebApiServices.Models.PPCPWebService.DAL
                     objPlanMapping.PlanStartDate = strStartDate;
                     objPlanMapping.ProviderID = intProviderID;
                     objPlanMapping.ProviderName = strProviderName;
-                    objPlanMapping.IsActive = false;
+                    objPlanMapping.IsActive = true;
+                    objPlanMapping.CreatedDate = DateTime.Parse(Convert.ToString(DateTime.UtcNow), new CultureInfo("en-US"));
+                    objPlanMapping.ModifiedDate= DateTime.Parse(Convert.ToString(DateTime.UtcNow), new CultureInfo("en-US"));
+                    objPlanMapping.IsDelete = false;
                     Context.PlansMappings.Add(objPlanMapping);
                     int res = Context.SaveChanges();
                     Result obj = new Result();
@@ -948,6 +978,7 @@ namespace PPCPWebApiServices.Models.PPCPWebService.DAL
                     //MemberDetails MemberDetails = new MemberDetails();
 
                     Member objMemberLoginDetails = Context.Members.First(m => m.MemberID == objMemberDetails.MemberID);
+                    int? UserId = objMemberLoginDetails.UserId;
                     objMemberLoginDetails.MemberID = Convert.ToInt32(objMemberDetails.MemberID);
                     objMemberLoginDetails.FirstName = objMemberDetails.FirstName;
                     objMemberLoginDetails.LastName = objMemberDetails.LastName;
@@ -971,6 +1002,29 @@ namespace PPCPWebApiServices.Models.PPCPWebService.DAL
                     Result obj = new Result();
                     obj.ResultID = res;
                     objResult.Add(obj);
+
+                    Context.MemberPlans.Where(x => x.MemberID == objMemberDetails.MemberID).ToList().ForEach(x =>
+                    {
+                        x.MemberName = objMemberDetails.FirstName + " " + objMemberDetails.LastName;
+                    });
+                    Context.MemberPlanMappings.Where(x => x.MemberID == objMemberDetails.MemberID).ToList().ForEach(x =>
+                    {
+                        x.MemberName = objMemberDetails.FirstName + " " + objMemberDetails.LastName;
+                    });
+                    Context.SaveChanges();
+
+                    User objuser = Context.Users.First(m => m.UserID == UserId);
+                    objuser.FirstName = objMemberDetails.FirstName; ;
+                    objuser.LastName = objMemberDetails.LastName;
+                    objuser.Email = objMemberDetails.Email;
+                    objuser.CountryCode = objMemberDetails.CountryCode;
+                    objuser.MobileNumber = objMemberDetails.MobileNumber;
+                    objuser.IsTwoFactorEnabled = Convert.ToBoolean(objMemberDetails.IsTwofactorAuthentication);
+                    if(objMemberDetails.IsTwofactorAuthentication)
+                        objuser.TwoFactorType = Convert.ToInt32(objMemberDetails.TwoFactorType);
+                    else
+                        objuser.TwoFactorType = 0;
+                    Context.SaveChanges();
                 }
             }
             catch (Exception ex)
@@ -1079,7 +1133,7 @@ namespace PPCPWebApiServices.Models.PPCPWebService.DAL
                     if(OrgType != 0){
 
                         Organization Organization = Context.Organizations.First(m => m.OrganizationID == OrgaziationID);
-                        Organization.TandCAcceptedDate = DateTime.Parse(Convert.ToString(DateTime.Now), new CultureInfo("en-US"));
+                        Organization.TandCAcceptedDate = DateTime.Parse(Convert.ToString(DateTime.UtcNow), new CultureInfo("en-US"));
                         int Result = Context.SaveChanges();
 
                         res.ResultID = Result;
@@ -1089,7 +1143,7 @@ namespace PPCPWebApiServices.Models.PPCPWebService.DAL
                     {
 
                         OrganizationUser Organization = Context.OrganizationUsers.First(m => m.UserID == UserID);
-                        Organization.TandCAcceptedDate = DateTime.Parse(Convert.ToString(DateTime.Now), new CultureInfo("en-US"));
+                        Organization.TandCAcceptedDate = DateTime.Parse(Convert.ToString(DateTime.UtcNow), new CultureInfo("en-US"));
                         int Result = Context.SaveChanges();
 
                         res.ResultID = Result;
@@ -1204,7 +1258,7 @@ namespace PPCPWebApiServices.Models.PPCPWebService.DAL
         public object GetPPCPReports(DateTime FromDate, DateTime ToDate, int ProviderID, string PaymentStatus, string PlanType,
             int OrganziationID,int Type)
         {
-            DateTime todate1=DateTime.Now;
+            DateTime todate1=DateTime.UtcNow;
             if(ToDate !=null)
 
             {

@@ -1,4 +1,5 @@
-﻿using PPCPWebApiServices.Models.PPCPWebService.DAL;
+﻿using PPCPWebApiServices.CustomEntities;
+using PPCPWebApiServices.Models.PPCPWebService.DAL;
 using PPCPWebApiServices.Models.PPCPWebService.DC;
 using System;
 using System.Collections.Generic;
@@ -167,7 +168,7 @@ namespace PPCPWebApiServices.ServiceAccess
         public object GetMemberFamilyPlanDetails(string strMemberParentID,string PlanType)
         {
           
-            List<MemberPlan> objGetPaymentDetails = new List<MemberPlan>();
+            List<MemberPlanDetails> objGetPaymentDetails = new List<MemberPlanDetails>();
             objGetPaymentDetails = objdal.GetMemberFamilyPlanDetails(Convert.ToInt32(strMemberParentID), Convert.ToInt32(PlanType));
             return objGetPaymentDetails;
         }

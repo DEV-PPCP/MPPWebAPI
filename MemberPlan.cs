@@ -45,8 +45,7 @@ namespace PPCPWebApiServices
         public Nullable<System.DateTime> ModifiedDate { get; set; }
         public Nullable<int> Plan_Code { get; set; }
         public Nullable<int> PlanType { get; set; }
-        public Nullable<decimal> GrandTotalAmount { get; set; }
-        public Nullable<decimal> GrandAmountPaid { get; set; }
+    
         public virtual Member Member { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<MemberPlanInstallmentMapping> MemberPlanInstallmentMappings { get; set; }

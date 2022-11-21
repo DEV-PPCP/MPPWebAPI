@@ -17,20 +17,11 @@ namespace PPCPWebApiServices
     
     public partial class Dev_PPCPEntities : DbContext
     {
-
-        public Dev_PPCPEntities(int val)
-          : base("name=Dev_PPCPEntities")
+        public Dev_PPCPEntities()
+            : base("name=Dev_PPCPEntities")
         {
-            if (val == 1)
-            {
-                Configuration.ProxyCreationEnabled = false;
-            }
-            else
-            {
-                Configuration.ProxyCreationEnabled = true;
-            }
         }
-
+    
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             throw new UnintentionalCodeFirstException();
@@ -47,7 +38,6 @@ namespace PPCPWebApiServices
         public virtual DbSet<RelationshipLkp> RelationshipLkps { get; set; }
         public virtual DbSet<SpecializationLKP> SpecializationLKPs { get; set; }
         public virtual DbSet<StatesLKP> StatesLKPs { get; set; }
-        public virtual DbSet<sysdiagram> sysdiagrams { get; set; }
         public virtual DbSet<TimeZonesLKP> TimeZonesLKPs { get; set; }
         public virtual DbSet<UserCredential> UserCredentials { get; set; }
         public virtual DbSet<Application_Parameter_Config> Application_Parameter_Config { get; set; }
@@ -59,13 +49,13 @@ namespace PPCPWebApiServices
         public virtual DbSet<OrganizationUser> OrganizationUsers { get; set; }
         public virtual DbSet<Organization> Organizations { get; set; }
         public virtual DbSet<MemberPlanMapping> MemberPlanMappings { get; set; }
-        public virtual DbSet<MemberPlan> MemberPlans { get; set; }
         public virtual DbSet<ModuleUseCas> ModuleUseCases { get; set; }
-        public virtual DbSet<RolesLKP> RolesLKPs { get; set; }
         public virtual DbSet<Provider> Providers { get; set; }
-        public virtual DbSet<PPCP_CODE_LKP> PPCP_CODE_LKP { get; set; }
         public virtual DbSet<MemberPlanInstallmentMapping> MemberPlanInstallmentMappings { get; set; }
         public virtual DbSet<TransactionstoPractice> TransactionstoPractices { get; set; }
+        public virtual DbSet<User> Users { get; set; }
+        public virtual DbSet<UserRole> UserRoles { get; set; }
+        public virtual DbSet<MemberPlan> MemberPlans { get; set; }
     
         public virtual ObjectResult<Pr_GetProviders_Result> Pr_GetProviders(Nullable<int> organizationID)
         {

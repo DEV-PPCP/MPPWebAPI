@@ -356,6 +356,11 @@ namespace PPCPWebApiServices.Models.PPCPWebService.DC
         public Nullable<System.DateTime> TandCAcceptedDate { get; set; }
 
 
+        //Plan details
+        public string PlanName { get; set; }
+        public DateTime PlanStartDate { get; set; }
+        public DateTime PlanEndDate { get; set; }
+
     }
 
 

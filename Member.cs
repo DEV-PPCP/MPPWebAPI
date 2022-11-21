@@ -56,6 +56,7 @@ namespace PPCPWebApiServices
         public Nullable<int> Type { get; set; }
         public string StripeCustomerID { get; set; }
         public Nullable<System.DateTime> TandCAcceptedDate { get; set; }
+        public Nullable<int> UserId { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<FamilyMember> FamilyMembers { get; set; }

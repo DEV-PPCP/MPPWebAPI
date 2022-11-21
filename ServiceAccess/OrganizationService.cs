@@ -137,12 +137,6 @@ namespace PPCPWebApiServices.ServiceAccess
         }
 
 
-        public object ValidateOrgForgotCredentials(string UserName, string FirstName, string LastName, string MobileNumber, string CountryCode, string Email, string Type)
-        {
-
-            List<ValidateOrgForgotCredentials> ValidateUserName = objdal.ValidateOrgForgotCredentials(UserName, FirstName, LastName, MobileNumber, CountryCode, Email, Type);
-            return ValidateUserName;
-        }
 
         public object UpdateOrgPassword(string UserID, string Password)
         {
@@ -220,6 +214,9 @@ namespace PPCPWebApiServices.ServiceAccess
 
         public object GetOrganizationMemberDetails(string OrganizationID, string strMemberID)
         {
+            if (string.IsNullOrEmpty(OrganizationID)) OrganizationID = "0";
+            if (string.IsNullOrEmpty(strMemberID)) strMemberID = "0";
+
             List<Member> GetMemberDetails = new List<Member>();
 
             GetMemberDetails = objdal.GetOrganizationMemberDetails(Convert.ToInt32(OrganizationID), Convert.ToInt32(strMemberID));

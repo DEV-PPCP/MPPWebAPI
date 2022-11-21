@@ -1,4 +1,4 @@
-﻿// T4 code generation is enabled for model 'D:\Code\GIT-Projects\GIT-PPCP\PPCPWebApiServices\PPCP_EntityFrameWork.edmx'. 
+﻿// T4 code generation is enabled for model 'C:\MyPhysicianGithub\MPPWebAPI\PPCP_EntityFrameWork.edmx'. 
 // To enable legacy code generation, change the value of the 'Code Generation Strategy' designer
 // property to 'Legacy ObjectContext'. This property is available in the Properties Window when the model
 // is open in the designer.

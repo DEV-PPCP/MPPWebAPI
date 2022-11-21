@@ -57,7 +57,8 @@ namespace PPCPWebApiServices
         public string SpecializationID { get; set; }
         public string Fax { get; set; }
         public string Degree { get; set; }
-        public string OTP { get; set; }
+        public Nullable<int> UserId { get; set; }
+    
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ProviderCredential> ProviderCredentials { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

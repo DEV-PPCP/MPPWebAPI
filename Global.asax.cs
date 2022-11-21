@@ -14,6 +14,7 @@ namespace LabWebApiServices
 {
     public class WebApiApplication : System.Web.HttpApplication
     {
+        static string ErrorLogFolder = System.Configuration.ConfigurationManager.AppSettings["ErrorLogFolder"].ToString();
         protected void Application_Start()
         {
             AreaRegistration.RegisterAllAreas();
@@ -46,7 +47,7 @@ namespace LabWebApiServices
             #region Exception
             Exception exception = Server.GetLastError();
             string SystemName = System.Net.Dns.GetHostName();
-            string dir = "D:/Error";
+            string dir = ErrorLogFolder;
             string file = dir + @"\" + DateTime.Today.ToString("MM-dd-yyyy") + ".txt";
             if (!(Directory.Exists(dir)))
             {

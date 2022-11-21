@@ -27,7 +27,7 @@ namespace PPCPWebApiServices
         public Nullable<System.DateTime> CreatedDate { get; set; }
         public Nullable<int> ModifiedBy { get; set; }
         public Nullable<System.DateTime> ModifiedDate { get; set; }
-        public string OTP { get; set; }
+    
         public virtual Provider Provider { get; set; }
     }
 }

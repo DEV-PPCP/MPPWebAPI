@@ -12,11 +12,121 @@ using System.Linq;
 using System.Text;
 using System.Web;
 using System.IO;
+using System.Configuration;
+using System.Data;
+using Dapper;
+using PPCPWebApiServices.CustomEntities;
+
 namespace PPCPWebApiServices.Models.PPCPWebService.DAL
 {
 
     public class DALDefaultService : DbContext
     {
+        #region Account Management
+        public List<UserProfile> ValidateCredentials(string Username, string Password, string Ipaddress)
+        {
+            List<UserProfile> usrDetails = new List<UserProfile>();
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(ConfigurationManager.ConnectionStrings["DALDefaultService"].ConnectionString))
+                {
+                    usrDetails = conn.Query<UserProfile>("pr_UserValidate", new { Username, Password, Ipaddress }, commandType: CommandType.StoredProcedure).ToList();
+                }
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+            return usrDetails;
+        }
+
+        public List<Credentials> ValidateForgotCredentials(string UserName, string FirstName, string LastName, string CountryCode, string MobileNumber, string Email)
+        {
+            List<Credentials> result;
+            using (var context = new DALDefaultService())
+            {
+                SqlParameter pUserName = new SqlParameter("@UserName", UserName);
+                SqlParameter pFirstName = new SqlParameter("@FirstName", FirstName);
+                SqlParameter pLastName = new SqlParameter("@LastName", LastName);
+                SqlParameter pCountryCode = new SqlParameter("@CountryCode", CountryCode);
+                SqlParameter pMobileNumber = new SqlParameter("@MobileNumber", MobileNumber);
+                SqlParameter pEmail = new SqlParameter("@Email", Email);
+
+                result = context.Database.SqlQuery<Credentials>("Pr_ValidateForgotCredentials @UserName, @FirstName,@LastName,@CountryCode,@MobileNumber,@Email",
+                    pUserName, pFirstName, pLastName, pCountryCode, pMobileNumber, pEmail).ToList();
+            }
+            if (result.Count > 0)
+            {
+                string OTP = randamNumber();
+                string Message = "OTP: " + OTP;
+                result[0].OTP = OTP;
+                SendMessageByText(Message, result[0].MobileNumber, result[0].CountryCode);
+                ForgotCredentials(Message, result[0].Email, "OTP");
+            }
+
+            return result;
+        }
+
+        public int SendCredentials(string FirstName, string LastName, string CountryCode, string MobileNumber, string Email, string UserName, string Password, string TempID)
+        {
+            // byte[] bytes = Decoder.UTF8.GetBytes(Password);
+            string password = decode(Password);//HttpUtility.HtmlDecode(Password);
+                                               // password = Convert.ToBase64String(bytes);
+            string Message = "";
+            if (TempID.Equals("1"))
+            {
+                Message = "Dear " + FirstName + " " + LastName + " your Password is : " + password;
+            }
+            else
+            {
+                Message = "Dear " + FirstName + " " + LastName + " your UserName is : " + UserName;
+            }
+
+            SendMessageByText(Message, MobileNumber, CountryCode);
+            ForgotCredentials(Message, Email, "Credentials");
+            return 1;
+
+        }
+        public static string decode(string text)
+        {
+            byte[] mybyte = System.Convert.FromBase64String(text);
+            string returntext = System.Text.Encoding.UTF8.GetString(mybyte);
+            return returntext;
+        }
+
+        private void ForgotCredentials(string Message, string Email, string Heading)
+        {
+            try
+            {
+                string body = ReadFile(VirtualPathUtility.MakeRelative(VirtualPathUtility.ToAppRelative(HttpContext.Current.Request.CurrentExecutionFilePath), "~/Resource/EmailTemplates/SendOTPToUser.htm"));
+
+                //string sub = message + " " + "Payment Receipt";
+                string sub = "Forgot Credentials";
+                body = body.Replace("##Date##", DateTime.UtcNow.ToShortDateString());
+                body = body.Replace("##Heading##", Heading);
+                body = body.Replace("##Message##", Message);
+
+                SendEmail(sub, Email, body, "");
+            }
+            catch (Exception ex)
+            {
+            }
+        }
+
+        public List<Result> ValidateUsername(string Username)
+        {
+            List<Result> IsActive;
+            using (var context = new DALDefaultService())
+            {
+                SqlParameter UserName = new SqlParameter("@UserName", Username);
+                //IsActive = context.Database.SqlQuery<Result>("Pr_ValidateMemberUserName @UserName", UserName).ToList();
+                IsActive = context.Database.SqlQuery<Result>("[Pr_ValidateUserName] @UserName", UserName).ToList();
+            }
+            return IsActive;
+        }
+
+        #endregion
+
         public List<Models.PPCPWebService.DC.CountriesLKP> GetCountries()
         {
 
@@ -57,17 +167,6 @@ namespace PPCPWebApiServices.Models.PPCPWebService.DAL
             return getcities;
         }
 
-        public List<Result> ValidateUsername(string Username)
-        {
-            List<Result> IsActive;
-            using (var context = new DALDefaultService())
-            {
-                SqlParameter UserName = new SqlParameter("@UserName", Username);
-                IsActive = context.Database.SqlQuery<Result>("Pr_ValidateMemberUserName @UserName", UserName).ToList();
-            }
-            return IsActive;
-        }
-
         public List<PPCPOrganizations> GetOrganizations()
         {
             List<PPCPOrganizations> getOrganizations;
@@ -78,8 +177,6 @@ namespace PPCPWebApiServices.Models.PPCPWebService.DAL
             return getOrganizations;
         }
 
-
-
         public List<PPCPOrganizations> GetPPCPSpecificOrganization(int OrganizationId)
         {
             List<PPCPOrganizations> getOrganizations;
@@ -89,8 +186,7 @@ namespace PPCPWebApiServices.Models.PPCPWebService.DAL
                 getOrganizations = context.Database.SqlQuery<PPCPOrganizations>("Pr_GetOrganizations @OrganizationID", OrganizationID).ToList();
             }
             return getOrganizations;
-        }
-
+        }        
 
         public List<PPCPOrganizationProviders> GetPPCPOrganizationProviders(int OrganizationId)
         {
@@ -160,69 +256,7 @@ namespace PPCPWebApiServices.Models.PPCPWebService.DAL
             return getPlans;
         }
 
-        public List<Credentials> ValidateForgotPassword(string Username, int type)
-        {
-            List<Credentials> result;
-            using (var context = new DALDefaultService())
-            {
-                SqlParameter UserName = new SqlParameter("@UserName", Username);
-                SqlParameter Type = new SqlParameter("@Type", type);
-                result = context.Database.SqlQuery<Credentials>("Pr_ValidateForgotPassword @UserName,@Type", UserName, Type).ToList();
-            }
-            if (result.Count > 0)
-            {
-                string OTP = randamNumber();
-                string Message = "OTP: " + OTP;
-                result[0].OTP = OTP;
-                SendMessageByText(Message, result[0].MobileNumber, result[0].CountryCode);
-                ForgotCredentials(Message, result[0].Email, "OTP");
-            }
-            return result;
-        }
-
-        public List<Credentials> ValidateForgotUserName(string Firstname, string Lastname, string Countrycode, string Mobilenumber, string email, int type)
-        {
-            List<Credentials> result;
-            using (var context = new DALDefaultService())
-            {
-                SqlParameter FirstName = new SqlParameter("@FirstName", Firstname);
-                SqlParameter LastName = new SqlParameter("@LastName", Lastname);
-                SqlParameter CountryCode = new SqlParameter("@CountryCode", Countrycode);
-                SqlParameter MobileNumber = new SqlParameter("@MobileNumber", Mobilenumber);
-                SqlParameter Email = new SqlParameter("@Email", email);
-                SqlParameter Type = new SqlParameter("@Type", type);
-                result = context.Database.SqlQuery<Credentials>("Pr_ValidateForgotUserName @FirstName,@LastName,@CountryCode,@MobileNumber,@Email", FirstName, LastName, CountryCode, MobileNumber, Email).ToList();
-            }
-            if (result.Count > 0)
-            {
-                string OTP = randamNumber();
-                string Message = "OTP: " + OTP;
-                result[0].OTP = OTP;
-                SendMessageByText(Message, result[0].MobileNumber, result[0].CountryCode);
-                ForgotCredentials(Message, result[0].Email,"OTP" );
-            }
-
-            return result;
-        }
-
-        private void ForgotCredentials(string Message, string Email,string Heading)
-        {
-            try
-            {
-                string body = ReadFile(VirtualPathUtility.MakeRelative(VirtualPathUtility.ToAppRelative(HttpContext.Current.Request.CurrentExecutionFilePath), "~/Resource/EmailTemplates/SendOTPToUser.htm"));
-
-                //string sub = message + " " + "Payment Receipt";
-                string sub = "Forgot Credentials";
-                body = body.Replace("##Date##", DateTime.Now.ToShortDateString());
-                body = body.Replace("##Heading##", Heading);
-                body = body.Replace("##Message##", Message);
-               
-                SendEmail(sub, Email, body, "");
-            }
-            catch (Exception ex)
-            {
-            }
-        }
+        
         private void SendEmail(string message, string ProviderEmail, string body, string CcEmail)
         {
             try
@@ -252,32 +286,7 @@ namespace PPCPWebApiServices.Models.PPCPWebService.DAL
             }
             return "";
         }
-        public int SendCredentials(string FirstName, string LastName, string CountryCode, string MobileNumber, string Email, string UserName, string Password, string TempID)
-        {
-            // byte[] bytes = Decoder.UTF8.GetBytes(Password);
-            string password = decode(Password);//HttpUtility.HtmlDecode(Password);
-           // password = Convert.ToBase64String(bytes);
-            string Message = "";
-            if (TempID.Equals("1"))
-            {
-                Message = "Dear " + FirstName+ " "+ LastName + " your Password is : " + password;
-            }
-            else
-            {
-                Message = "Dear " + FirstName + " " + LastName + " your UserName is : " + UserName;
-            }
-
-            SendMessageByText(Message, MobileNumber, CountryCode);
-            ForgotCredentials( Message, Email,"Credentials");
-            return 1;
-
-        }
-        public static string decode(string text)
-        {
-            byte[] mybyte = System.Convert.FromBase64String(text);
-            string returntext = System.Text.Encoding.UTF8.GetString(mybyte);
-            return returntext;
-        }
+        
         public List<Result> validateChangePassword(int UserId, string password, int TypeId)
         {
             byte[] bytes = Encoding.UTF8.GetBytes(password);
@@ -773,7 +782,7 @@ namespace PPCPWebApiServices.Models.PPCPWebService.DAL
                         TermsAndConditionsName = TermsAndConditionsName,
                         TempletPath = TempletPath,
                         Type = Type,
-                        CreatedDate = DateTime.Parse(Convert.ToString(DateTime.Now), new CultureInfo("en-US")),
+                        CreatedDate = DateTime.Parse(Convert.ToString(DateTime.UtcNow), new CultureInfo("en-US")),
                         IsActive = true,
                     };
                     Context.TermsAndConditions.Add(termsandconditions);
@@ -822,6 +831,32 @@ namespace PPCPWebApiServices.Models.PPCPWebService.DAL
             }
             return obj;
 
+        }
+
+        public List<Result> UpdateTermsandConditions(int UserID)
+        {
+            List<Result> obj = new List<Result>();
+            Result res = new Result();
+            try
+            {
+                using (var Context = new Dev_PPCPEntities(1))
+                {
+                    User data = Context.Users.FirstOrDefault(m => m.UserID == UserID);
+                    data.IsTermsAccepted = true;
+                    data.TermsAcceptDate = DateTime.Parse(Convert.ToString(DateTime.UtcNow), new CultureInfo("en-US"));
+                    int Result = Context.SaveChanges();
+
+                    res.ResultID = Result;
+                    obj.Add(res);
+                }
+            }
+            catch (Exception ex)
+            {
+                res.ResultName = ex.Message;
+                obj.Add(res);
+            }
+
+            return obj;
         }
         public object GetMembersAutoComplete(int OrganizationID, string Text)
         {

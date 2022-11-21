@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using PPCPWebApiServices.Controllers;
+using PPCPWebApiServices.CustomEntities;
 using PPCPWebApiServices.Models.PPCPWebService.DAL;
 using PPCPWebApiServices.Models.PPCPWebService.DC;
 using System;
@@ -13,11 +14,219 @@ namespace PPCPWebApiServices.ServiceAccess
     public class DefaultServiceMethod
     {
         DALDefaultService objdal = new DALDefaultService();
+
+        public object ValidateCredentials(string Username, string Password, string Ipaddress)
+        {
+            List<UserProfile> usrDetails = new List<UserProfile>();
+            try
+            {
+                usrDetails = objdal.ValidateCredentials(Username, Password, Ipaddress);
+                if (usrDetails.Count >= 1)
+                {
+                    if (!usrDetails[0].IsAccountLocked)
+                    {
+                        if (usrDetails[0].IsTwoFactorEnabled)
+                        {
+                            string OTP = objdal.randamNumber();
+                            string Message = "";
+
+                            switch (usrDetails[0].RoleType)
+                            {
+                                case "Member":
+                                    Message = "MyPhysicianPlan: DO NOT share this Sign In Code.  We will Never call you or text you for it.  Code " + OTP;
+                                    break;
+                                case "Admin":
+                                    Message = "Dear " + Username + ", Your one time password is : " + OTP;
+                                    break;
+                                case "Organization":
+                                    Message = "MyPhysicianPlan: DO NOT share this Sign In Code.  We will Never call you or text you for it.  Code " + OTP;
+                                    break;
+                                case "Provider":
+                                    Message = "Dear " + Username + ", Your one time password is : " + OTP;
+                                    break;
+                                default:
+                                    break;
+                            }
+
+                            //if (string.IsNullOrEmpty(usrDetails[0].RoleType))
+                            //{
+                            //    switch(usrDetails[0].RoleName)
+                            //    {
+                            //        case "Member":
+                            //            Message = "MyPhysicianPlan: DO NOT share this Sign In Code.  We will Never call you or text you for it.  Code " + OTP;
+                            //            break;
+                            //        case "Admin":
+                            //            Message = "Dear " + Username + ", Your one time password is : " + OTP;
+                            //            break;
+                            //    }
+                            //}
+                            //else
+                            //{
+                            //    switch (usrDetails[0].RoleType)
+                            //    {
+                            //        case "Organization":
+                            //            Message = "MyPhysicianPlan: DO NOT share this Sign In Code.  We will Never call you or text you for it.  Code " + OTP;
+                            //            break;
+                            //        case "Provider":
+                            //            Message = "Dear " + Username + ", Your one time password is : " + OTP;
+                            //            break;
+                            //        default:
+                            //            break;
+                            //    }
+                            //}                           
+
+                            if (usrDetails[0].TwoFactorType == 1)
+                            {
+                                objdal.SendMessageByText(Message, usrDetails[0].MobileNumber, usrDetails[0].CountryCode);
+                                usrDetails[0].OTP = OTP;
+                            }
+                            else
+                            {
+                                if (usrDetails[0].LastIPAddress != Ipaddress)
+                                {
+                                    objdal.SendMessageByText(Message, usrDetails[0].MobileNumber, usrDetails[0].CountryCode);
+                                    usrDetails[0].OTP = OTP;
+                                }
+                            }
+                        }
+                        usrDetails[0].IsTermsAccepted = true;
+
+                        List<TermsAndCondition> objTermsAndConditions = new List<TermsAndCondition>();
+                        switch (usrDetails[0].RoleType)
+                        {
+                            case "MPP":
+                                objTermsAndConditions = objdal.GetTermsAndConditions(TermsType.MPP);
+                                break;
+                            case "Organization":
+                                objTermsAndConditions = objdal.GetTermsAndConditions(TermsType.Organization);
+                                break;
+                            case "Member":
+                                objTermsAndConditions = objdal.GetTermsAndConditions(TermsType.Member);
+                                break;
+                            case "Provider":
+                                objTermsAndConditions = objdal.GetTermsAndConditions(TermsType.Provider);
+                                break;
+                        }
+
+                        if (objTermsAndConditions.Count >= 1)
+                        {
+                            usrDetails[0].TermsAndConditionsFile = objTermsAndConditions[0].TempletPath;
+                            //int value = DateTime.Compare(Convert.ToDateTime(usrDetails[0].TermsAcceptDate), Convert.ToDateTime(objTermsAndConditions[0].CreatedDate));
+                            if (!usrDetails[0].TermsAcceptDate.HasValue) //terms not accepted by user
+                                usrDetails[0].IsTermsAccepted = false;
+                            else
+                            {
+                                if (usrDetails[0].TermsAcceptDate.Value.Date < objTermsAndConditions[0].CreatedDate.Value.Date)
+                                    usrDetails[0].IsTermsAccepted = false;
+                                else
+                                    usrDetails[0].IsTermsAccepted = true;
+                            }
+                        }
+
+                        //if (usrDetails[0].RoleType == "Organization")
+                        //{
+                        //    //Organization Terms and Conditions flag
+                        //    List<TermsAndCondition> objTermsAndConditionsOrganization = objdal.GetTermsAndConditions(TermsType.Organization);//intType=2-Organization
+                        //    if (objTermsAndConditionsOrganization.Count >= 1)
+                        //    {
+                        //        int value = DateTime.Compare(Convert.ToDateTime(usrDetails[0].OrganizationTandC), Convert.ToDateTime(objTermsAndConditionsOrganization[0].CreatedDate));
+                        //        if (value > 0)
+                        //            usrDetails[0].TermsAndConditionsNeeded = 0;
+                        //        else if (value < 0)
+                        //            usrDetails[0].TermsAndConditionsNeeded = 1;
+                        //    }
+                        //}
+                        //if (usrDetails[0].RoleType == "Member")
+                        //{
+                        //    List<TermsAndCondition> objTermsAndConditions = objdal.GetTermsAndConditions(TermsType.Member);//intType=1-Member
+                        //    if (objTermsAndConditions.Count >= 1)
+                        //    {
+                        //        int value = DateTime.Compare(Convert.ToDateTime(usrDetails[0].MemberTandCDate), Convert.ToDateTime(objTermsAndConditions[0].CreatedDate));
+                        //        if (value > 0)
+                        //            usrDetails[0].TermsAndConditionsNeeded = 0;
+                        //        else if (value < 0)
+                        //            usrDetails[0].TermsAndConditionsNeeded = 1;
+
+                        //    }
+                        //}
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+            return usrDetails;
+        }
+
+        public object ValidateForgotCredentials(string UserName, string FirstName, string LastName, string CountryCode, string MobileNumber, string Email)
+        {
+            List<Models.PPCPWebService.DC.Credentials> validateForgotUserName = objdal.ValidateForgotCredentials(UserName, FirstName, LastName, CountryCode, MobileNumber, Email);
+            return validateForgotUserName;
+        }
+
+        public object SendCredentials(string FirstName, string LastName, string CountryCode, string MobileNumber, string Email, string UserName, string Password, string TempID)
+        {
+
+            int result = objdal.SendCredentials(FirstName, LastName, CountryCode, MobileNumber, Email, UserName, Password, TempID);
+            return result;
+        }
+
+        public object ValidateUserName(string UserName)
+        {
+            if (!string.IsNullOrEmpty(UserName))
+            {
+                List<Models.PPCPWebService.DC.Result> ValidateUserName = objdal.ValidateUsername(UserName);
+                return ValidateUserName;
+            }
+            return 0;
+        }
+
+        public object validateChangePassword(string UserID, string Password, string TypeID)
+        {
+
+            List<Result> changePassword = objdal.validateChangePassword(Convert.ToInt32(UserID), Password, Convert.ToInt32(TypeID));
+            return changePassword;
+        }
+
+        #region Terms & Conditions
+        /// <summary>
+        /// Insert TermsAndConditions for Member,Organization and Provider.in type=1(Member),2(Organization),3(User)-vinod
+        /// </summary>
+        /// <param name="TermsandConditionName"></param>
+        /// <param name="TempletPath"></param>
+        /// <param name="Type"></param>
+        /// <returns></returns>
+        public object InsertTermsAndConditions(string TermsandConditionName, string TempletPath, string Type)
+        {
+            List<Result> objresult = objdal.InsertTermsAndConditions(TermsandConditionName, TempletPath, Convert.ToInt32(Type));
+            return objresult;
+        }
+        /// <summary>
+        /// Get TermsAndConditions for Member,OrganizationUser in type=1(Member),2(Organization),3(User)-vinod
+        /// </summary>
+        /// <param name="strType"></param>
+        /// <returns></returns>
+
+        public object GetTermsAndConditions(string strType)
+        {
+            List<TermsAndCondition> objTermsAndCondition = objdal.GetTermsAndConditions(Convert.ToInt32(strType));
+            return objTermsAndCondition;
+        }
+
+        public object UpdateTermsandConditions(string UserID)
+        {
+            List<Result> updateTermsAndConditions = objdal.UpdateTermsandConditions(Convert.ToInt32(UserID));
+            return updateTermsAndConditions;
+        }
+
+        #endregion
+
         /// <summary>
         /// Get Countries -vinod(30/7/2018)
         /// </summary>
         /// <returns></returns>
-      
+
         public object GetCountries()
         {
             List<Models.PPCPWebService.DC.CountriesLKP> getCountries = objdal.GetCountries();
@@ -53,17 +262,7 @@ namespace PPCPWebApiServices.ServiceAccess
         /// </summary>
         /// <param name="UserName"></param>
         /// <returns></returns>
-        public object ValidateUserName(string UserName)
-        {
-            if (!string.IsNullOrEmpty(UserName))
-            {
-
-                List<Models.PPCPWebService.DC.Result> ValidateUserName = objdal.ValidateUsername(UserName);
-
-                return ValidateUserName;
-            }
-            return 0;
-        }
+        
         /// <summary>
         /// Get Organization details-vinod(31/7/2018)
         /// </summary>
@@ -300,34 +499,7 @@ namespace PPCPWebApiServices.ServiceAccess
             List<Models.PPCPWebService.DC.MemberPlans> getPPCPOrganizationProvidersplans = objdal.GetPlanDetails(Convert.ToInt32(PlanID), Convert.ToInt32(MemberID), Convert.ToInt32(OrganizationID), Convert.ToInt32(ProviderID));
             return getPPCPOrganizationProvidersplans;
         }
-
-        public object ValidateForgotPassword(string UserName, string Type)
-        {
-
-            List<Models.PPCPWebService.DC.Credentials> validateForgotPassword = objdal.ValidateForgotPassword(UserName, Convert.ToInt32(Type));
-            return validateForgotPassword;
-        }
-
-        public object ValidateForgotUserName(string FirstName, string LastName, string CountryCode, string MobileNumber, string Email, string Type)
-        {
-
-            List<Models.PPCPWebService.DC.Credentials> validateForgotUserName = objdal.ValidateForgotUserName(FirstName, LastName, CountryCode, MobileNumber, Email, Convert.ToInt32(1));
-            return validateForgotUserName;
-        }
-
-        public object SendCredentials(string FirstName, string LastName, string CountryCode, string MobileNumber, string Email, string UserName, string Password, string TempID)
-        {
-
-            int result = objdal.SendCredentials(FirstName, LastName, CountryCode, MobileNumber, Email, UserName, Password, TempID);
-            return result;
-        }
-
-        public object validateChangePassword(string UserID, string Password, string TypeID)
-        {
-
-            List<Result> changePassword = objdal.validateChangePassword(Convert.ToInt32(UserID), Password, Convert.ToInt32(TypeID));
-            return changePassword;
-        }
+        
         public object GetPaymentDetails(string MemberID)
         {
 
@@ -445,29 +617,7 @@ namespace PPCPWebApiServices.ServiceAccess
             return ProviderPlanDetails;
 
         }
-        /// <summary>
-        /// Insert TermsAndConditions for Member,Organization and Provider.in type=1(Member),2(Organization),3(User)-vinod
-        /// </summary>
-        /// <param name="TermsandConditionName"></param>
-        /// <param name="TempletPath"></param>
-        /// <param name="Type"></param>
-        /// <returns></returns>
-        public object InsertTermsAndConditions(string TermsandConditionName,string TempletPath, string Type)
-        {
-           List<Result> objresult= objdal.InsertTermsAndConditions(TermsandConditionName, TempletPath, Convert.ToInt32(Type));
-            return objresult;
-        }
-        /// <summary>
-        /// Get TermsAndConditions for Member,OrganizationUser in type=1(Member),2(Organization),3(User)-vinod
-        /// </summary>
-        /// <param name="strType"></param>
-        /// <returns></returns>
-
-        public object GetTermsAndConditions(string strType)
-        {
-            List<TermsAndCondition> objTermsAndCondition = objdal.GetTermsAndConditions(Convert.ToInt32(strType));
-            return objTermsAndCondition;
-        }
+        
         /// <summary>
         /// 
         /// </summary>

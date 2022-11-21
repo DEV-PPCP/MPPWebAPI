@@ -15,6 +15,7 @@ using System.IO;
 using System.Globalization;
 using PPCPWebApiServices.ServiceAccess;
 using PPCPWebApiServices;
+using PPCPWebApiServices.CustomEntities;
 
 namespace PPCPWebApiServices.Models.PPCPWebService.DAL
 {
@@ -251,7 +252,7 @@ namespace PPCPWebApiServices.Models.PPCPWebService.DAL
                     SqlParameter TotalAmount = new SqlParameter("@TotalAmount", Totalamount);
                     SqlParameter NetAmount = new SqlParameter("@NetAmount", Netamount);
                     SqlParameter TransactionFee = new SqlParameter("@TransactionFee", Transactionfee);//Netamount send but the value is not saved
-                    SqlParameter MemberName = new SqlParameter("@MemberName", objMemberDetails.LastName + " " + objMemberDetails.FirstName);
+                    SqlParameter MemberName = new SqlParameter("@MemberName", objMemberDetails.FirstName + " " + objMemberDetails.LastName);
                     SqlParameter PaymentInterval = new SqlParameter("@PaymentInterval", Paymentinterval);
                     SqlParameter TransactioID = new SqlParameter("@TransactioID", TransactioId);
                     SqlParameter StripeCustomerID = new SqlParameter("@StripeCustomerID", StripeCustomerId);
@@ -273,7 +274,7 @@ namespace PPCPWebApiServices.Models.PPCPWebService.DAL
                 }
                 if (Convert.ToDecimal(Netamount) > 0)
                 {
-                    var Membername = objMemberDetails.LastName + " " + objMemberDetails.FirstName;
+                    var Membername = objMemberDetails.FirstName + " " + objMemberDetails.LastName;
                     var Email = objMemberDetails.Email;
                     PaymentreceiptEmail(Membername, Email, TransactioId, Convert.ToString(Netamount), objMemberDetails.OrganizationName);
                 }
@@ -344,11 +345,11 @@ namespace PPCPWebApiServices.Models.PPCPWebService.DAL
 
                 //string sub = message + " " + "Payment Receipt";
                 string sub = "Payment Receipt";
-                body = body.Replace("##Date##", DateTime.Now.ToShortDateString());
+                body = body.Replace("##Date##", DateTime.UtcNow.ToShortDateString());
                 body = body.Replace("##PaidAmount##", PaidAmount);
                 body = body.Replace("##PaymentMode##", "Card");
                 body = body.Replace("##TransactionID##", TransactionID);
-                body = body.Replace("##FullDate##", DateTime.Now.ToShortDateString());
+                body = body.Replace("##FullDate##", DateTime.UtcNow.ToShortDateString());
                 body = body.Replace("##FirstName##", FirstName);
                 body = body.Replace("##OrganizationName##", OrganizationName);
                 SendEmail(sub, Email, body, "");
@@ -1159,7 +1160,6 @@ namespace PPCPWebApiServices.Models.PPCPWebService.DAL
                 using (var Context = new Dev_PPCPEntities(1))
                 {
                     getFamilyDetails = Context.Members.Where(m => m.MemberParentID == intMemberParentID).ToList();
-
                 }
             }
             catch (Exception ex)
@@ -1189,16 +1189,49 @@ namespace PPCPWebApiServices.Models.PPCPWebService.DAL
 
         }
 
-        public List<MemberPlan> GetMemberFamilyPlanDetails(int intMemberParentID, int PlanType)
+        public List<MemberPlanDetails> GetMemberFamilyPlanDetails(int intMemberParentID, int PlanType)
         {
 
-            List<MemberPlan> getMemberFamilyPlanDetails = new List<MemberPlan>();
+            List<MemberPlanDetails> getMemberFamilyPlanDetails = new List<MemberPlanDetails>();
             try
             {
                 using (var Context = new Dev_PPCPEntities(1))
                 {
-                    getMemberFamilyPlanDetails = Context.MemberPlans.Where(m => (m.MemberParentID == intMemberParentID) && (m.PlanType == PlanType)).ToList();
+                    //getMemberFamilyPlanDetails = Context.MemberPlans.Where(m => (m.MemberParentID == intMemberParentID) && (m.PlanType == PlanType)).ToList();
 
+                    getMemberFamilyPlanDetails = (from m in Context.Members
+                                                  join mp in Context.MemberPlans on m.MemberID equals mp.MemberID 
+                                                  into tmpMembers 
+                                                  from tmp in tmpMembers.DefaultIfEmpty()
+                                                  //join p in Context.Plans on mp.PlanID equals p.PlanID
+                                                  where m.MemberParentID == intMemberParentID
+                                                  //&& ((PlanType == 1 && m.RelationshipID == 0) || (PlanType == 2 && m.RelationshipID != 0))                                     
+                                                  select new MemberPlanDetails
+                                                  {
+                                                      MemberPlanID = tmp != null ? tmp.MemberPlanID : 0,
+                                                      MemberID = m.MemberID,
+                                                      MemberParentID = m.MemberParentID,
+                                                      MemberName = m.FirstName + " " + m.LastName,
+                                                      PlanID = tmp != null ? tmp.PlanID : 0,
+                                                      PlanName = tmp != null ? tmp.PlanName : string.Empty,
+                                                      OrganizationID = tmp != null ? tmp.OrganizationID : null,
+                                                      OrganizationName = tmp != null ? tmp.OrganizationName : string.Empty,
+                                                      ProviderID = tmp != null ? tmp.ProviderID : null,
+                                                      ProviderName = tmp != null ? tmp.ProviderName : string.Empty,
+                                                      Status = tmp != null ? tmp.Status : string.Empty,
+                                                      PlanStartDate = tmp != null ? tmp.PlanStartDate : null,
+                                                      PlanEndDate = tmp != null ? tmp.PlanEndDate : null,
+                                                      PlanType = tmp != null ? tmp.PlanType : null,
+                                                      TotalAmount = tmp != null ? tmp.TotalAmount : null,
+                                                      //GrandAmountPaid= mp.GrandAmountPaid,
+                                                      AmountPaid = tmp != null ? tmp.AmountPaid : null,
+                                                      DueAmount = tmp != null ? tmp.DueAmount : null,
+                                                      Discount = tmp != null ? tmp.Discount : null,
+                                                      PaymentInterval = tmp != null ? tmp.PaymentInterval : string.Empty,
+                                                      Duration = tmp != null ? tmp.Duration : string.Empty,
+                                                      Plan_Code = tmp != null ? tmp.Plan_Code : null,
+                                                      //PatientTAndCPath = p.PatientTAndCPath
+                                                  }).ToList();
                 }
             }
             catch (Exception ex)
@@ -1208,7 +1241,6 @@ namespace PPCPWebApiServices.Models.PPCPWebService.DAL
             return getMemberFamilyPlanDetails;
 
         }
-
 
         public List<MemberPlanMapping> GetFamilyPlanMemberDetails(int intMemberPlanID)
         {
@@ -1410,7 +1442,7 @@ namespace PPCPWebApiServices.Models.PPCPWebService.DAL
                 using (var Context = new Dev_PPCPEntities(1))
                 {
                     Member member = Context.Members.FirstOrDefault(m => m.MemberID == MemberID);
-                    member.TandCAcceptedDate = DateTime.Parse(Convert.ToString(DateTime.Now), new CultureInfo("en-US"));
+                    member.TandCAcceptedDate = DateTime.Parse(Convert.ToString(DateTime.UtcNow), new CultureInfo("en-US"));
                     int Result = Context.SaveChanges();
 
                     res.ResultID = Result;
@@ -1456,7 +1488,7 @@ namespace PPCPWebApiServices.Models.PPCPWebService.DAL
                     Member.CityID = objMemberDetails.CityID;
                     Member.CityName = objMemberDetails.CityName;
                     Member.Zip = objMemberDetails.Zip;
-                    Member.ModifiedDate = DateTime.Parse(Convert.ToString(DateTime.Now), new CultureInfo("en-US"));
+                    Member.ModifiedDate = DateTime.Parse(Convert.ToString(DateTime.UtcNow), new CultureInfo("en-US"));
                     Member.ModifiedBy = objMemberDetails.LoginMemberID;
                     int Result = context.SaveChanges();
                     res.ResultID = Result;
