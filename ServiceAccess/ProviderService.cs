@@ -22,59 +22,13 @@ namespace PPCPWebApiServices.ServiceAccess
             //initially deserialized, the data is represented by an object without a defined type 
             return YourClassObject;
         }
-        public object ValidateProviderLogin(string Username, string Password, string IpAddress)
-        {
+       
 
-            List<Provider> ordDetails = objDalProvider.ValidateProviderLogin(Username, Password);
-            if (ordDetails[0].IsTwofactorAuthentication == true)
-            {
-                DALDefaultService dal = new DALDefaultService();
-
-                string OTP = dal.randamNumber();
-                string Message = "Dear " + Username + ", Your one time password is : " + OTP;
-                if (ordDetails[0].TwoFactorType == 1)
-                {
-                    dal.SendMessageByText(Message, ordDetails[0].MobileNumber, ordDetails[0].CountryCode);
-                    ordDetails[0].OTP = OTP;
-                }
-                else
-                {
-                    if (ordDetails[0].PreferredIP != IpAddress)
-                    {
-                        dal.SendMessageByText(Message, ordDetails[0].MobileNumber, ordDetails[0].CountryCode);
-                        ordDetails[0].OTP = OTP;
-
-                    }
-                    else
-                    {
-                        // No Action Required
-                    }
-                }
-            }
-            else
-            {
-                // No Action Required
-            }
-            return ordDetails;
-        }
-        //Provider credentials forgot username or password by veema
-        public object ValidateProviderForgotUserName(string UserName, string FirstName, string LastName, string MobileNumber, string CountryCode, string Email)
-        {
-
-            List<ProviderCredential> ValidateUserName = objDalProvider.ValidateProviderForgotUserName(UserName, FirstName, LastName, MobileNumber, CountryCode, Email);
-            return ValidateUserName;
-        }
-        public object ValidateProviderForgotPassword(string UserName)
-        {
-            List<Provider> validatePasswor = objDalProvider.ValidateProviderForgotPassword(UserName);
-            return validatePasswor;
-        }
-
-        public object UpdatePassword(string ProviderID,string Password)
-        {
-            List<Result> res = objDalProvider.UpdatePassword(Convert.ToInt32(ProviderID), Password);
-            return res;
-        }
+        //public object UpdatePassword(string ProviderID,string Password)
+        //{
+        //    List<Result> res = objDalProvider.UpdatePassword(Convert.ToInt32(ProviderID), Password);
+        //    return res;
+        //}
         /// <summary>
         /// Provider Details in Provider-Ragini
         /// </summary>

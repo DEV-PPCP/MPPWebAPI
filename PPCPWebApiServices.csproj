@@ -325,6 +325,7 @@
     <Compile Include="CountriesLKP.cs">
       <DependentUpon>PPCP_EntityFrameWork.tt</DependentUpon>
     </Compile>
+    <Compile Include="CustomEntities\Billing.cs" />
     <Compile Include="CustomEntities\DBEntityAddlProperties.cs" />
     <Compile Include="CustomEntities\Lookup.cs" />
     <Compile Include="CustomEntities\MemberPlanDetails.cs" />
@@ -335,10 +336,10 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Member.cs">
+    <Compile Include="lkpRole.cs">
       <DependentUpon>PPCP_EntityFrameWork.tt</DependentUpon>
     </Compile>
-    <Compile Include="MemberCredential.cs">
+    <Compile Include="Member.cs">
       <DependentUpon>PPCP_EntityFrameWork.tt</DependentUpon>
     </Compile>
     <Compile Include="MemberPlan.cs">
@@ -403,9 +404,6 @@
     <Compile Include="Provider.cs">
       <DependentUpon>PPCP_EntityFrameWork.tt</DependentUpon>
     </Compile>
-    <Compile Include="ProviderCredential.cs">
-      <DependentUpon>PPCP_EntityFrameWork.tt</DependentUpon>
-    </Compile>
     <Compile Include="ProviderSpecialization.cs">
       <DependentUpon>PPCP_EntityFrameWork.tt</DependentUpon>
     </Compile>
@@ -442,9 +440,6 @@
       <DependentUpon>PPCP_EntityFrameWork.tt</DependentUpon>
     </Compile>
     <Compile Include="User.cs">
-      <DependentUpon>PPCP_EntityFrameWork.tt</DependentUpon>
-    </Compile>
-    <Compile Include="UserCredential.cs">
       <DependentUpon>PPCP_EntityFrameWork.tt</DependentUpon>
     </Compile>
     <Compile Include="UserRole.cs">

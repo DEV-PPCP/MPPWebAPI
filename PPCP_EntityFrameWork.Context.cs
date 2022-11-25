@@ -31,15 +31,12 @@ namespace PPCPWebApiServices
         public virtual DbSet<CountriesLKP> CountriesLKPs { get; set; }
         public virtual DbSet<FamilyMember> FamilyMembers { get; set; }
         public virtual DbSet<Member> Members { get; set; }
-        public virtual DbSet<MemberCredential> MemberCredentials { get; set; }
         public virtual DbSet<PlansPriceDetail> PlansPriceDetails { get; set; }
-        public virtual DbSet<ProviderCredential> ProviderCredentials { get; set; }
         public virtual DbSet<ProviderSpecialization> ProviderSpecializations { get; set; }
         public virtual DbSet<RelationshipLkp> RelationshipLkps { get; set; }
         public virtual DbSet<SpecializationLKP> SpecializationLKPs { get; set; }
         public virtual DbSet<StatesLKP> StatesLKPs { get; set; }
         public virtual DbSet<TimeZonesLKP> TimeZonesLKPs { get; set; }
-        public virtual DbSet<UserCredential> UserCredentials { get; set; }
         public virtual DbSet<Application_Parameter_Config> Application_Parameter_Config { get; set; }
         public virtual DbSet<OrganizationPlan> OrganizationPlans { get; set; }
         public virtual DbSet<Plan> Plans { get; set; }
@@ -47,7 +44,6 @@ namespace PPCPWebApiServices
         public virtual DbSet<PlansMapping> PlansMappings { get; set; }
         public virtual DbSet<TermsAndCondition> TermsAndConditions { get; set; }
         public virtual DbSet<OrganizationUser> OrganizationUsers { get; set; }
-        public virtual DbSet<Organization> Organizations { get; set; }
         public virtual DbSet<MemberPlanMapping> MemberPlanMappings { get; set; }
         public virtual DbSet<ModuleUseCas> ModuleUseCases { get; set; }
         public virtual DbSet<Provider> Providers { get; set; }
@@ -56,6 +52,8 @@ namespace PPCPWebApiServices
         public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<UserRole> UserRoles { get; set; }
         public virtual DbSet<MemberPlan> MemberPlans { get; set; }
+        public virtual DbSet<lkpRole> lkpRoles { get; set; }
+        public virtual DbSet<Organization> Organizations { get; set; }
     
         public virtual ObjectResult<Pr_GetProviders_Result> Pr_GetProviders(Nullable<int> organizationID)
         {

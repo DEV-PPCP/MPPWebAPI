@@ -14,12 +14,6 @@ namespace PPCPWebApiServices
     
     public partial class OrganizationUser
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public OrganizationUser()
-        {
-            this.UserCredentials = new HashSet<UserCredential>();
-        }
-    
         public int UserID { get; set; }
         public int OrganizationID { get; set; }
         public string OrganizationName { get; set; }
@@ -51,8 +45,6 @@ namespace PPCPWebApiServices
         public Nullable<System.DateTime> TandCAcceptedDate { get; set; }
         public string SSN { get; set; }
     
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<UserCredential> UserCredentials { get; set; }
         public virtual Organization Organization { get; set; }
     }
 }

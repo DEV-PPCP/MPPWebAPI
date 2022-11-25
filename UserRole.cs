@@ -20,5 +20,6 @@ namespace PPCPWebApiServices
         public Nullable<int> AssociatedEntityId { get; set; }
     
         public virtual User User { get; set; }
+        public virtual lkpRole lkpRole { get; set; }
     }
 }

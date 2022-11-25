@@ -358,9 +358,13 @@ namespace PPCPWebApiServices.Models.PPCPWebService.DC
 
 
         //Plan details
+        public int MemberPlanID { get; set; }
         public string PlanName { get; set; }
         public DateTime PlanStartDate { get; set; }
         public DateTime PlanEndDate { get; set; }
+        public int PlanID { get; set; }
+        public Nullable<int> Plan_Code { get; set; }
+        public Nullable<int> PlanType { get; set; }
 
     }
 

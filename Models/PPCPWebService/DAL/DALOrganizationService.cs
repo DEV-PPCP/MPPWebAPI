@@ -1,15 +1,21 @@
-﻿using Newtonsoft.Json;
+﻿using Dapper;
+using Newtonsoft.Json;
+using PPCPWebApiServices.CustomEntities;
 using PPCPWebApiServices.Models.PPCPWebService.DC;
 using PPCPWebApiServices.Models.Service;
 using PPCPWebApiServices.ServiceAccess;
 using Stripe;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
+using System.Data;
 using System.Data.Entity;
 using System.Data.SqlClient;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Net.PeerToPeer;
+using System.Net;
 using System.Text;
 using System.Web;
 using System.Xml;
@@ -126,54 +132,54 @@ namespace PPCPWebApiServices.Models.PPCPWebService.DAL
         }
 
 
-        public List<OrganizationUsers> ValidateOrganization(string Username, string Password, string IpAddress)
-        {
-            List<OrganizationUsers> ordDetails = new List<OrganizationUsers>();
-            try
-            {
-                using (var context = new DALMemberService())
-                {
-                    SqlParameter UserName = new SqlParameter("@UserName", Username);
-                    SqlParameter PassWord = new SqlParameter("@Password", Password);
-                    ordDetails = context.Database.SqlQuery<OrganizationUsers>("Pr_ValidateOrganizationCredentials @UserName, @Password", UserName, PassWord).ToList();
+        //public List<OrganizationUsers> ValidateOrganization(string Username, string Password, string IpAddress)
+        //{
+        //    List<OrganizationUsers> ordDetails = new List<OrganizationUsers>();
+        //    try
+        //    {
+        //        using (var context = new DALMemberService())
+        //        {
+        //            SqlParameter UserName = new SqlParameter("@UserName", Username);
+        //            SqlParameter PassWord = new SqlParameter("@Password", Password);
+        //            ordDetails = context.Database.SqlQuery<OrganizationUsers>("Pr_ValidateOrganizationCredentials @UserName, @Password", UserName, PassWord).ToList();
 
-                    if (ordDetails.Count() > 0)
-                    {
-                        if (ordDetails[0].IsActive != true)
-                        {
-                            using (var Context = new Dev_PPCPEntities(1))
-                            {
-                                int UserID = Convert.ToInt32(ordDetails[0].UserID);
-                                UserCredential h = Context.UserCredentials.First(m => m.UserID == UserID);
-                                h.UserStatus = "A";
-                                Context.SaveChanges();
+        //            if (ordDetails.Count() > 0)
+        //            {
+        //                if (ordDetails[0].IsActive != true)
+        //                {
+        //                    using (var Context = new Dev_PPCPEntities(1))
+        //                    {
+        //                        int UserID = Convert.ToInt32(ordDetails[0].UserID);
+        //                        UserCredential h = Context.UserCredentials.First(m => m.UserID == UserID);
+        //                        h.UserStatus = "A";
+        //                        Context.SaveChanges();
 
-                                int OrganizationID = Convert.ToInt32(ordDetails[0].OrganizationID);
-                                Organization Organization = Context.Organizations.First(m => m.OrganizationID == OrganizationID);
-                                Organization.IsActive = true;
-                                Context.SaveChanges();
+        //                        int OrganizationID = Convert.ToInt32(ordDetails[0].OrganizationID);
+        //                        Organization Organization = Context.Organizations.First(m => m.OrganizationID == OrganizationID);
+        //                        Organization.IsActive = true;
+        //                        Context.SaveChanges();
 
-                                OrganizationUser OrganizationUser = Context.OrganizationUsers.First(m => m.OrganizationID == OrganizationID);
-                                OrganizationUser.IsActive = true;
-                                Context.SaveChanges();
-                            }
+        //                        OrganizationUser OrganizationUser = Context.OrganizationUsers.First(m => m.OrganizationID == OrganizationID);
+        //                        OrganizationUser.IsActive = true;
+        //                        Context.SaveChanges();
+        //                    }
 
-                        }
+        //                }
 
 
-                        //List<MemberLoginDetails> list = new List<MemberLoginDetails>();
-                        //SqlParameter OrganizationID = new SqlParameter("@OrganizationID", listMemberDetails[0].OrganizationID);
-                        //SqlParameter UserID = new SqlParameter("@UserID", listMemberDetails[0].UserID);
-                        //list = context.Database.SqlQuery<MemberLoginDetails>("Pr_UpdateOrganizationUsers @OrganizationID,@UserID", OrganizationID, UserID).ToList();
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
+        //                //List<MemberLoginDetails> list = new List<MemberLoginDetails>();
+        //                //SqlParameter OrganizationID = new SqlParameter("@OrganizationID", listMemberDetails[0].OrganizationID);
+        //                //SqlParameter UserID = new SqlParameter("@UserID", listMemberDetails[0].UserID);
+        //                //list = context.Database.SqlQuery<MemberLoginDetails>("Pr_UpdateOrganizationUsers @OrganizationID,@UserID", OrganizationID, UserID).ToList();
+        //            }
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
 
-            }
-            return ordDetails;
-        }
+        //    }
+        //    return ordDetails;
+        //}
         public List<TemporaryUserDetails> AddUserDetails(string xml)
         {
             string MobileNumber = "", CountryCode = "";
@@ -337,27 +343,27 @@ namespace PPCPWebApiServices.Models.PPCPWebService.DAL
         //    return getOrganizationUsersDetails;
         //}
 
-        public int UpdateOrgCredentials(int userID, string Password)
-        {
-            int result = 0;
-            try
-            {
-                byte[] bytes = Encoding.UTF8.GetBytes(Password);
-                Password = Convert.ToBase64String(bytes);//Convert the password to Encrypt
-                PPCPWebApiServices.UserCredential obj = new PPCPWebApiServices.UserCredential();
-                using (var Context = new Dev_PPCPEntities(1))
-                {
-                    UserCredential h = Context.UserCredentials.First(m => m.UserID == userID);
-                    h.Userpassword = Password;
-                    result = Context.SaveChanges();
-                }
-            }
-            catch (Exception ex)
-            {
+        //public int UpdateOrgCredentials(int userID, string Password)
+        //{
+        //    int result = 0;
+        //    try
+        //    {
+        //        byte[] bytes = Encoding.UTF8.GetBytes(Password);
+        //        Password = Convert.ToBase64String(bytes);//Convert the password to Encrypt
+        //        PPCPWebApiServices.UserCredential obj = new PPCPWebApiServices.UserCredential();
+        //        using (var Context = new Dev_PPCPEntities(1))
+        //        {
+        //            UserCredential h = Context.UserCredentials.First(m => m.UserID == userID);
+        //            h.Userpassword = Password;
+        //            result = Context.SaveChanges();
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
 
-            }
-            return result;
-        }
+        //    }
+        //    return result;
+        //}
 
 
         /// <summary>
@@ -573,17 +579,6 @@ namespace PPCPWebApiServices.Models.PPCPWebService.DAL
             }
             return getOrganizationPlanDetails;
         }
-        public int ValidateProviderUserName(string Username)
-        {
-            int result = 0;
-            using (var Context = new Dev_PPCPEntities(1))
-            {
-                result = Context.ProviderCredentials.Count(P => P.UserName == Username);
-
-            }
-            return result;
-
-        }
 
         /// <summary>
         /// veena view OrganizationPaymentDetails using OrganizationID
@@ -706,11 +701,26 @@ namespace PPCPWebApiServices.Models.PPCPWebService.DAL
             {
                 using (var Context = new Dev_PPCPEntities(1))
                 {
-                    OrganizationPlan objsys = new OrganizationPlan();
+                    var orgDetails = (from OP in Context.OrganizationPlans
+                                      join P in Context.Plans on OP.PlanID equals P.PlanID
+                                      join O in Context.Organizations on OP.OrganizationID equals O.OrganizationID
+                                      where O.OrganizationID == intOrgId
+                                      select new
+                                      {
+                                          P.MaxAllowedClaims
+                                      }).FirstOrDefault();
 
+                    int? maxAllowedClaims = 0;
+                    if(orgDetails != null)
+                    {
+                        maxAllowedClaims = orgDetails.MaxAllowedClaims;
+                    }
+
+                    OrganizationPlan objsys = new OrganizationPlan();
                     objsys.PlanID = intPlanId;
                     objsys.OrganizationID = intOrgId;
                     objsys.PlanstartDate = strStartDate;
+                    objsys.MaxAllowedClaims = maxAllowedClaims;
                     objsys.IsDelete = false;
                     objsys.CreatedDate = DateTime.Parse(Convert.ToString(DateTime.UtcNow), new CultureInfo("en-US"));
                     objsys.ModifiedDate = DateTime.Parse(Convert.ToString(DateTime.UtcNow), new CultureInfo("en-US"));
@@ -1318,8 +1328,6 @@ namespace PPCPWebApiServices.Models.PPCPWebService.DAL
 
         }
 
-
-
         public object GetMembersList(int intOrganizationID, int intMemberID, string searchtext)
         {
 
@@ -1342,6 +1350,46 @@ namespace PPCPWebApiServices.Models.PPCPWebService.DAL
 
         }
 
+
+        #region Billing
+
+        public object GetClaims(int OrganizationID, DateTime ClaimStartDate, DateTime ClaimEndDate, int ClaimStatusId)
+        {
+            List<MemberVisit> list = new List<MemberVisit>();
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(ConfigurationManager.ConnectionStrings["DALDefaultService"].ConnectionString))
+                {
+                    list = conn.Query<MemberVisit>("pr_ClaimsGet", new { OrganizationID, ClaimStartDate, ClaimEndDate, ClaimStatusId }, 
+                                    commandType: CommandType.StoredProcedure).ToList();
+                }
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+            return list;
+        }
+
+        public object GetVisitById(int VisitId)
+        {
+            List<MemberVisit> list = new List<MemberVisit>();
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(ConfigurationManager.ConnectionStrings["DALDefaultService"].ConnectionString))
+                {
+                    list = conn.Query<MemberVisit>("select * from MemberVisit where VisitID = " + VisitId, null,
+                                    commandType: CommandType.Text).ToList();
+                }
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+            return list;
+        }
+
+        #endregion
 
     }
 }

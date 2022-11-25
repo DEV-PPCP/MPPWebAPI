@@ -155,13 +155,18 @@ namespace PPCPWebApiServices.Models.PPCPWebService.DAL
                     mycharge.Currency = "USD";
                     mycharge.Customer = objMemberDetails.StripeCustomerID;
                     mycharge.Amount = chargetotal;
-                    var TransferDataOptions = new ChargeTransferDataOptions()
+
+                    if (objMemberDetails.BillingTypeID == BillingType.Lumpsum)
                     {
-                        Destination = (!string.IsNullOrEmpty(objMemberDetails.StripeAccountID) ? objMemberDetails.StripeAccountID.Trim() : StripeAccountID.Trim()),
-                        //Amount = chargetotal - stripefeeCents - stripeExtraFee
-                        Amount = TotalTransferAmount - stripefeeCents - stripeExtraFee
-                    };
-                    mycharge.TransferData = TransferDataOptions;
+                        var TransferDataOptions = new ChargeTransferDataOptions()
+                        {
+                            Destination = (!string.IsNullOrEmpty(objMemberDetails.StripeAccountID) ? objMemberDetails.StripeAccountID.Trim() : StripeAccountID.Trim()),
+                            //Amount = chargetotal - stripefeeCents - stripeExtraFee
+                            Amount = TotalTransferAmount - stripefeeCents - stripeExtraFee
+                        };
+                        mycharge.TransferData = TransferDataOptions;
+                    }
+
                     mycharge.OnBehalfOf = objMemberDetails.StripeAccountID.Trim();// StripeAccountID.Trim();
                                                                                   // mycharge.Destination = StripeAccountID;
                                                                                   // mycharge.DestinationAmount = chargetotal - stripefeeCents - stripeExtraFee;
@@ -626,13 +631,18 @@ namespace PPCPWebApiServices.Models.PPCPWebService.DAL
                         mycharge.Currency = "USD";
                         mycharge.Customer = objMemberDetails[0].StripeCustomerID;
                         mycharge.Amount = chargetotal;
-                        var TransferDataOptions = new ChargeTransferDataOptions()
+
+                        if (objMemberDetails[0].BillingTypeID == BillingType.Lumpsum)
                         {
-                            Destination = objMemberDetails[0].StripeAccountID.Trim(), //!string.IsNullOrEmpty(OrgstripeAccountID)? OrgstripeAccountID.Trim(): StripeAccountID.Trim(),// OrgstripeAccountID,//StripeAccountID.Trim(),
-                            // Amount = chargetotal - stripefeeCents - stripeExtraFee
-                            Amount = TotalTransferAmount - stripefeeCents - stripeExtraFee
-                        };
-                        mycharge.TransferData = TransferDataOptions;
+                            var TransferDataOptions = new ChargeTransferDataOptions()
+                            {
+                                Destination = objMemberDetails[0].StripeAccountID.Trim(), //!string.IsNullOrEmpty(OrgstripeAccountID)? OrgstripeAccountID.Trim(): StripeAccountID.Trim(),// OrgstripeAccountID,//StripeAccountID.Trim(),
+                                                                                          // Amount = chargetotal - stripefeeCents - stripeExtraFee
+                                Amount = TotalTransferAmount - stripefeeCents - stripeExtraFee
+                            };
+                            mycharge.TransferData = TransferDataOptions;
+                        }
+
                         mycharge.OnBehalfOf = objMemberDetails[0].StripeAccountID.Trim();//OrgstripeAccountID.Trim();//StripeAccountID.Trim();
                         mycharge.StatementDescriptorSuffix = "Plans";
                         //mycharge.Destination = StripeAccountID;

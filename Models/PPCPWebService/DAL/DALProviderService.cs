@@ -15,140 +15,36 @@ namespace PPCPWebApiServices.Models.PPCPWebService.DAL
 {
     public class DALProviderService
     {
-        public List<Provider> ValidateProviderLogin(string Username, string Password)
-        {
+        //public List<Result> UpdatePassword(int intProviderID, string strPassword)
+        //{
 
-            List<Provider> objProvider = new List<Provider>();
-            try
-            {
-                using (var Context = new Dev_PPCPEntities(1))
-                {
-                    var query = (from RR in Context.ProviderCredentials
-                                 from M in Context.Providers
-                                 where RR.ProviderID == M.ProviderID
-                                 //|| RR.SoldProductId == M.ProductID // Your join
-                                 where RR.UserName == Username
-                                        && RR.Userpassword == Password
-                                 //&& statusIds.Any(x => x.Equals(RR.StatusID.Value))
-                                 select M).ToArray();
+        //    List<Result> res = new List<Result>();
+        //    try
+        //    {
+        //        byte[] bytes = Encoding.UTF8.GetBytes(strPassword);
+        //        strPassword = Convert.ToBase64String(bytes);//Convert the password to Encrypt
 
+        //        using (var Context = new Dev_PPCPEntities(1))
+        //        {
+        //            ProviderCredential h = Context.ProviderCredentials.First(m => m.ProviderID == intProviderID);
+        //            h.Userpassword = strPassword;
+        //            int result = Context.SaveChanges();
+        //            Result objres = new Result();
+        //            objres.ResultID = result;
+        //            res.Add(objres);
 
-                    objProvider = query.ToList();
-                }
-            }
-            catch (Exception ex)
-            {
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        Result objres = new Result();
+        //        objres.ResultName = ex.Message;
+        //        res.Add(objres);
 
-            }
-            return objProvider;
+        //    }
+        //    return res;
 
-        }
-        //Provider credentials forgot username or password by veema
-        public List<ProviderCredential> ValidateProviderForgotUserName(string Username, string Firstname, string Lastname, string Mobilenumber, string Countrycode, string email)
-        {
-
-            List<ProviderCredential> getProviderUsersDetails = new List<ProviderCredential>();
-
-
-            try
-            {
-
-                using (var Context = new Dev_PPCPEntities(1))
-                {
-                    var query = (from RR in Context.ProviderCredentials
-                                 from M in Context.Providers
-                                 where RR.ProviderID == M.ProviderID
-                                 where
-                                        M.FirstName == Firstname
-                                         && M.LastName == Lastname
-                                           && M.MobileNumber == Mobilenumber
-                                             && M.CountryCode == Countrycode
-                                               && M.Email == email
-                                 select RR).ToArray();
-
-                    getProviderUsersDetails = query.ToList();
-                }
-                if (getProviderUsersDetails.Count >= 1)
-                {
-                    DALDefaultService dal = new DALDefaultService();
-                    string OTP = dal.randamNumber();
-                    string Message = "Dear " + Firstname + " " + Lastname + ", Your one time password is : " + OTP;
-                    dal.SendMessageByText(Message, Mobilenumber, Countrycode);
-                    getProviderUsersDetails[0].OTP = OTP;
-                    //public string OTP { get; set; }
-                }
-            }
-            catch (Exception ex)
-            {
-
-            }
-            return getProviderUsersDetails;
-        }
-
-        public List<Provider> ValidateProviderForgotPassword(string UserName)
-        {
-            List<Provider> getProviderUsersDetails = new List<Provider>();
-            try
-            {
-
-                using (var Context = new Dev_PPCPEntities(1))
-                {
-                    var query = (from PC in Context.ProviderCredentials
-                                 from P in Context.Providers
-                                 where PC.ProviderID == P.ProviderID
-                                 where
-                                        PC.UserName == UserName
-                                 select P).ToArray();
-
-                    getProviderUsersDetails = query.ToList();
-                }
-                if (getProviderUsersDetails.Count >= 1)
-                {
-                    DALDefaultService dal = new DALDefaultService();
-                    string OTP = dal.randamNumber();
-                    string Message = "Dear " + getProviderUsersDetails[0].FirstName + " " + getProviderUsersDetails[0].LastName + ", Your one time password is : " + OTP;
-                    dal.SendMessageByText(Message, getProviderUsersDetails[0].MobileNumber, getProviderUsersDetails[0].CountryCode);
-                    getProviderUsersDetails[0].OTP = OTP;
-                    // public string OTP { get; set; }
-                }
-            }
-            catch (Exception ex)
-            {
-
-            }
-            return getProviderUsersDetails;
-        }
-
-        public List<Result> UpdatePassword(int intProviderID, string strPassword)
-        {
-
-            List<Result> res = new List<Result>();
-            try
-            {
-                byte[] bytes = Encoding.UTF8.GetBytes(strPassword);
-                strPassword = Convert.ToBase64String(bytes);//Convert the password to Encrypt
-
-                using (var Context = new Dev_PPCPEntities(1))
-                {
-                    ProviderCredential h = Context.ProviderCredentials.First(m => m.ProviderID == intProviderID);
-                    h.Userpassword = strPassword;
-                    int result = Context.SaveChanges();
-                    Result objres = new Result();
-                    objres.ResultID = result;
-                    res.Add(objres);
-
-                }
-            }
-            catch (Exception ex)
-            {
-                Result objres = new Result();
-                objres.ResultName = ex.Message;
-                res.Add(objres);
-
-            }
-            return res;
-
-        }
+        //}
         public List<Member> GetOrganizationMemberDetails(int OrganizationID)
         {
             List<Member> getMemberDetails = new List<Member>();

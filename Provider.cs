@@ -17,7 +17,6 @@ namespace PPCPWebApiServices
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Provider()
         {
-            this.ProviderCredentials = new HashSet<ProviderCredential>();
             this.ProviderSpecializations = new HashSet<ProviderSpecialization>();
         }
     
@@ -59,8 +58,6 @@ namespace PPCPWebApiServices
         public string Degree { get; set; }
         public Nullable<int> UserId { get; set; }
     
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<ProviderCredential> ProviderCredentials { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ProviderSpecialization> ProviderSpecializations { get; set; }
     }

@@ -17,6 +17,9 @@ using System.Data;
 using Dapper;
 using PPCPWebApiServices.CustomEntities;
 using System.Web.UI.WebControls;
+using System.Net.PeerToPeer;
+using System.Net;
+using Twilio.TwiML.Voice;
 
 namespace PPCPWebApiServices.Models.PPCPWebService.DAL
 {
@@ -128,6 +131,23 @@ namespace PPCPWebApiServices.Models.PPCPWebService.DAL
 
         #endregion
 
+        public List<LookupValue> GetLookupValues(int LookupTypeId)
+        {
+            List<LookupValue> list = new List<LookupValue>();
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(ConfigurationManager.ConnectionStrings["DALDefaultService"].ConnectionString))
+                {
+                    list = conn.Query<LookupValue>("select * from lookupValues where lookuptypeid = " + LookupTypeId, null, commandType: CommandType.Text).ToList();
+                }
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+            return list;
+        }
+
         public List<Models.PPCPWebService.DC.CountriesLKP> GetCountries()
         {
 
@@ -212,18 +232,19 @@ namespace PPCPWebApiServices.Models.PPCPWebService.DAL
 
         public List<PlansAndPlansMapping> GetPPCPOrganizationProviderPlans(int OrganizationId, int ProviderId, int PlanId, string Memberage, string Membergender, int Plantype)
         {
-            List<PlansAndPlansMapping> getOrganizationProviderPlans;
-            using (var context = new DALDefaultService())
+            List<PlansAndPlansMapping> list = new List<PlansAndPlansMapping>();
+            try
             {
-                SqlParameter OrganizationID = new SqlParameter("@OrganizationID", OrganizationId);
-                SqlParameter ProviderID = new SqlParameter("@ProviderID", ProviderId);
-                SqlParameter PlanID = new SqlParameter("@PlanID", PlanId);
-                SqlParameter MemberAge = new SqlParameter("@MemberAge", Memberage);
-                SqlParameter MemberGender = new SqlParameter("@MemberGender", Membergender);
-                SqlParameter PlanType = new SqlParameter("@PlanType", Plantype);
-                getOrganizationProviderPlans = context.Database.SqlQuery<PlansAndPlansMapping>("Pr_GetPlans @OrganizationID,@ProviderID,@PlanID,@MemberAge,@MemberGender,@PlanType", OrganizationID, ProviderID, PlanID, MemberAge, MemberGender, PlanType).ToList();
+                using (SqlConnection conn = new SqlConnection(ConfigurationManager.ConnectionStrings["DALDefaultService"].ConnectionString))
+                {
+                    list = conn.Query<PlansAndPlansMapping>("Pr_GetPlans", new { OrganizationId, ProviderId, PlanId, Memberage, Membergender, Plantype }, commandType: CommandType.StoredProcedure).ToList();
+                }
             }
-            return getOrganizationProviderPlans;
+            catch (Exception ex)
+            {
+                return null;
+            }
+            return list;
         }
 
         public List<MemberPlans> GetPlanDetails(int PlanId, int MemberId, int OrganizationId, int ProviderId)
@@ -828,6 +849,9 @@ namespace PPCPWebApiServices.Models.PPCPWebService.DAL
             }
             catch (Exception ex)
             {
+                string s = ex.InnerException.Message;
+                string st = ex.InnerException.StackTrace;
+                string st1 = ex.InnerException.Source;
 
             }
             return obj;
@@ -959,21 +983,23 @@ namespace PPCPWebApiServices.Models.PPCPWebService.DAL
 
         }
 
-        public List<PlansAndPlansMapping> GetPPCPOrganizationProviderPlansBasedonFilters(int OrganizationId, int ProviderId, int PlanId, int StateId,int CityId, string Zip, int Plantype)
+        public List<PlansAndPlansMapping> GetPPCPOrganizationProviderPlansBasedonFilters(int OrganizationId, int ProviderId, int PlanId, int StateId, int CityId, string Zip, int Plantype)
         {
-            List<PlansAndPlansMapping> getOrganizationProviderPlans;
-            using (var context = new DALDefaultService())
+
+            List<PlansAndPlansMapping> list = new List<PlansAndPlansMapping>();
+            try
             {
-                SqlParameter OrganizationID = new SqlParameter("@OrganizationID", OrganizationId);
-                SqlParameter ProviderID = new SqlParameter("@ProviderID", ProviderId);
-                SqlParameter PlanID = new SqlParameter("@PlanID", PlanId);
-                SqlParameter StateID = new SqlParameter("@StateID", StateId);
-                SqlParameter CityID = new SqlParameter("@CityID", CityId);
-                SqlParameter ZIP = new SqlParameter("@ZIP", Zip);
-                SqlParameter PlanType = new SqlParameter("@PlanType", Plantype);
-                getOrganizationProviderPlans = context.Database.SqlQuery<PlansAndPlansMapping>("Pr_GetPlansBasedOnFilters @OrganizationID,@ProviderID,@PlanID,@StateID,@CityID,@ZIP,@PlanType", OrganizationID, ProviderID, PlanID, StateID, CityID, ZIP, PlanType).ToList();
+                using (SqlConnection conn = new SqlConnection(ConfigurationManager.ConnectionStrings["DALDefaultService"].ConnectionString))
+                {
+                    list = conn.Query<PlansAndPlansMapping>("Pr_GetPlansBasedOnFilters", new { OrganizationId, ProviderId, PlanId, StateId, CityId, Zip, Plantype }, commandType: CommandType.StoredProcedure).ToList();
+                }
             }
-            return getOrganizationProviderPlans;
+            catch (Exception ex)
+            {
+                return null;
+            }
+            return list;
+            
         }
 
     }

@@ -178,6 +178,7 @@ namespace PPCPWebApiServices.Models.PPCPWebService.DC
         public string ConfirmPassword { get; set; }
         public string OrganizationName { get; set; }
         public int OrganizationID { get; set; }
+        public int BillingTypeID { get; set; }
         public string ProviderName { get; set; }
         public int ProviderID { get; set; }
         public string PlanName { get; set; }

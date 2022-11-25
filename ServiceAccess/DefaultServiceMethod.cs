@@ -95,16 +95,16 @@ namespace PPCPWebApiServices.ServiceAccess
                         switch (usrDetails[0].RoleType)
                         {
                             case "MPP":
-                                objTermsAndConditions = objdal.GetTermsAndConditions(TermsType.MPP);
+                                objTermsAndConditions = objdal.GetTermsAndConditions(enumTermsType.MPP);
                                 break;
                             case "Organization":
-                                objTermsAndConditions = objdal.GetTermsAndConditions(TermsType.Organization);
+                                objTermsAndConditions = objdal.GetTermsAndConditions(enumTermsType.Organization);
                                 break;
                             case "Member":
-                                objTermsAndConditions = objdal.GetTermsAndConditions(TermsType.Member);
+                                objTermsAndConditions = objdal.GetTermsAndConditions(enumTermsType.Member);
                                 break;
                             case "Provider":
-                                objTermsAndConditions = objdal.GetTermsAndConditions(TermsType.Provider);
+                                objTermsAndConditions = objdal.GetTermsAndConditions(enumTermsType.Provider);
                                 break;
                         }
 
@@ -221,6 +221,13 @@ namespace PPCPWebApiServices.ServiceAccess
         }
 
         #endregion
+
+        public object GetLookupValues(string LookupTypeId)
+        {
+
+            List<LookupValue> list = objdal.GetLookupValues(Convert.ToInt32(LookupTypeId));
+            return list;
+        }
 
         /// <summary>
         /// Get Countries -vinod(30/7/2018)
@@ -729,6 +736,8 @@ namespace PPCPWebApiServices.ServiceAccess
                     intervals.ProviderName = getPPCPOrganizationProvidersplans[0].ProviderName;
                     intervals.OrganizationID = getPPCPOrganizationProvidersplans[0].OrgID;
                     intervals.OrganizationName = getPPCPOrganizationProvidersplans[0].OrgName;
+                    intervals.BillingTypeID = getPPCPOrganizationProvidersplans[0].BillingTypeID;
+                    intervals.MaxAllowedClaims = getPPCPOrganizationProvidersplans[0].MaxAllowedClaims;
                     intervals.AccountID = getPPCPOrganizationProvidersplans[0].AccountID;
                     intervals.CommPPCP = getPPCPOrganizationProvidersplans[0].CommPPCP;
                     intervals.CommPrimaryMember = getPPCPOrganizationProvidersplans[0].CommPrimaryMember;

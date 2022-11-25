@@ -45,7 +45,8 @@ namespace PPCPWebApiServices
         public Nullable<System.DateTime> ModifiedDate { get; set; }
         public string AccountID { get; set; }
         public Nullable<System.DateTime> TandCAcceptedDate { get; set; }
-        public Nullable<int> UserId { get; set; }
+        public Nullable<int> UserID { get; set; }
+        public Nullable<int> BillingTypeID { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<OrganizationPlan> OrganizationPlans { get; set; }

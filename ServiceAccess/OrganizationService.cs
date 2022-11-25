@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using static PPCPWebApiServices.Models.PPCPWebService.DC.DCProviderService;
+using PPCPWebApiServices.CustomEntities;
 
 namespace PPCPWebApiServices.ServiceAccess
 {
@@ -32,69 +33,69 @@ namespace PPCPWebApiServices.ServiceAccess
             List<Models.PPCPWebService.DC.OrganizationDetails> SaveOrganizationDetails = objdal.SaveOrganizationDetails(plansxml);
             return SaveOrganizationDetails;
         }
-        public object ValidateOrganization(string Username, string Password, string IpAddress)
-        {
+        //public object ValidateOrganization(string Username, string Password, string IpAddress)
+        //{
 
-            List<OrganizationUsers> ordDetails = objdal.ValidateOrganization(Username, Password, IpAddress);
-            if (ordDetails.Count >= 1)
-            {
-                if (ordDetails[0].IsTwofactorAuthentication == true)
-                {
-                    DALDefaultService dal = new DALDefaultService();
+        //    List<OrganizationUsers> ordDetails = objdal.ValidateOrganization(Username, Password, IpAddress);
+        //    if (ordDetails.Count >= 1)
+        //    {
+        //        if (ordDetails[0].IsTwofactorAuthentication == true)
+        //        {
+        //            DALDefaultService dal = new DALDefaultService();
 
-                    string OTP = dal.randamNumber();
-                    string Message = "MyPhysicianPlan: DO NOT share this Sign In Code.  We will Never call you or text you for it.  Code " + OTP;
+        //            string OTP = dal.randamNumber();
+        //            string Message = "MyPhysicianPlan: DO NOT share this Sign In Code.  We will Never call you or text you for it.  Code " + OTP;
                     
-                    if (ordDetails[0].TwoFactorType == 1)
-                    {
-                        dal.SendMessageByText(Message, ordDetails[0].MobileNumber, ordDetails[0].CountryCode);
-                        ordDetails[0].Otp = OTP;
-                    }
-                    else
-                    {
-                        if (ordDetails[0].PreferredIP != IpAddress)
-                        {
-                            dal.SendMessageByText(Message, ordDetails[0].MobileNumber, ordDetails[0].CountryCode);
-                            ordDetails[0].Otp = OTP;
-                        }
-                        else
-                        {
-                            // No Action Required
-                        }
-                    }
-                }
-                try
-                {
-                    //Organization Terms and Conditions flag
-                    DALDefaultService objdal = new DALDefaultService();
-                    List<TermsAndCondition> objTermsAndConditionsOrganization = objdal.GetTermsAndConditions(2);//intType=2-Organization
-                    if (objTermsAndConditionsOrganization.Count >= 1)
-                    {
-                        int value = DateTime.Compare(Convert.ToDateTime(ordDetails[0].OrganizationTandC), Convert.ToDateTime(objTermsAndConditionsOrganization[0].CreatedDate));
-                        if (value > 0)
-                            ordDetails[0].OrganizationTandCFlag = 0;
-                        else if (value < 0)
-                            ordDetails[0].OrganizationTandCFlag = 1;
-                    }
-                    // Organization User Terms and Conditions flag
-                    List<TermsAndCondition> objTermsAndConditionsOrganizatioUsers = objdal.GetTermsAndConditions(3);//intType=2-Organization
-                    if (objTermsAndConditionsOrganizatioUsers.Count >= 1)
-                    {
-                        int value = DateTime.Compare(Convert.ToDateTime(ordDetails[0].OrganizationUserTandC), Convert.ToDateTime(objTermsAndConditionsOrganizatioUsers[0].CreatedDate));
-                        if (value > 0)
-                            ordDetails[0].OrganizationUserTandCFlag = 0;
-                        else if (value < 0)
-                            ordDetails[0].OrganizationUserTandCFlag = 1;
-                    }
-                }
-                catch (Exception ex)
-                {
+        //            if (ordDetails[0].TwoFactorType == 1)
+        //            {
+        //                dal.SendMessageByText(Message, ordDetails[0].MobileNumber, ordDetails[0].CountryCode);
+        //                ordDetails[0].Otp = OTP;
+        //            }
+        //            else
+        //            {
+        //                if (ordDetails[0].PreferredIP != IpAddress)
+        //                {
+        //                    dal.SendMessageByText(Message, ordDetails[0].MobileNumber, ordDetails[0].CountryCode);
+        //                    ordDetails[0].Otp = OTP;
+        //                }
+        //                else
+        //                {
+        //                    // No Action Required
+        //                }
+        //            }
+        //        }
+        //        try
+        //        {
+        //            //Organization Terms and Conditions flag
+        //            DALDefaultService objdal = new DALDefaultService();
+        //            List<TermsAndCondition> objTermsAndConditionsOrganization = objdal.GetTermsAndConditions(2);//intType=2-Organization
+        //            if (objTermsAndConditionsOrganization.Count >= 1)
+        //            {
+        //                int value = DateTime.Compare(Convert.ToDateTime(ordDetails[0].OrganizationTandC), Convert.ToDateTime(objTermsAndConditionsOrganization[0].CreatedDate));
+        //                if (value > 0)
+        //                    ordDetails[0].OrganizationTandCFlag = 0;
+        //                else if (value < 0)
+        //                    ordDetails[0].OrganizationTandCFlag = 1;
+        //            }
+        //            // Organization User Terms and Conditions flag
+        //            List<TermsAndCondition> objTermsAndConditionsOrganizatioUsers = objdal.GetTermsAndConditions(3);//intType=2-Organization
+        //            if (objTermsAndConditionsOrganizatioUsers.Count >= 1)
+        //            {
+        //                int value = DateTime.Compare(Convert.ToDateTime(ordDetails[0].OrganizationUserTandC), Convert.ToDateTime(objTermsAndConditionsOrganizatioUsers[0].CreatedDate));
+        //                if (value > 0)
+        //                    ordDetails[0].OrganizationUserTandCFlag = 0;
+        //                else if (value < 0)
+        //                    ordDetails[0].OrganizationUserTandCFlag = 1;
+        //            }
+        //        }
+        //        catch (Exception ex)
+        //        {
 
-                }
-            }
+        //        }
+        //    }
 
-            return ordDetails;
-        }
+        //    return ordDetails;
+        //}
         public object AddUserDetails(string organizationxml)
         {
 
@@ -138,12 +139,12 @@ namespace PPCPWebApiServices.ServiceAccess
 
 
 
-        public object UpdateOrgPassword(string UserID, string Password)
-        {
+        //public object UpdateOrgPassword(string UserID, string Password)
+        //{
 
-            int UpdatePassword = objdal.UpdateOrgCredentials(Convert.ToInt32(UserID), Password);
-            return UpdatePassword;
-        }
+        //    int UpdatePassword = objdal.UpdateOrgCredentials(Convert.ToInt32(UserID), Password);
+        //    return UpdatePassword;
+        //}
         /// <summary>
         /// Update Organization details in Organization ,OrganizationUser and UserCredential table-vinod
         /// </summary>
@@ -250,11 +251,6 @@ namespace PPCPWebApiServices.ServiceAccess
         /// <param name="Username"></param>
         /// <returns></returns>
 
-        public object ValidateProviderUserName(string Username)
-        {
-            int i = objdal.ValidateProviderUserName(Username);
-            return i;
-        }
 
         /// <summary>
         /// veena view OrganizationPaymentDetails using OrganizationID
@@ -474,7 +470,40 @@ namespace PPCPWebApiServices.ServiceAccess
 
         }
 
-        
+
+
+        #region Billing
+
+        public object GetClaims(string OrganizationID, string ClaimStartDate, string ClaimEndDate, string ClaimStatus)
+        {
+            int orgid = 0;
+            if (!string.IsNullOrEmpty(OrganizationID))
+                orgid = Convert.ToInt32(OrganizationID);
+            int claimStatus = 0;
+            if (!string.IsNullOrEmpty(ClaimStatus))
+                claimStatus = Convert.ToInt32(ClaimStatus);
+
+            object list = new List<MemberVisit>();
+
+            list = objdal.GetClaims(orgid, Convert.ToDateTime(ClaimStartDate), Convert.ToDateTime(ClaimEndDate), Convert.ToInt32(claimStatus));
+
+            return list;
+
+        }
+
+        public object GetVisitById(string VisitId)
+        {
+            int visitId = 0;
+            if (!string.IsNullOrEmpty(VisitId))
+                visitId = Convert.ToInt32(VisitId);
+
+            object list = new List<MemberVisit>();
+            list = objdal.GetVisitById(visitId);
+
+            return list;
+        }
+
+        #endregion
 
     }
 

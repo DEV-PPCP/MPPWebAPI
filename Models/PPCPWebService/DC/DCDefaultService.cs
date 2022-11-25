@@ -217,6 +217,8 @@ namespace PPCPWebApiServices.Models.PPCPWebService.DC
         public string ProviderName { get; set; }
         public int? OrganizationID { get; set; }
         public string OrganizationName { get; set; }
+        public int BillingTypeID { get; set; }
+        public int MaxAllowedClaims { get; set; }
 
         public string AccountID { get; set; }
         public Nullable<decimal> CommPPCP { get; set; }
@@ -305,6 +307,8 @@ namespace PPCPWebApiServices.Models.PPCPWebService.DC
         
         public string ProviderName { get; set; }
         public string OrganizationName { get; set; }
+        public string OrganizationAddress { get; set; }
+        public string ProviderAddress { get; set; }
         public string Features { get; set; }
         public string Patient_Features { get; set; }
         public Nullable<bool> IsDelete { get; set; }
@@ -318,6 +322,8 @@ namespace PPCPWebApiServices.Models.PPCPWebService.DC
         public Nullable<decimal> CommPPCP { get; set; }
         public Nullable<decimal> CommPrimaryMember { get; set; }
         public int MapID { get; set; }
+        public int BillingTypeID { get; set; }
+        public int MaxAllowedClaims { get; set; }
     }
     public class PaymentDetails
     {

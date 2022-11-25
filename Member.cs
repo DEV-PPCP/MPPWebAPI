@@ -18,7 +18,6 @@ namespace PPCPWebApiServices
         public Member()
         {
             this.FamilyMembers = new HashSet<FamilyMember>();
-            this.MemberCredentials = new HashSet<MemberCredential>();
             this.PaymentDetails = new HashSet<PaymentDetail>();
             this.MemberPlans = new HashSet<MemberPlan>();
         }
@@ -61,8 +60,6 @@ namespace PPCPWebApiServices
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<FamilyMember> FamilyMembers { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<MemberCredential> MemberCredentials { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PaymentDetail> PaymentDetails { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
