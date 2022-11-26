@@ -46,6 +46,7 @@
         <AssociationConnector Association="Dev_PPCPModel.FK_OrganizationPlans_Organizations" />
         <AssociationConnector Association="Dev_PPCPModel.FK_OrganizationUsers_Organizations" />
         <AssociationConnector Association="Dev_PPCPModel.FK_PlansMapping_Organizations" />
+        <EntityTypeShape EntityType="Dev_PPCPModel.Log" Width="1.5" PointX="0.75" PointY="0.75" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

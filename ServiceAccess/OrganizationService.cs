@@ -287,9 +287,9 @@ namespace PPCPWebApiServices.ServiceAccess
 
      
 
-        public object InsertOrganizationPlans(string OrganizationID, string PlanID, string StartDate)
+        public object InsertOrganizationPlans(string OrganizationID, string PlanID, string StartDate, string ModifiedBy)
         {
-            int insertOrgPlans = objdal.InsertOrganizationPlan(Convert.ToInt32(OrganizationID), Convert.ToInt32(PlanID), Convert.ToDateTime(StartDate));
+            int insertOrgPlans = objdal.InsertOrganizationPlan(Convert.ToInt32(OrganizationID), Convert.ToInt32(PlanID), Convert.ToDateTime(StartDate), Convert.ToInt32(ModifiedBy));
             return insertOrgPlans;
         }
         /// <summary>

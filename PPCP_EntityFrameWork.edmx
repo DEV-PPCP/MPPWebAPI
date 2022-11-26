@@ -81,6 +81,17 @@ warning 6002: The table/view 'Dev_PPCP_200722.dbo.Application_Parameter_Config' 
           <Property Name="RoleType" Type="varchar" MaxLength="200" />
           <Property Name="RoleName" Type="varchar" MaxLength="50" />
         </EntityType>
+        <EntityType Name="Logs">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Source" Type="varchar" MaxLength="100" />
+          <Property Name="ErrorMessage" Type="varchar" MaxLength="5000" />
+          <Property Name="LogType" Type="varchar" MaxLength="50" />
+          <Property Name="CreatedDate" Type="datetime" />
+          <Property Name="CreatedBy" Type="int" />
+        </EntityType>
         <EntityType Name="Member">
           <Key>
             <PropertyRef Name="MemberID" />
@@ -200,6 +211,8 @@ warning 6002: The table/view 'Dev_PPCP_200722.dbo.Application_Parameter_Config' 
           <Property Name="IsDelete" Type="bit" />
           <Property Name="CreatedDate" Type="datetime" />
           <Property Name="ModifiedDate" Type="datetime" />
+          <Property Name="CreatedBy" Type="int" />
+          <Property Name="ModifiedBy" Type="int" />
         </EntityType>
         <EntityType Name="Organizations">
           <Key>
@@ -350,6 +363,8 @@ warning 6002: The table/view 'Dev_PPCP_200722.dbo.Application_Parameter_Config' 
           <Property Name="CreatedDate" Type="datetime" />
           <Property Name="ModifiedDate" Type="datetime" />
           <Property Name="IsDelete" Type="bit" />
+          <Property Name="CreatedBy" Type="int" />
+          <Property Name="ModifiedBy" Type="int" />
         </EntityType>
         <EntityType Name="PlansPriceDetails">
           <Key>
@@ -700,6 +715,7 @@ warning 6002: The table/view 'Dev_PPCP_200722.dbo.Application_Parameter_Config' 
           <EntitySet Name="CountriesLKP" EntityType="Self.CountriesLKP" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="FamilyMember" EntityType="Self.FamilyMember" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="lkpRoles" EntityType="Self.lkpRoles" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Logs" EntityType="Self.Logs" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Member" EntityType="Self.Member" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="MemberPlanInstallmentMapping" EntityType="Self.MemberPlanInstallmentMapping" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="MemberPlanMapping" EntityType="Self.MemberPlanMapping" Schema="dbo" store:Type="Tables" />
@@ -882,6 +898,7 @@ warning 6002: The table/view 'Dev_PPCP_200722.dbo.Application_Parameter_Config' 
             <End Role="Organization" EntitySet="Organizations" />
             <End Role="PlansMapping" EntitySet="PlansMappings" />
           </AssociationSet>
+          <EntitySet Name="Logs" EntityType="Dev_PPCPModel.Log" />
           </EntityContainer>
         <EntityType Name="CitiesLKP">
           <Key>
@@ -1108,6 +1125,8 @@ warning 6002: The table/view 'Dev_PPCP_200722.dbo.Application_Parameter_Config' 
           <Property Name="ModifiedDate" Type="DateTime" Precision="3" />
           <Property Name="MaxAllowedClaims" Type="Int32" />
           <NavigationProperty Name="Organization" Relationship="Dev_PPCPModel.FK_OrganizationPlans_Organizations" FromRole="OrganizationPlan" ToRole="Organization" />
+          <Property Name="CreatedBy" Type="Int32" />
+          <Property Name="ModifiedBy" Type="Int32" />
         </EntityType>
         <EntityType Name="Plan">
           <Key>
@@ -1222,6 +1241,8 @@ warning 6002: The table/view 'Dev_PPCP_200722.dbo.Application_Parameter_Config' 
           <Property Name="ModifiedDate" Type="DateTime" Precision="3" />
           <Property Name="IsDelete" Type="Boolean" />
           <NavigationProperty Name="Organization" Relationship="Dev_PPCPModel.FK_PlansMapping_Organizations" FromRole="PlansMapping" ToRole="Organization" />
+          <Property Name="CreatedBy" Type="Int32" />
+          <Property Name="ModifiedBy" Type="Int32" />
         </EntityType>
         <Association Name="FK_PlansMapping_Plans1">
           <End Type="Dev_PPCPModel.Plan" Role="Plan" Multiplicity="1" />
@@ -1702,6 +1723,17 @@ warning 6002: The table/view 'Dev_PPCP_200722.dbo.Application_Parameter_Config' 
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="Log">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Source" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="ErrorMessage" Type="String" MaxLength="5000" FixedLength="false" Unicode="false" />
+          <Property Name="LogType" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="CreatedDate" Type="DateTime" Precision="3" />
+          <Property Name="CreatedBy" Type="Int32" />
+        </EntityType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1888,6 +1920,8 @@ warning 6002: The table/view 'Dev_PPCP_200722.dbo.Application_Parameter_Config' 
           <EntitySetMapping Name="OrganizationPlans">
             <EntityTypeMapping TypeName="Dev_PPCPModel.OrganizationPlan">
               <MappingFragment StoreEntitySet="OrganizationPlans">
+                <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
                 <ScalarProperty Name="MaxAllowedClaims" ColumnName="MaxAllowedClaims" />
                 <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
                 <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
@@ -1972,6 +2006,8 @@ warning 6002: The table/view 'Dev_PPCP_200722.dbo.Application_Parameter_Config' 
           <EntitySetMapping Name="PlansMappings">
             <EntityTypeMapping TypeName="Dev_PPCPModel.PlansMapping">
               <MappingFragment StoreEntitySet="PlansMapping">
+                <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
                 <ScalarProperty Name="IsDelete" ColumnName="IsDelete" />
                 <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
                 <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
@@ -2376,6 +2412,18 @@ warning 6002: The table/view 'Dev_PPCP_200722.dbo.Application_Parameter_Config' 
                 <ScalarProperty Name="ParentOrganizationID" ColumnName="ParentOrganizationID" />
                 <ScalarProperty Name="OrganizationName" ColumnName="OrganizationName" />
                 <ScalarProperty Name="OrganizationID" ColumnName="OrganizationID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Logs">
+            <EntityTypeMapping TypeName="Dev_PPCPModel.Log">
+              <MappingFragment StoreEntitySet="Logs">
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="LogType" ColumnName="LogType" />
+                <ScalarProperty Name="ErrorMessage" ColumnName="ErrorMessage" />
+                <ScalarProperty Name="Source" ColumnName="Source" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

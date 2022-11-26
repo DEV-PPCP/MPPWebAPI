@@ -21,6 +21,7 @@ using System.Web;
 using System.Xml;
 using System.Xml.Serialization;
 using static PPCPWebApiServices.Models.PPCPWebService.DC.DCProviderService;
+using Twilio.TwiML.Messaging;
 
 namespace PPCPWebApiServices.Models.PPCPWebService.DAL
 {
@@ -120,9 +121,25 @@ namespace PPCPWebApiServices.Models.PPCPWebService.DAL
                         //}
                     }
                 }
+
+                //Send email to support email if existing
+                List<Application_Parameter_Config> list = CommonService.GetApplicationConfigs();
+                Service.MailHelper _objMail = new Service.MailHelper();
+                string toEmail = list.Where(o => o.PARAMETER_NAME == "NewOrganizationRegistrationEmail").First().PARAMETER_VALUE;
+                if(!string.IsNullOrEmpty(toEmail))
+                {
+                    string subject = "MyPhysicianPlan - New Organization Registered";
+                    string body = "An Organization has registered. Please setup their Stripe account. <br/><br/> "
+                                    + "Name: " + objDCOrganizationService.OrganizationName + "<br/>"
+                                    + "Contact Person: " + objDCOrganizationService.FirstName + " " + objDCOrganizationService.LastName + "<br/>"
+                                    + "Contact Phone: " + objDCOrganizationService.MobileNumber + "<br/>"
+                                    + "Contact Email: " + objDCOrganizationService.Email;
+                    _objMail.SendEmail(toEmail, string.Empty, subject, body);
+                }                
             }
             catch (Exception ex)
             {
+                Logging.LogMessage("SaveOrganizationDetails", ex.Message + "; InnerException: " + ex.InnerException + "; stacktrace:" + ex.StackTrace, LogType.Error, -1);
                 OrganizationDetails obj = new OrganizationDetails();
                 obj.Result = ex.Message;
                 objTemporaryDetails.Add(obj);
@@ -693,47 +710,67 @@ namespace PPCPWebApiServices.Models.PPCPWebService.DAL
             return getOrganizationUsers;
         }
         //Insertion of OrganizationPlan Details :Ragini on 20-09-2019
-        public int InsertOrganizationPlan(int intOrgId, int intPlanId, DateTime strStartDate)
+        public int InsertOrganizationPlan(int intOrgId, int intPlanId, DateTime strStartDate, int ModifiedBy)
         {
-            int res = 0;
-            List<OrganizationPlan> getOrganizationPlans = new List<OrganizationPlan>();
+            int isSuccess = 1;
             try
             {
-                using (var Context = new Dev_PPCPEntities(1))
+                using (SqlConnection conn = new SqlConnection(ConfigurationManager.ConnectionStrings["DALDefaultService"].ConnectionString))
                 {
-                    var orgDetails = (from OP in Context.OrganizationPlans
-                                      join P in Context.Plans on OP.PlanID equals P.PlanID
-                                      join O in Context.Organizations on OP.OrganizationID equals O.OrganizationID
-                                      where O.OrganizationID == intOrgId
-                                      select new
-                                      {
-                                          P.MaxAllowedClaims
-                                      }).FirstOrDefault();
-
-                    int? maxAllowedClaims = 0;
-                    if(orgDetails != null)
-                    {
-                        maxAllowedClaims = orgDetails.MaxAllowedClaims;
-                    }
-
-                    OrganizationPlan objsys = new OrganizationPlan();
-                    objsys.PlanID = intPlanId;
-                    objsys.OrganizationID = intOrgId;
-                    objsys.PlanstartDate = strStartDate;
-                    objsys.MaxAllowedClaims = maxAllowedClaims;
-                    objsys.IsDelete = false;
-                    objsys.CreatedDate = DateTime.Parse(Convert.ToString(DateTime.UtcNow), new CultureInfo("en-US"));
-                    objsys.ModifiedDate = DateTime.Parse(Convert.ToString(DateTime.UtcNow), new CultureInfo("en-US"));
-                    Context.OrganizationPlans.Add(objsys);
-                    res = Context.SaveChanges();
+                    conn.Query<int>("Pr_PlansSubscribeOrg", new 
+                    { 
+                        OrganizationId = intOrgId, 
+                        PlanId = intPlanId, 
+                        StartDate = strStartDate,
+                        ModifiedBy
+                    }, commandType: CommandType.StoredProcedure).ToList();
                 }
-
             }
             catch (Exception ex)
             {
-
+                isSuccess = 0;
             }
-            return res;
+            return isSuccess;
+
+            //int res = 0;
+            //List<OrganizationPlan> getOrganizationPlans = new List<OrganizationPlan>();
+            //try
+            //{
+            //    using (var Context = new Dev_PPCPEntities(1))
+            //    {
+            //        var orgDetails = (from OP in Context.OrganizationPlans
+            //                          join P in Context.Plans on OP.PlanID equals P.PlanID
+            //                          join O in Context.Organizations on OP.OrganizationID equals O.OrganizationID
+            //                          where O.OrganizationID == intOrgId
+            //                          select new
+            //                          {
+            //                              P.MaxAllowedClaims
+            //                          }).FirstOrDefault();
+
+            //        int? maxAllowedClaims = 0;
+            //        if(orgDetails != null)
+            //        {
+            //            maxAllowedClaims = orgDetails.MaxAllowedClaims;
+            //        }
+
+            //        OrganizationPlan objsys = new OrganizationPlan();
+            //        objsys.PlanID = intPlanId;
+            //        objsys.OrganizationID = intOrgId;
+            //        objsys.PlanstartDate = strStartDate;
+            //        objsys.MaxAllowedClaims = maxAllowedClaims;
+            //        objsys.IsDelete = false;
+            //        objsys.CreatedDate = DateTime.Parse(Convert.ToString(DateTime.UtcNow), new CultureInfo("en-US"));
+            //        objsys.ModifiedDate = DateTime.Parse(Convert.ToString(DateTime.UtcNow), new CultureInfo("en-US"));
+            //        Context.OrganizationPlans.Add(objsys);
+            //        res = Context.SaveChanges();
+            //    }
+
+            //}
+            //catch (Exception ex)
+            //{
+
+            //}
+            //return res;
         }
         /// <summary>
         /// 

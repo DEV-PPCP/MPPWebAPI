@@ -339,6 +339,9 @@
     <Compile Include="lkpRole.cs">
       <DependentUpon>PPCP_EntityFrameWork.tt</DependentUpon>
     </Compile>
+    <Compile Include="Log.cs">
+      <DependentUpon>PPCP_EntityFrameWork.tt</DependentUpon>
+    </Compile>
     <Compile Include="Member.cs">
       <DependentUpon>PPCP_EntityFrameWork.tt</DependentUpon>
     </Compile>
@@ -351,6 +354,7 @@
     <Compile Include="MemberPlanMapping.cs">
       <DependentUpon>PPCP_EntityFrameWork.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\PPCPWebService\DAL\CommonService.cs" />
     <Compile Include="Models\PPCPWebService\DAL\DALDefaultService.cs" />
     <Compile Include="Models\PPCPWebService\DAL\DALMemberService.cs" />
     <Compile Include="Models\PPCPWebService\DAL\DALOrganizationService.cs" />

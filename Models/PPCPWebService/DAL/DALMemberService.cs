@@ -77,6 +77,7 @@ namespace PPCPWebApiServices.Models.PPCPWebService.DAL
                         }
                         catch (Exception ex)
                         {
+                            Logging.LogMessage("SaveMemberSignUP", ex.Message + "; InnerException: " + ex.InnerException + "; stacktrace:" + ex.StackTrace, LogType.Error, -1);
                             res.result = ex.Message;
                             objTemporaryDetails.Add(res);
                             return objTemporaryDetails;
@@ -97,6 +98,7 @@ namespace PPCPWebApiServices.Models.PPCPWebService.DAL
                         }
                         catch (Exception ex)
                         {
+                            Logging.LogMessage("SaveMemberSignUP", ex.Message + "; InnerException: " + ex.InnerException + "; stacktrace:" + ex.StackTrace, LogType.Error, -1);
                             res.result = ex.Message;
                             objTemporaryDetails.Add(res);
                             return objTemporaryDetails;
@@ -121,6 +123,7 @@ namespace PPCPWebApiServices.Models.PPCPWebService.DAL
                         }
                         catch (Exception ex)
                         {
+                            Logging.LogMessage("SaveMemberSignUP", ex.Message + "; InnerException: " + ex.InnerException + "; stacktrace:" + ex.StackTrace, LogType.Error, -1);
                             res.result = ex.Message;
                             objTemporaryDetails.Add(res);
                             return objTemporaryDetails;
@@ -287,6 +290,7 @@ namespace PPCPWebApiServices.Models.PPCPWebService.DAL
             }
             catch (Exception ex)
             {
+                Logging.LogMessage("SaveMemberSignUP", ex.Message + "; InnerException: " + ex.InnerException + "; stacktrace:" + ex.StackTrace, LogType.Error, -1);
                 res.result = ex.Message;
                 objTemporaryDetails.Add(res);
             }

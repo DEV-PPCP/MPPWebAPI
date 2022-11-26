@@ -6,6 +6,12 @@ using System.Web;
 
 namespace PPCPWebApiServices.CustomEntities
 {
+    public static class LogType
+    {
+        public const string Info = "Info";
+        public const string Warning = "Warning";
+        public const string Error = "Error";
+    }
     public class LookupValue
     {
         public int Id { get; set; }

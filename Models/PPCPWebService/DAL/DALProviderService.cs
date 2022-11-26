@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using PPCPWebApiServices.CustomEntities;
 using PPCPWebApiServices.Models.PPCPWebService.DC;
 using System;
 using System.Collections.Generic;
@@ -110,6 +111,7 @@ namespace PPCPWebApiServices.Models.PPCPWebService.DAL
             }
             catch (Exception ex)
             {
+                Logging.LogMessage("UpdateProviderDetails", ex.Message + "; InnerException: " + ex.InnerException + "; stacktrace:" + ex.StackTrace, LogType.Error, -1);
                 Result objres = new Result();
                 objres.ResultName = ex.Message;
                 res.Add(objres);
@@ -131,7 +133,7 @@ namespace PPCPWebApiServices.Models.PPCPWebService.DAL
             }
             catch (Exception ex)
             {
-
+                Logging.LogMessage("GetProviderDetails: ProviderID: " + ProvderID, ex.Message + "; InnerException: " + ex.InnerException + "; stacktrace:" + ex.StackTrace, LogType.Error, -1);
             }
             return getProviderDetails;
         }

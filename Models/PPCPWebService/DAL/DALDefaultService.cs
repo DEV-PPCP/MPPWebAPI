@@ -20,12 +20,16 @@ using System.Web.UI.WebControls;
 using System.Net.PeerToPeer;
 using System.Net;
 using Twilio.TwiML.Voice;
+using Microsoft.Ajax.Utilities;
+using System.Web.Mvc;
 
 namespace PPCPWebApiServices.Models.PPCPWebService.DAL
 {
-
+    
     public class DALDefaultService : DbContext
     {
+       
+
         #region Account Management
         public List<UserProfile> ValidateCredentials(string Username, string Password, string Ipaddress)
         {
@@ -34,11 +38,12 @@ namespace PPCPWebApiServices.Models.PPCPWebService.DAL
             {
                 using (SqlConnection conn = new SqlConnection(ConfigurationManager.ConnectionStrings["DALDefaultService"].ConnectionString))
                 {
-                    usrDetails = conn.Query<UserProfile>("pr_UserValidate", new { Username, Password, Ipaddress }, commandType: CommandType.StoredProcedure).ToList();
+                    usrDetails = conn.Query<UserProfile>("pr_UserValidate", new { Username, Password, Ipaddress }, commandType: CommandType.StoredProcedure).ToList();                    
                 }
             }
             catch (Exception ex)
             {
+                Logging.LogMessage("ValidateCredentials", ex.Message + "; InnerException: " + ex.InnerException + "; stacktrace:" + ex.StackTrace, LogType.Error, -1);
                 return null;
             }
             return usrDetails;
@@ -114,6 +119,7 @@ namespace PPCPWebApiServices.Models.PPCPWebService.DAL
             }
             catch (Exception ex)
             {
+                Logging.LogMessage("ForgotCredentials", ex.Message + "; InnerException: " + ex.InnerException + "; stacktrace:" + ex.StackTrace, LogType.Error, -1);
             }
         }
 
@@ -143,6 +149,7 @@ namespace PPCPWebApiServices.Models.PPCPWebService.DAL
             }
             catch (Exception ex)
             {
+                Logging.LogMessage("GetLookupValues: " + LookupTypeId, ex.Message + "; InnerException: " + ex.InnerException + "; stacktrace:" + ex.StackTrace, LogType.Error, -1);
                 return null;
             }
             return list;
@@ -161,7 +168,7 @@ namespace PPCPWebApiServices.Models.PPCPWebService.DAL
             }
             catch (Exception ex)
             {
-
+                Logging.LogMessage("GetCountries", ex.Message + "; InnerException: " + ex.InnerException + "; stacktrace:" + ex.StackTrace, LogType.Error, -1);
             }
             return getcountries;
         }
@@ -242,6 +249,7 @@ namespace PPCPWebApiServices.Models.PPCPWebService.DAL
             }
             catch (Exception ex)
             {
+                Logging.LogMessage("GetPPCPOrganizationProviderPlans: OrganizationId: " + OrganizationId + ": ProviderId: " + ProviderId, ex.Message + "; InnerException: " + ex.InnerException + "; stacktrace:" + ex.StackTrace, LogType.Error, -1);
                 return null;
             }
             return list;
@@ -291,7 +299,7 @@ namespace PPCPWebApiServices.Models.PPCPWebService.DAL
             }
             catch (Exception ex)
             {
-
+                Logging.LogMessage("SendEmail: ProviderEmail: " + ProviderEmail, ex.Message + "; InnerException: " + ex.InnerException + "; stacktrace:" + ex.StackTrace, LogType.Error, -1);
             }
         }
         public static string ReadFile(string fileName)
@@ -367,7 +375,7 @@ namespace PPCPWebApiServices.Models.PPCPWebService.DAL
             }
             catch (Exception ex)
             {
-
+                Logging.LogMessage("SendMessageByText: MobileNo: " + MobileNo, ex.Message + "; InnerException: " + ex.InnerException + "; stacktrace:" + ex.StackTrace, LogType.Error, -1);
             }
         }
 
@@ -386,7 +394,7 @@ namespace PPCPWebApiServices.Models.PPCPWebService.DAL
             }
             catch (Exception ex)
             {
-
+                Logging.LogMessage("SendMessageByEmail: ProviderEmail: " + ProviderEmail, ex.Message + "; InnerException: " + ex.InnerException + "; stacktrace:" + ex.StackTrace, LogType.Error, -1);
             }
         }
 
@@ -475,7 +483,7 @@ namespace PPCPWebApiServices.Models.PPCPWebService.DAL
             }
             catch (Exception ex)
             {
-
+                Logging.LogMessage("GetPlans: type: " + type, ex.Message + "; InnerException: " + ex.InnerException + "; stacktrace:" + ex.StackTrace, LogType.Error, -1);
             }
 
             return getPlans;
@@ -498,6 +506,7 @@ namespace PPCPWebApiServices.Models.PPCPWebService.DAL
                 Result obj = new Result();
                 obj.ResultName = ex.Message;
                 objResult.Add(obj);
+                Logging.LogMessage("AddPlans", ex.Message + "; InnerException: " + ex.InnerException + "; stacktrace:" + ex.StackTrace, LogType.Error, -1);
             }
             return objResult;
         }
@@ -557,6 +566,7 @@ namespace PPCPWebApiServices.Models.PPCPWebService.DAL
             {
                 resobj.ResultName = ex.Message;
                 res.Add(resobj);
+                Logging.LogMessage("SavePlanMapping: OrganizationID: " + OrganizationID, ex.Message + "; InnerException: " + ex.InnerException + "; stacktrace:" + ex.StackTrace, LogType.Error, -1);
             }
             return res;
         }
@@ -706,7 +716,7 @@ namespace PPCPWebApiServices.Models.PPCPWebService.DAL
             }
             catch (Exception ex)
             {
-
+                Logging.LogMessage("GetMemberPlansDetails: MemberID: " + MemberID, ex.Message + "; InnerException: " + ex.InnerException + "; stacktrace:" + ex.StackTrace, LogType.Error, -1);
             }
             return MemberPlanDetails;
         }
@@ -758,7 +768,7 @@ namespace PPCPWebApiServices.Models.PPCPWebService.DAL
             }
             catch (Exception ex)
             {
-
+                Logging.LogMessage("GetOrganizationPlanDetails: OrganizationID: " + OrganizationID, ex.Message + "; InnerException: " + ex.InnerException + "; stacktrace:" + ex.StackTrace, LogType.Error, -1);
             }
             return "";
         }
@@ -784,7 +794,7 @@ namespace PPCPWebApiServices.Models.PPCPWebService.DAL
             }
             catch (Exception ex)
             {
-
+                Logging.LogMessage("GetProviderPlanDetails: ProviderID: " + ProviderID, ex.Message + "; InnerException: " + ex.InnerException + "; stacktrace:" + ex.StackTrace, LogType.Error, -1);
             }
             return ProviderPlanDetails;
         }
@@ -826,6 +836,7 @@ namespace PPCPWebApiServices.Models.PPCPWebService.DAL
             {
                 res.ResultName = ex.Message;
                 obj.Add(res);
+                Logging.LogMessage("InsertTermsAndConditions: Type: " + Type, ex.Message + "; InnerException: " + ex.InnerException + "; stacktrace:" + ex.StackTrace, LogType.Error, -1);
             }
 
             return obj;
@@ -852,7 +863,7 @@ namespace PPCPWebApiServices.Models.PPCPWebService.DAL
                 string s = ex.InnerException.Message;
                 string st = ex.InnerException.StackTrace;
                 string st1 = ex.InnerException.Source;
-
+                Logging.LogMessage("GetTermsAndConditions: Type: " + intType, ex.Message + "; InnerException: " + ex.InnerException + "; stacktrace:" + ex.StackTrace, LogType.Error, -1);
             }
             return obj;
 
@@ -879,6 +890,7 @@ namespace PPCPWebApiServices.Models.PPCPWebService.DAL
             {
                 res.ResultName = ex.Message;
                 obj.Add(res);
+                Logging.LogMessage("UpdateTermsandConditions: UserID: " + UserID, ex.Message + "; InnerException: " + ex.InnerException + "; stacktrace:" + ex.StackTrace, LogType.Error, -1);
             }
 
             return obj;
@@ -996,6 +1008,7 @@ namespace PPCPWebApiServices.Models.PPCPWebService.DAL
             }
             catch (Exception ex)
             {
+                Logging.LogMessage("GetPPCPOrganizationProviderPlansBasedonFilters: OrganizationId: " + OrganizationId + ", ProviderId:" + ProviderId + ", StateId: " + StateId + ", CityId: " + CityId , ex.Message + "; InnerException: " + ex.InnerException + "; stacktrace:" + ex.StackTrace, LogType.Error, -1);
                 return null;
             }
             return list;

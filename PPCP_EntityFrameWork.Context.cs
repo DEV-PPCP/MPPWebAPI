@@ -54,6 +54,7 @@ namespace PPCPWebApiServices
         public virtual DbSet<MemberPlan> MemberPlans { get; set; }
         public virtual DbSet<lkpRole> lkpRoles { get; set; }
         public virtual DbSet<Organization> Organizations { get; set; }
+        public virtual DbSet<Log> Logs { get; set; }
     
         public virtual ObjectResult<Pr_GetProviders_Result> Pr_GetProviders(Nullable<int> organizationID)
         {

@@ -26,6 +26,8 @@ namespace PPCPWebApiServices
         public Nullable<System.DateTime> CreatedDate { get; set; }
         public Nullable<System.DateTime> ModifiedDate { get; set; }
         public Nullable<bool> IsDelete { get; set; }
+        public Nullable<int> CreatedBy { get; set; }
+        public Nullable<int> ModifiedBy { get; set; }
     
         public virtual Plan Plan { get; set; }
         public virtual Organization Organization { get; set; }

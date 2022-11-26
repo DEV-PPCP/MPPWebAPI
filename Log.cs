@@ -12,20 +12,13 @@ namespace PPCPWebApiServices
     using System;
     using System.Collections.Generic;
     
-    public partial class OrganizationPlan
+    public partial class Log
     {
-        public int OrganizationPlanID { get; set; }
-        public int PlanID { get; set; }
-        public int OrganizationID { get; set; }
-        public Nullable<System.DateTime> PlanstartDate { get; set; }
-        public Nullable<bool> IsDelete { get; set; }
+        public int Id { get; set; }
+        public string Source { get; set; }
+        public string ErrorMessage { get; set; }
+        public string LogType { get; set; }
         public Nullable<System.DateTime> CreatedDate { get; set; }
-        public Nullable<System.DateTime> ModifiedDate { get; set; }
-        public Nullable<int> MaxAllowedClaims { get; set; }
         public Nullable<int> CreatedBy { get; set; }
-        public Nullable<int> ModifiedBy { get; set; }
-    
-        public virtual Plan Plan { get; set; }
-        public virtual Organization Organization { get; set; }
     }
 }

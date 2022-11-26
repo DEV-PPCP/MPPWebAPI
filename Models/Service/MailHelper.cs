@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PPCPWebApiServices.Models.PPCPWebService.DAL;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Mail;
@@ -12,8 +13,42 @@ namespace PPCPWebApiServices.Models.Service
         readonly MailMessage _m = new MailMessage();
         readonly SmtpClient _sc = new SmtpClient();
 
+        public void SendEmail(string tolist, string cclist, string subject, string body)
+        {
+            try
+            {
+                //string fromMail = "support@ihealthpay.co";
+                List<Application_Parameter_Config> list = CommonService.GetApplicationConfigs();
+                string fromEmail = list.Where(o => o.PARAMETER_NAME == "From_Mail").First().PARAMETER_VALUE;
+                string fromPassword = list.Where(o => o.PARAMETER_NAME == "From_PassWord").First().PARAMETER_VALUE;
 
+                _m.From = new MailAddress(fromEmail, Convert.ToString("MyPhysicianPlan"));
+                string[] validemails = ValidEmails(tolist);
 
+                _m.To.Clear();
+                foreach (var validemail in validemails.Where(validemail => validemail != null))
+                {
+                    _m.To.Add(new MailAddress(validemail, validemail));
+                }
+
+                _m.Subject = subject;
+                _m.IsBodyHtml = true;
+                _m.Body = body;
+
+                // _m.Bcc.Add(new MailAddress(fromMail));
+                _sc.Host = "smtp.1and1.com";
+                _sc.Port = 587;
+                _sc.UseDefaultCredentials = false;
+                _sc.Credentials = new System.Net.NetworkCredential(fromEmail, fromPassword);
+                _sc.EnableSsl = Convert.ToBoolean(Convert.ToInt32("1"));
+                _sc.Send(_m);
+
+            }
+            catch (Exception ex)
+            {
+                //throw ex;
+            }
+        }
 
 
         /// <summary>

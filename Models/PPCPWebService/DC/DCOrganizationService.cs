@@ -106,6 +106,7 @@ namespace PPCPWebApiServices.Models.PPCPWebService.DC
         public string RoutingNumber { get; set; }
 
         public string UserSSN { get; set; }
+
     }
     public class TemporaryUserDetails
     {
