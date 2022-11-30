@@ -29,7 +29,7 @@ namespace PPCPWebApiServices
         public Nullable<int> CreatedBy { get; set; }
         public Nullable<int> ModifiedBy { get; set; }
     
-        public virtual Plan Plan { get; set; }
         public virtual Organization Organization { get; set; }
+        public virtual Plan Plan { get; set; }
     }
 }

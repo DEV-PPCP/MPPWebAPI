@@ -86,7 +86,7 @@ warning 6002: The table/view 'Dev_PPCP_200722.dbo.Application_Parameter_Config' 
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Source" Type="varchar" MaxLength="100" />
+          <Property Name="Source" Type="varchar" MaxLength="1000" />
           <Property Name="ErrorMessage" Type="varchar" MaxLength="5000" />
           <Property Name="LogType" Type="varchar" MaxLength="50" />
           <Property Name="CreatedDate" Type="datetime" />
@@ -317,8 +317,14 @@ warning 6002: The table/view 'Dev_PPCP_200722.dbo.Application_Parameter_Config' 
           <Property Name="ModifiedDate" Type="date" />
           <Property Name="PlanTermName" Type="nvarchar" MaxLength="50" />
           <Property Name="PlanTermMonths" Type="int" />
-          <Property Name="VisitFee" Type="money" />
+          <Property Name="BillingTypeID" Type="int" />
+          <Property Name="MaxAllowedClaims" Type="int" />
           <Property Name="EnrollFee" Type="money" />
+          <Property Name="VisitFee" Type="money" />
+          <Property Name="TeleVisitFee" Type="money" />
+          <Property Name="InPersonProviderFee" Type="money" />
+          <Property Name="TeleVisitProviderFee" Type="money" />
+          <Property Name="CommPrimaryMember" Type="decimal" Precision="18" Scale="2" />
           <Property Name="FromAge" Type="int" />
           <Property Name="ToAge" Type="int" />
           <Property Name="GenderID" Type="int" />
@@ -330,7 +336,6 @@ warning 6002: The table/view 'Dev_PPCP_200722.dbo.Application_Parameter_Config' 
           <Property Name="EffectiveDate" Type="date" />
           <Property Name="PlanMemberType" Type="int" />
           <Property Name="PlanFeeAddMember" Type="money" />
-          <Property Name="CommPrimaryMember" Type="decimal" Precision="18" Scale="2" />
           <Property Name="CommAdditionalMember" Type="decimal" Precision="18" Scale="2" />
           <Property Name="IsThirdParty" Type="bit" />
           <Property Name="OrganizationID" Type="int" />
@@ -343,9 +348,6 @@ warning 6002: The table/view 'Dev_PPCP_200722.dbo.Application_Parameter_Config' 
           <Property Name="OrganizationTAndCPath" Type="nvarchar(max)" />
           <Property Name="ProviderTAndCPath" Type="nvarchar(max)" />
           <Property Name="CommPPCP" Type="decimal" Precision="18" Scale="2" />
-          <Property Name="BillingTypeID" Type="int" />
-          <Property Name="TeleVisitFee" Type="money" />
-          <Property Name="MaxAllowedClaims" Type="int" />
         </EntityType>
         <EntityType Name="PlansMapping">
           <Key>
@@ -833,21 +835,12 @@ warning 6002: The table/view 'Dev_PPCP_200722.dbo.Application_Parameter_Config' 
             <End Role="ProviderSpecialization" EntitySet="ProviderSpecializations" />
           </AssociationSet>
           <EntitySet Name="OrganizationPlans" EntityType="Dev_PPCPModel.OrganizationPlan" />
-          <EntitySet Name="Plans" EntityType="Dev_PPCPModel.Plan" />
-          <AssociationSet Name="FK_OrganizationPlans_Plans1" Association="Dev_PPCPModel.FK_OrganizationPlans_Plans1">
-            <End Role="Plan" EntitySet="Plans" />
-            <End Role="OrganizationPlan" EntitySet="OrganizationPlans" />
-          </AssociationSet>
           <EntitySet Name="PaymentDetails" EntityType="Dev_PPCPModel.PaymentDetail" />
           <AssociationSet Name="FK_PaymentDetails_Member" Association="Dev_PPCPModel.FK_PaymentDetails_Member">
             <End Role="Member" EntitySet="Members" />
             <End Role="PaymentDetail" EntitySet="PaymentDetails" />
           </AssociationSet>
           <EntitySet Name="PlansMappings" EntityType="Dev_PPCPModel.PlansMapping" />
-          <AssociationSet Name="FK_PlansMapping_Plans1" Association="Dev_PPCPModel.FK_PlansMapping_Plans1">
-            <End Role="Plan" EntitySet="Plans" />
-            <End Role="PlansMapping" EntitySet="PlansMappings" />
-          </AssociationSet>
           <EntitySet Name="TermsAndConditions" EntityType="Dev_PPCPModel.TermsAndCondition" />
           <EntitySet Name="OrganizationUsers" EntityType="Dev_PPCPModel.OrganizationUser" />
           <FunctionImport Name="Pr_GetProviders" ReturnType="Collection(Dev_PPCPModel.Pr_GetProviders_Result)">
@@ -899,6 +892,15 @@ warning 6002: The table/view 'Dev_PPCP_200722.dbo.Application_Parameter_Config' 
             <End Role="PlansMapping" EntitySet="PlansMappings" />
           </AssociationSet>
           <EntitySet Name="Logs" EntityType="Dev_PPCPModel.Log" />
+          <EntitySet Name="Plans" EntityType="Dev_PPCPModel.Plan" />
+          <AssociationSet Name="FK_OrganizationPlans_Plans1" Association="Dev_PPCPModel.FK_OrganizationPlans_Plans1">
+            <End Role="Plan" EntitySet="Plans" />
+            <End Role="OrganizationPlan" EntitySet="OrganizationPlans" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PlansMapping_Plans1" Association="Dev_PPCPModel.FK_PlansMapping_Plans1">
+            <End Role="Plan" EntitySet="Plans" />
+            <End Role="PlansMapping" EntitySet="PlansMappings" />
+          </AssociationSet>
           </EntityContainer>
         <EntityType Name="CitiesLKP">
           <Key>
@@ -1120,74 +1122,14 @@ warning 6002: The table/view 'Dev_PPCP_200722.dbo.Application_Parameter_Config' 
           <Property Name="OrganizationID" Type="Int32" Nullable="false" />
           <Property Name="PlanstartDate" Type="DateTime" Precision="0" />
           <Property Name="IsDelete" Type="Boolean" />
-          <NavigationProperty Name="Plan" Relationship="Dev_PPCPModel.FK_OrganizationPlans_Plans1" FromRole="OrganizationPlan" ToRole="Plan" />
           <Property Name="CreatedDate" Type="DateTime" Precision="3" />
           <Property Name="ModifiedDate" Type="DateTime" Precision="3" />
           <Property Name="MaxAllowedClaims" Type="Int32" />
           <NavigationProperty Name="Organization" Relationship="Dev_PPCPModel.FK_OrganizationPlans_Organizations" FromRole="OrganizationPlan" ToRole="Organization" />
           <Property Name="CreatedBy" Type="Int32" />
           <Property Name="ModifiedBy" Type="Int32" />
+          <NavigationProperty Name="Plan" Relationship="Dev_PPCPModel.FK_OrganizationPlans_Plans1" FromRole="OrganizationPlan" ToRole="Plan" />
         </EntityType>
-        <EntityType Name="Plan">
-          <Key>
-            <PropertyRef Name="PlanID" />
-          </Key>
-          <Property Name="PlanID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="PlanCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="PlanName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="MonthlyFee" Type="Decimal" Precision="19" Scale="4" />
-          <Property Name="PaymentIntervals" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
-          <Property Name="IsActive" Type="Boolean" />
-          <Property Name="CreatedBy" Type="Int32" />
-          <Property Name="CreatedDate" Type="DateTime" Precision="0" />
-          <Property Name="ModifiedBy" Type="Int32" />
-          <Property Name="ModifiedDate" Type="DateTime" Precision="0" />
-          <Property Name="PlanTermName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="PlanTermMonths" Type="Int32" />
-          <Property Name="VisitFee" Type="Decimal" Precision="19" Scale="4" />
-          <Property Name="EnrollFee" Type="Decimal" Precision="19" Scale="4" />
-          <Property Name="FromAge" Type="Int32" />
-          <Property Name="ToAge" Type="Int32" />
-          <Property Name="GenderID" Type="Int32" />
-          <Property Name="PlanType" Type="Int32" />
-          <Property Name="PlanStatus" Type="Boolean" />
-          <Property Name="PlanStartDate" Type="DateTime" Precision="0" />
-          <Property Name="PlanEndDate" Type="DateTime" Precision="0" />
-          <Property Name="PlanDescription" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
-          <Property Name="EffectiveDate" Type="DateTime" Precision="0" />
-          <Property Name="PlanMemberType" Type="Int32" />
-          <Property Name="PlanFeeAddMember" Type="Decimal" Precision="19" Scale="4" />
-          <Property Name="CommPrimaryMember" Type="Decimal" Precision="18" Scale="2" />
-          <Property Name="CommAdditionalMember" Type="Decimal" Precision="18" Scale="2" />
-          <Property Name="IsThirdParty" Type="Boolean" />
-          <Property Name="OrganizationID" Type="Int32" />
-          <Property Name="OrganizationName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="Features" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="Patient_Features" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="IsDelete" Type="Boolean" />
-          <Property Name="UnSubscribedDate" Type="DateTime" Precision="0" />
-          <NavigationProperty Name="OrganizationPlans" Relationship="Dev_PPCPModel.FK_OrganizationPlans_Plans1" FromRole="Plan" ToRole="OrganizationPlan" />
-          <Property Name="PatientTAndCPath" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="OrganizationTAndCPath" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="ProviderTAndCPath" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="PlansMappings" Relationship="Dev_PPCPModel.FK_PlansMapping_Plans1" FromRole="Plan" ToRole="PlansMapping" />
-          <Property Name="CommPPCP" Type="Decimal" Precision="18" Scale="2" />
-          <Property Name="BillingTypeID" Type="Int32" />
-          <Property Name="TeleVisitFee" Type="Int32" />
-          <Property Name="MaxAllowedClaims" Type="Int32" />
-        </EntityType>
-        <Association Name="FK_OrganizationPlans_Plans1">
-          <End Type="Dev_PPCPModel.Plan" Role="Plan" Multiplicity="1" />
-          <End Type="Dev_PPCPModel.OrganizationPlan" Role="OrganizationPlan" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Plan">
-              <PropertyRef Name="PlanID" />
-            </Principal>
-            <Dependent Role="OrganizationPlan">
-              <PropertyRef Name="PlanID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <EntityType Name="PaymentDetail">
           <Key>
             <PropertyRef Name="PaymentDetailsID" />
@@ -1236,26 +1178,14 @@ warning 6002: The table/view 'Dev_PPCP_200722.dbo.Application_Parameter_Config' 
           <Property Name="Organizationname" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="IsActive" Type="Boolean" />
           <Property Name="PlanStartDate" Type="DateTime" Precision="0" />
-          <NavigationProperty Name="Plan" Relationship="Dev_PPCPModel.FK_PlansMapping_Plans1" FromRole="PlansMapping" ToRole="Plan" />
           <Property Name="CreatedDate" Type="DateTime" Precision="3" />
           <Property Name="ModifiedDate" Type="DateTime" Precision="3" />
           <Property Name="IsDelete" Type="Boolean" />
           <NavigationProperty Name="Organization" Relationship="Dev_PPCPModel.FK_PlansMapping_Organizations" FromRole="PlansMapping" ToRole="Organization" />
           <Property Name="CreatedBy" Type="Int32" />
           <Property Name="ModifiedBy" Type="Int32" />
+          <NavigationProperty Name="Plan" Relationship="Dev_PPCPModel.FK_PlansMapping_Plans1" FromRole="PlansMapping" ToRole="Plan" />
         </EntityType>
-        <Association Name="FK_PlansMapping_Plans1">
-          <End Type="Dev_PPCPModel.Plan" Role="Plan" Multiplicity="1" />
-          <End Type="Dev_PPCPModel.PlansMapping" Role="PlansMapping" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Plan">
-              <PropertyRef Name="PlanID" />
-            </Principal>
-            <Dependent Role="PlansMapping">
-              <PropertyRef Name="PlanID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <EntityType Name="TermsAndCondition">
           <Key>
             <PropertyRef Name="TermsAndConditionsID" />
@@ -1728,12 +1658,86 @@ warning 6002: The table/view 'Dev_PPCP_200722.dbo.Application_Parameter_Config' 
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Source" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Source" Type="String" MaxLength="1000" FixedLength="false" Unicode="false" />
           <Property Name="ErrorMessage" Type="String" MaxLength="5000" FixedLength="false" Unicode="false" />
           <Property Name="LogType" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="CreatedDate" Type="DateTime" Precision="3" />
           <Property Name="CreatedBy" Type="Int32" />
         </EntityType>
+        <EntityType Name="Plan">
+          <Key>
+            <PropertyRef Name="PlanID" />
+          </Key>
+          <Property Name="PlanID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="PlanCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="PlanName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="MonthlyFee" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="PaymentIntervals" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="IsActive" Type="Boolean" />
+          <Property Name="CreatedBy" Type="Int32" />
+          <Property Name="CreatedDate" Type="DateTime" Precision="0" />
+          <Property Name="ModifiedBy" Type="Int32" />
+          <Property Name="ModifiedDate" Type="DateTime" Precision="0" />
+          <Property Name="PlanTermName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="PlanTermMonths" Type="Int32" />
+          <Property Name="BillingTypeID" Type="Int32" />
+          <Property Name="MaxAllowedClaims" Type="Int32" />
+          <Property Name="EnrollFee" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="VisitFee" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="TeleVisitFee" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="InPersonProviderFee" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="TeleVisitProviderFee" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="CommPrimaryMember" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="FromAge" Type="Int32" />
+          <Property Name="ToAge" Type="Int32" />
+          <Property Name="GenderID" Type="Int32" />
+          <Property Name="PlanType" Type="Int32" />
+          <Property Name="PlanStatus" Type="Boolean" />
+          <Property Name="PlanStartDate" Type="DateTime" Precision="0" />
+          <Property Name="PlanEndDate" Type="DateTime" Precision="0" />
+          <Property Name="PlanDescription" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="EffectiveDate" Type="DateTime" Precision="0" />
+          <Property Name="PlanMemberType" Type="Int32" />
+          <Property Name="PlanFeeAddMember" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="CommAdditionalMember" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="IsThirdParty" Type="Boolean" />
+          <Property Name="OrganizationID" Type="Int32" />
+          <Property Name="OrganizationName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Features" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Patient_Features" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="IsDelete" Type="Boolean" />
+          <Property Name="UnSubscribedDate" Type="DateTime" Precision="0" />
+          <Property Name="PatientTAndCPath" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="OrganizationTAndCPath" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ProviderTAndCPath" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="CommPPCP" Type="Decimal" Precision="18" Scale="2" />
+          <NavigationProperty Name="OrganizationPlans" Relationship="Dev_PPCPModel.FK_OrganizationPlans_Plans1" FromRole="Plan" ToRole="OrganizationPlan" />
+          <NavigationProperty Name="PlansMappings" Relationship="Dev_PPCPModel.FK_PlansMapping_Plans1" FromRole="Plan" ToRole="PlansMapping" />
+        </EntityType>
+        <Association Name="FK_OrganizationPlans_Plans1">
+          <End Type="Dev_PPCPModel.Plan" Role="Plan" Multiplicity="1" />
+          <End Type="Dev_PPCPModel.OrganizationPlan" Role="OrganizationPlan" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Plan">
+              <PropertyRef Name="PlanID" />
+            </Principal>
+            <Dependent Role="OrganizationPlan">
+              <PropertyRef Name="PlanID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PlansMapping_Plans1">
+          <End Type="Dev_PPCPModel.Plan" Role="Plan" Multiplicity="1" />
+          <End Type="Dev_PPCPModel.PlansMapping" Role="PlansMapping" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Plan">
+              <PropertyRef Name="PlanID" />
+            </Principal>
+            <Dependent Role="PlansMapping">
+              <PropertyRef Name="PlanID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1930,53 +1934,6 @@ warning 6002: The table/view 'Dev_PPCP_200722.dbo.Application_Parameter_Config' 
                 <ScalarProperty Name="OrganizationID" ColumnName="OrganizationID" />
                 <ScalarProperty Name="PlanID" ColumnName="PlanID" />
                 <ScalarProperty Name="OrganizationPlanID" ColumnName="OrganizationPlanID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Plans">
-            <EntityTypeMapping TypeName="Dev_PPCPModel.Plan">
-              <MappingFragment StoreEntitySet="Plans">
-                <ScalarProperty Name="MaxAllowedClaims" ColumnName="MaxAllowedClaims" />
-                <ScalarProperty Name="TeleVisitFee" ColumnName="TeleVisitFee" />
-                <ScalarProperty Name="BillingTypeID" ColumnName="BillingTypeID" />
-                <ScalarProperty Name="CommPPCP" ColumnName="CommPPCP" />
-                <ScalarProperty Name="ProviderTAndCPath" ColumnName="ProviderTAndCPath" />
-                <ScalarProperty Name="OrganizationTAndCPath" ColumnName="OrganizationTAndCPath" />
-                <ScalarProperty Name="PatientTAndCPath" ColumnName="PatientTAndCPath" />
-                <ScalarProperty Name="UnSubscribedDate" ColumnName="UnSubscribedDate" />
-                <ScalarProperty Name="IsDelete" ColumnName="IsDelete" />
-                <ScalarProperty Name="Patient_Features" ColumnName="Patient_Features" />
-                <ScalarProperty Name="Features" ColumnName="Features" />
-                <ScalarProperty Name="OrganizationName" ColumnName="OrganizationName" />
-                <ScalarProperty Name="OrganizationID" ColumnName="OrganizationID" />
-                <ScalarProperty Name="IsThirdParty" ColumnName="IsThirdParty" />
-                <ScalarProperty Name="CommAdditionalMember" ColumnName="CommAdditionalMember" />
-                <ScalarProperty Name="CommPrimaryMember" ColumnName="CommPrimaryMember" />
-                <ScalarProperty Name="PlanFeeAddMember" ColumnName="PlanFeeAddMember" />
-                <ScalarProperty Name="PlanMemberType" ColumnName="PlanMemberType" />
-                <ScalarProperty Name="EffectiveDate" ColumnName="EffectiveDate" />
-                <ScalarProperty Name="PlanDescription" ColumnName="PlanDescription" />
-                <ScalarProperty Name="PlanEndDate" ColumnName="PlanEndDate" />
-                <ScalarProperty Name="PlanStartDate" ColumnName="PlanStartDate" />
-                <ScalarProperty Name="PlanStatus" ColumnName="PlanStatus" />
-                <ScalarProperty Name="PlanType" ColumnName="PlanType" />
-                <ScalarProperty Name="GenderID" ColumnName="GenderID" />
-                <ScalarProperty Name="ToAge" ColumnName="ToAge" />
-                <ScalarProperty Name="FromAge" ColumnName="FromAge" />
-                <ScalarProperty Name="EnrollFee" ColumnName="EnrollFee" />
-                <ScalarProperty Name="VisitFee" ColumnName="VisitFee" />
-                <ScalarProperty Name="PlanTermMonths" ColumnName="PlanTermMonths" />
-                <ScalarProperty Name="PlanTermName" ColumnName="PlanTermName" />
-                <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
-                <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />
-                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
-                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
-                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
-                <ScalarProperty Name="PaymentIntervals" ColumnName="PaymentIntervals" />
-                <ScalarProperty Name="MonthlyFee" ColumnName="MonthlyFee" />
-                <ScalarProperty Name="PlanName" ColumnName="PlanName" />
-                <ScalarProperty Name="PlanCode" ColumnName="PlanCode" />
-                <ScalarProperty Name="PlanID" ColumnName="PlanID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -2424,6 +2381,55 @@ warning 6002: The table/view 'Dev_PPCP_200722.dbo.Application_Parameter_Config' 
                 <ScalarProperty Name="ErrorMessage" ColumnName="ErrorMessage" />
                 <ScalarProperty Name="Source" ColumnName="Source" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Plans">
+            <EntityTypeMapping TypeName="Dev_PPCPModel.Plan">
+              <MappingFragment StoreEntitySet="Plans">
+                <ScalarProperty Name="CommPPCP" ColumnName="CommPPCP" />
+                <ScalarProperty Name="ProviderTAndCPath" ColumnName="ProviderTAndCPath" />
+                <ScalarProperty Name="OrganizationTAndCPath" ColumnName="OrganizationTAndCPath" />
+                <ScalarProperty Name="PatientTAndCPath" ColumnName="PatientTAndCPath" />
+                <ScalarProperty Name="UnSubscribedDate" ColumnName="UnSubscribedDate" />
+                <ScalarProperty Name="IsDelete" ColumnName="IsDelete" />
+                <ScalarProperty Name="Patient_Features" ColumnName="Patient_Features" />
+                <ScalarProperty Name="Features" ColumnName="Features" />
+                <ScalarProperty Name="OrganizationName" ColumnName="OrganizationName" />
+                <ScalarProperty Name="OrganizationID" ColumnName="OrganizationID" />
+                <ScalarProperty Name="IsThirdParty" ColumnName="IsThirdParty" />
+                <ScalarProperty Name="CommAdditionalMember" ColumnName="CommAdditionalMember" />
+                <ScalarProperty Name="PlanFeeAddMember" ColumnName="PlanFeeAddMember" />
+                <ScalarProperty Name="PlanMemberType" ColumnName="PlanMemberType" />
+                <ScalarProperty Name="EffectiveDate" ColumnName="EffectiveDate" />
+                <ScalarProperty Name="PlanDescription" ColumnName="PlanDescription" />
+                <ScalarProperty Name="PlanEndDate" ColumnName="PlanEndDate" />
+                <ScalarProperty Name="PlanStartDate" ColumnName="PlanStartDate" />
+                <ScalarProperty Name="PlanStatus" ColumnName="PlanStatus" />
+                <ScalarProperty Name="PlanType" ColumnName="PlanType" />
+                <ScalarProperty Name="GenderID" ColumnName="GenderID" />
+                <ScalarProperty Name="ToAge" ColumnName="ToAge" />
+                <ScalarProperty Name="FromAge" ColumnName="FromAge" />
+                <ScalarProperty Name="CommPrimaryMember" ColumnName="CommPrimaryMember" />
+                <ScalarProperty Name="TeleVisitProviderFee" ColumnName="TeleVisitProviderFee" />
+                <ScalarProperty Name="InPersonProviderFee" ColumnName="InPersonProviderFee" />
+                <ScalarProperty Name="TeleVisitFee" ColumnName="TeleVisitFee" />
+                <ScalarProperty Name="VisitFee" ColumnName="VisitFee" />
+                <ScalarProperty Name="EnrollFee" ColumnName="EnrollFee" />
+                <ScalarProperty Name="MaxAllowedClaims" ColumnName="MaxAllowedClaims" />
+                <ScalarProperty Name="BillingTypeID" ColumnName="BillingTypeID" />
+                <ScalarProperty Name="PlanTermMonths" ColumnName="PlanTermMonths" />
+                <ScalarProperty Name="PlanTermName" ColumnName="PlanTermName" />
+                <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+                <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="PaymentIntervals" ColumnName="PaymentIntervals" />
+                <ScalarProperty Name="MonthlyFee" ColumnName="MonthlyFee" />
+                <ScalarProperty Name="PlanName" ColumnName="PlanName" />
+                <ScalarProperty Name="PlanCode" ColumnName="PlanCode" />
+                <ScalarProperty Name="PlanID" ColumnName="PlanID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

@@ -39,7 +39,6 @@ namespace PPCPWebApiServices
         public virtual DbSet<TimeZonesLKP> TimeZonesLKPs { get; set; }
         public virtual DbSet<Application_Parameter_Config> Application_Parameter_Config { get; set; }
         public virtual DbSet<OrganizationPlan> OrganizationPlans { get; set; }
-        public virtual DbSet<Plan> Plans { get; set; }
         public virtual DbSet<PaymentDetail> PaymentDetails { get; set; }
         public virtual DbSet<PlansMapping> PlansMappings { get; set; }
         public virtual DbSet<TermsAndCondition> TermsAndConditions { get; set; }
@@ -55,6 +54,7 @@ namespace PPCPWebApiServices
         public virtual DbSet<lkpRole> lkpRoles { get; set; }
         public virtual DbSet<Organization> Organizations { get; set; }
         public virtual DbSet<Log> Logs { get; set; }
+        public virtual DbSet<Plan> Plans { get; set; }
     
         public virtual ObjectResult<Pr_GetProviders_Result> Pr_GetProviders(Nullable<int> organizationID)
         {

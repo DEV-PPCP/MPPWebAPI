@@ -36,12 +36,13 @@ namespace PPCPWebApiServices.CustomEntities
         public string PaymentType { get; set; }
         public DateTime? PaymentDate { get; set; }
         public string ReceiptNumber { get; set; }
-        public DateTime? DatePaid { get; set; }
+        public DateTime? PlanPaidDate { get; set; }
         public decimal PlanPaidAmount { get; set; }
         public int ClaimStatusId { get; set; }
         public string ClaimStatus { get; set; }
         public int ClaimSubStatusId { get; set; }
         public string ClaimSubStatus { get; set; }
+        public DateTime? MemberContactDate { get; set; }
         public DateTime? ManualApprovalDate { get; set; }
         public int ManualApprovalBy { get; set; }
         public string ManualApprovalUserName { get; set; }

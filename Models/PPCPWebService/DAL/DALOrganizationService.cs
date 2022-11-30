@@ -1513,7 +1513,7 @@ namespace PPCPWebApiServices.Models.PPCPWebService.DAL
 
                         using (SqlConnection conn = new SqlConnection(ConfigurationManager.ConnectionStrings["DALDefaultService"].ConnectionString))
                         {
-                            string ssql = "update MemberVisit set ClaimStatusId = @newClaimStatusId, ClaimSubStatusId = @newClaimSubStatusId where VisitId = @VisitId";
+                            string ssql = "update MemberVisit set ClaimStatusId = @newClaimStatusId, ClaimSubStatusId = @newClaimSubStatusId, MemberContactDate=getutcdate() where VisitId = @VisitId";
                             conn.Execute(ssql, new { newClaimStatusId, mv.VisitId, newClaimSubStatusId });
                         }
                         

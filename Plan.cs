@@ -33,8 +33,14 @@ namespace PPCPWebApiServices
         public Nullable<System.DateTime> ModifiedDate { get; set; }
         public string PlanTermName { get; set; }
         public Nullable<int> PlanTermMonths { get; set; }
-        public Nullable<decimal> VisitFee { get; set; }
+        public Nullable<int> BillingTypeID { get; set; }
+        public Nullable<int> MaxAllowedClaims { get; set; }
         public Nullable<decimal> EnrollFee { get; set; }
+        public Nullable<decimal> VisitFee { get; set; }
+        public Nullable<decimal> TeleVisitFee { get; set; }
+        public Nullable<decimal> InPersonProviderFee { get; set; }
+        public Nullable<decimal> TeleVisitProviderFee { get; set; }
+        public Nullable<decimal> CommPrimaryMember { get; set; }
         public Nullable<int> FromAge { get; set; }
         public Nullable<int> ToAge { get; set; }
         public Nullable<int> GenderID { get; set; }
@@ -46,7 +52,6 @@ namespace PPCPWebApiServices
         public Nullable<System.DateTime> EffectiveDate { get; set; }
         public Nullable<int> PlanMemberType { get; set; }
         public Nullable<decimal> PlanFeeAddMember { get; set; }
-        public Nullable<decimal> CommPrimaryMember { get; set; }
         public Nullable<decimal> CommAdditionalMember { get; set; }
         public Nullable<bool> IsThirdParty { get; set; }
         public Nullable<int> OrganizationID { get; set; }
@@ -59,9 +64,6 @@ namespace PPCPWebApiServices
         public string OrganizationTAndCPath { get; set; }
         public string ProviderTAndCPath { get; set; }
         public Nullable<decimal> CommPPCP { get; set; }
-        public Nullable<int> BillingTypeID { get; set; }
-        public Nullable<int> TeleVisitFee { get; set; }
-        public Nullable<int> MaxAllowedClaims { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<OrganizationPlan> OrganizationPlans { get; set; }
