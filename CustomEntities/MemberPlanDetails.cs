@@ -12,6 +12,7 @@ namespace PPCPWebApiServices.CustomEntities
         public int MemberID { get; set; }
         public Nullable<int> MemberParentID { get; set; }
         public string MemberName { get; set; }
+        public bool doesPlanExist { get; set; }
         public int PlanID { get; set; }
         public string PlanName { get; set; }
         public Nullable<int> OrganizationID { get; set; }

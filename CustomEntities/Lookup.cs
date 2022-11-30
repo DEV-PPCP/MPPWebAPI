@@ -45,4 +45,23 @@ namespace PPCPWebApiServices.CustomEntities
         public const int PPV = 26;
     }
 
+    public static class ClaimStatus
+    {
+        public const int Saved = 1;
+        public const int Submitted = 2;
+        public const int Verification = 3;
+        public const int Denied = 4;
+        public const int Approved = 5;
+        public const int Paid = 6;      
+    }
+    public static class ClaimSubStatus
+    {        
+        public const int PlanNotActive = 7;
+        public const int ExceededClaimCount = 8;
+        public const int TextSent = 9;
+        public const int EmailSent = 10;
+        public const int TextAndEmailSent = 11;
+        public const int MemberContactError = 12;
+        public const int MemberDenied = 13;
+    }
 }

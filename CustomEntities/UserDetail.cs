@@ -59,4 +59,13 @@ namespace PPCPWebApiServices.CustomEntities
         public int? ProviderID { get; set; }
 
     }
+
+    public class EmailMaster
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }    
+        public string Subject { get; set; } 
+        public string HtmlBody { get; set; }
+        public bool isActive { get; set; }
+    }
 }

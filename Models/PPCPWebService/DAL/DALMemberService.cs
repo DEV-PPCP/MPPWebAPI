@@ -16,6 +16,9 @@ using System.Globalization;
 using PPCPWebApiServices.ServiceAccess;
 using PPCPWebApiServices;
 using PPCPWebApiServices.CustomEntities;
+using Dapper;
+using System.Configuration;
+using System.Data;
 
 namespace PPCPWebApiServices.Models.PPCPWebService.DAL
 {
@@ -1213,47 +1216,18 @@ namespace PPCPWebApiServices.Models.PPCPWebService.DAL
                 {
                     //getMemberFamilyPlanDetails = Context.MemberPlans.Where(m => (m.MemberParentID == intMemberParentID) && (m.PlanType == PlanType)).ToList();
 
-                    getMemberFamilyPlanDetails = (from m in Context.Members
-                                                  join mp in Context.MemberPlans on m.MemberID equals mp.MemberID 
-                                                  into tmpMembers 
-                                                  from tmp in tmpMembers.DefaultIfEmpty()
-                                                  //join p in Context.Plans on mp.PlanID equals p.PlanID
-                                                  where m.MemberParentID == intMemberParentID
-                                                  //&& ((PlanType == 1 && m.RelationshipID == 0) || (PlanType == 2 && m.RelationshipID != 0))                                     
-                                                  select new MemberPlanDetails
-                                                  {
-                                                      MemberPlanID = tmp != null ? tmp.MemberPlanID : 0,
-                                                      MemberID = m.MemberID,
-                                                      MemberParentID = m.MemberParentID,
-                                                      MemberName = m.FirstName + " " + m.LastName,
-                                                      PlanID = tmp != null ? tmp.PlanID : 0,
-                                                      PlanName = tmp != null ? tmp.PlanName : string.Empty,
-                                                      OrganizationID = tmp != null ? tmp.OrganizationID : null,
-                                                      OrganizationName = tmp != null ? tmp.OrganizationName : string.Empty,
-                                                      ProviderID = tmp != null ? tmp.ProviderID : null,
-                                                      ProviderName = tmp != null ? tmp.ProviderName : string.Empty,
-                                                      Status = tmp != null ? tmp.Status : string.Empty,
-                                                      PlanStartDate = tmp != null ? tmp.PlanStartDate : null,
-                                                      PlanEndDate = tmp != null ? tmp.PlanEndDate : null,
-                                                      PlanType = tmp != null ? tmp.PlanType : null,
-                                                      TotalAmount = tmp != null ? tmp.TotalAmount : null,
-                                                      //GrandAmountPaid= mp.GrandAmountPaid,
-                                                      AmountPaid = tmp != null ? tmp.AmountPaid : null,
-                                                      DueAmount = tmp != null ? tmp.DueAmount : null,
-                                                      Discount = tmp != null ? tmp.Discount : null,
-                                                      PaymentInterval = tmp != null ? tmp.PaymentInterval : string.Empty,
-                                                      Duration = tmp != null ? tmp.Duration : string.Empty,
-                                                      Plan_Code = tmp != null ? tmp.Plan_Code : null,
-                                                      //PatientTAndCPath = p.PatientTAndCPath
-                                                  }).ToList();
+                    using (SqlConnection conn = new SqlConnection(ConfigurationManager.ConnectionStrings["DALDefaultService"].ConnectionString))
+                    {
+                        getMemberFamilyPlanDetails = conn.Query<MemberPlanDetails>("pr_MemberPlansGet", new { MemberParentID = intMemberParentID }, commandType: CommandType.StoredProcedure).ToList();
+                    }
                 }
             }
             catch (Exception ex)
             {
-
+                Logging.LogMessage("GetMemberFamilyPlanDetails", ex.Message + "; InnerException: " + ex.InnerException + "; stacktrace:" + ex.StackTrace, LogType.Error, -1);
+                return null;
             }
             return getMemberFamilyPlanDetails;
-
         }
 
         public List<MemberPlanMapping> GetFamilyPlanMemberDetails(int intMemberPlanID)

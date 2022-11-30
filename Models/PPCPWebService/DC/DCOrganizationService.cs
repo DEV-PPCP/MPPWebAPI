@@ -323,6 +323,7 @@ namespace PPCPWebApiServices.Models.PPCPWebService.DC
     {
 
         public int MemberID { get; set; }
+        public string MemberCardID { get; set; }
         public Nullable<int> MemberParentID { get; set; }
         public string MemberCode { get; set; }
         public Nullable<int> RelationshipID { get; set; }
@@ -366,6 +367,7 @@ namespace PPCPWebApiServices.Models.PPCPWebService.DC
         public int PlanID { get; set; }
         public Nullable<int> Plan_Code { get; set; }
         public Nullable<int> PlanType { get; set; }
+        public bool IsPlanActive { get; set; }
 
     }
 

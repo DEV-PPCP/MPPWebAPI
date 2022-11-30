@@ -503,6 +503,19 @@ namespace PPCPWebApiServices.ServiceAccess
             return list;
         }
 
+        public object SaveClaim(string xml)
+        {
+            DALOrganizationService objdal = new DALOrganizationService();
+            if (!string.IsNullOrEmpty(xml))
+            {
+
+                // List<TemporaryMemberDetails> objTemporaryDetails = new List<TemporaryMemberDetails>();
+                List<MemberVisit> objTemporaryDetails = objdal.SaveClaim(xml);
+                return objTemporaryDetails;
+            }
+            return 0;
+        }
+
         #endregion
 
     }

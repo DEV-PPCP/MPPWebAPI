@@ -13,7 +13,7 @@ namespace PPCPWebApiServices.Models.Service
         readonly MailMessage _m = new MailMessage();
         readonly SmtpClient _sc = new SmtpClient();
 
-        public void SendEmail(string tolist, string cclist, string subject, string body)
+        public bool SendEmail(string tolist, string cclist, string subject, string body)
         {
             try
             {
@@ -42,11 +42,11 @@ namespace PPCPWebApiServices.Models.Service
                 _sc.Credentials = new System.Net.NetworkCredential(fromEmail, fromPassword);
                 _sc.EnableSsl = Convert.ToBoolean(Convert.ToInt32("1"));
                 _sc.Send(_m);
-
+                return true;
             }
             catch (Exception ex)
             {
-                //throw ex;
+                return false;
             }
         }
 

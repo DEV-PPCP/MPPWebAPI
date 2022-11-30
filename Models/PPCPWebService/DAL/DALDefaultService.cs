@@ -22,13 +22,14 @@ using System.Net;
 using Twilio.TwiML.Voice;
 using Microsoft.Ajax.Utilities;
 using System.Web.Mvc;
+using Stripe;
 
 namespace PPCPWebApiServices.Models.PPCPWebService.DAL
 {
     
     public class DALDefaultService : DbContext
     {
-       
+        static string StripeAccountID = System.Configuration.ConfigurationManager.AppSettings["IphStripeAccountId"];
 
         #region Account Management
         public List<UserProfile> ValidateCredentials(string Username, string Password, string Ipaddress)
@@ -333,7 +334,7 @@ namespace PPCPWebApiServices.Models.PPCPWebService.DAL
         }
 
 
-        public void SendMessageByText(string message, string MobileNo, string CountryCode)
+        public List<string> SendMessageByText(string message, string MobileNo, string CountryCode)
         {
             List<string> MessageInfo = new List<string>();
             try
@@ -361,9 +362,6 @@ namespace PPCPWebApiServices.Models.PPCPWebService.DAL
 
                 MessageInfo = SMS.SendMessage(FromPhone, AccountSid, AuthToken, mobile, message, MessagingServiceSid);
 
-
-
-
                 //if (K.Substring(0, 1) == "1")
                 //{
                 //    // Result = "1";//if want show popupsuecessfully messaage based text sucess we can these things
@@ -372,10 +370,12 @@ namespace PPCPWebApiServices.Models.PPCPWebService.DAL
                 //{
                 //    // Result = "0";//if want show popupsuecessfully messaage based text sucess we can these things
                 //}
+                return MessageInfo;
             }
             catch (Exception ex)
             {
                 Logging.LogMessage("SendMessageByText: MobileNo: " + MobileNo, ex.Message + "; InnerException: " + ex.InnerException + "; stacktrace:" + ex.StackTrace, LogType.Error, -1);
+                return null;
             }
         }
 
@@ -1015,5 +1015,77 @@ namespace PPCPWebApiServices.Models.PPCPWebService.DAL
             
         }
 
+        public Result ClaimMemberResponse(int VisitId, string mode)
+        {
+            Result res = new Result();
+            int newClaimStatusId = 0;
+            int? newClaimSubStatusId = null;
+            if (mode == "Confirm")
+                newClaimStatusId = ClaimStatus.Approved;
+            if (mode == "Deny")
+            {
+                newClaimStatusId = ClaimStatus.Denied;
+                newClaimSubStatusId = ClaimSubStatus.MemberDenied;
+            }
+
+            MemberVisit mv = new MemberVisit();
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(ConfigurationManager.ConnectionStrings["DALDefaultService"].ConnectionString))
+                {
+                    string ssql = "update MemberVisit set ClaimStatusId = @newClaimStatusId, ClaimSubStatusId = @newClaimSubStatusId where VisitId = @VisitId";
+                    conn.Execute(ssql, new { newClaimStatusId, newClaimSubStatusId, VisitId });
+
+                    if (newClaimStatusId == ClaimStatus.Approved)
+                        mv = conn.Query<MemberVisit>("pr_ClaimsGet", new { VisitId = VisitId }, commandType: CommandType.StoredProcedure).FirstOrDefault();
+                }
+            }
+            catch(Exception ex)
+            {
+                Logging.LogMessage("ClaimMemberResponse", ex.Message + "; InnerException: " + ex.InnerException + "; stacktrace:" + ex.StackTrace, LogType.Error, -1);
+                return null;
+            }
+
+            //Transfer Stripe $$ to provider
+            List<Application_Parameter_Config> list = CommonService.GetApplicationConfigs();
+            string PPVPaymentMode = list.Where(o => o.PARAMETER_NAME == "PPVPaymentMode").First().PARAMETER_VALUE;
+            if (PPVPaymentMode == "Automatic")
+            {
+                if (newClaimStatusId == ClaimStatus.Approved && !string.IsNullOrEmpty(mv.OrgStripeAccountId))
+                {
+                    decimal TransferAmount = 0;
+                    if (mv.VisitTypeId == VisitType.InPerson) TransferAmount = mv.InPersonProviderFee * 100; //amount in cents
+                    if (mv.VisitTypeId == VisitType.Tele) TransferAmount = mv.TeleVisitProviderFee * 100; //amount in cents
+
+                    var mycharge = new Stripe.TransferCreateOptions();
+                    //mycharge.Source = StripeAccountID.Trim();
+                    mycharge.Description = "PPV Provider Payment";
+                    mycharge.Currency = "USD";
+                    mycharge.Amount = Convert.ToInt32(TransferAmount);
+                    mycharge.Destination = mv.OrgStripeAccountId.Trim();
+
+                    var service = new TransferService();
+                    Transfer response = service.Create(mycharge);
+                    string TransactionId = "";
+                    if (!string.IsNullOrEmpty(response.Id))
+                    {
+                        TransactionId = response.BalanceTransactionId;
+                        try
+                        {
+                            using (SqlConnection conn = new SqlConnection(ConfigurationManager.ConnectionStrings["DALDefaultService"].ConnectionString))
+                            {
+                                mv = conn.Query<MemberVisit>("pr_ClaimProviderPayment", new { VisitId = VisitId, TransactionId = TransactionId, TransferAmount = TransferAmount }, commandType: CommandType.StoredProcedure).FirstOrDefault();
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            Logging.LogMessage("pr_ClaimProviderPayment", ex.Message + "; InnerException: " + ex.InnerException + "; stacktrace:" + ex.StackTrace, LogType.Error, -1);
+                            return null;
+                        }
+                    }
+                }
+            }
+            return res;
+        }
     }
 }

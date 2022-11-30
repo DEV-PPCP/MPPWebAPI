@@ -22,6 +22,9 @@ using System.Xml;
 using System.Xml.Serialization;
 using static PPCPWebApiServices.Models.PPCPWebService.DC.DCProviderService;
 using Twilio.TwiML.Messaging;
+using System.Drawing.Drawing2D;
+using System.Xml.Linq;
+using System.Data.Entity.Core.Metadata.Edm;
 
 namespace PPCPWebApiServices.Models.PPCPWebService.DAL
 {
@@ -1381,7 +1384,8 @@ namespace PPCPWebApiServices.Models.PPCPWebService.DAL
             }
             catch (Exception ex)
             {
-
+                Logging.LogMessage("GetMembersList", ex.Message + "; InnerException: " + ex.InnerException + "; stacktrace:" + ex.StackTrace, LogType.Error, -1);
+                return null;
             }
             return getorganizationProviderDetail;
 
@@ -1403,7 +1407,8 @@ namespace PPCPWebApiServices.Models.PPCPWebService.DAL
             }
             catch (Exception ex)
             {
-                return null;
+                Logging.LogMessage("GetClaims", ex.Message + "; InnerException: " + ex.InnerException + "; stacktrace:" + ex.StackTrace, LogType.Error, -1);
+                return list;
             }
             return list;
         }
@@ -1415,15 +1420,113 @@ namespace PPCPWebApiServices.Models.PPCPWebService.DAL
             {
                 using (SqlConnection conn = new SqlConnection(ConfigurationManager.ConnectionStrings["DALDefaultService"].ConnectionString))
                 {
-                    list = conn.Query<MemberVisit>("select * from MemberVisit where VisitID = " + VisitId, null,
-                                    commandType: CommandType.Text).ToList();
+                    list = conn.Query<MemberVisit>("pr_ClaimsGet", new { VisitId = VisitId }, commandType: CommandType.StoredProcedure).ToList();
+                    if (list.Count > 0)
+                    {
+                        List<ProcedureLine> lines = new List<ProcedureLine>();
+                        lines = conn.Query<ProcedureLine>("select * from MemberVisitProcCodes where MemberVisitID = " + VisitId, new { }, commandType: CommandType.Text).ToList();
+                        list.First().ProcedureLines = lines;
+                    }
                 }
             }
             catch (Exception ex)
             {
-                return null;
+                Logging.LogMessage("GetVisitById: VisitId" + VisitId, ex.Message + "; InnerException: " + ex.InnerException + "; stacktrace:" + ex.StackTrace, LogType.Error, -1);
+                return list;
             }
             return list;
+        }
+
+        public List<MemberVisit> SaveClaim(string xml)
+        {
+            List<MemberVisit> objResult = new List<MemberVisit>();
+            XmlSerializer serializer = new XmlSerializer(typeof(MemberVisit));
+            StringReader rdr = new StringReader(xml);
+            //MemberVisit clm = (MemberVisit)serializer.Deserialize(rdr);
+            //Member MemberDetails = new Member();
+
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(ConfigurationManager.ConnectionStrings["DALDefaultService"].ConnectionString))
+                {
+                    objResult = conn.Query<MemberVisit>("Pr_ClaimSave", new { input = xml }, commandType: CommandType.StoredProcedure).ToList();
+                }
+
+                if (objResult.Count > 0)
+                {
+                    MemberVisit mv = objResult[0];
+                    if (mv.ClaimStatusId == ClaimStatus.Submitted)
+                    {
+                        List<EmailMaster> emList = new List<EmailMaster>();
+                        using (SqlConnection conn = new SqlConnection(ConfigurationManager.ConnectionStrings["DALDefaultService"].ConnectionString))
+                        {
+                            emList = conn.Query<EmailMaster>("select * from EmailMaster where name='ClaimConfirmEmail' or name='ClaimConfirmText'", null, commandType: CommandType.Text).ToList();
+                        }
+
+                        List<Application_Parameter_Config> list = CommonService.GetApplicationConfigs();
+                        string ApplicationUrl = list.Where(o => o.PARAMETER_NAME == "ApplicationUrl").First().PARAMETER_VALUE;
+
+                        bool isSMSSuccess = false;
+                        if (mv.MemberMobileNumber != "")
+                        {
+                            EmailMaster sms = emList.Where(o => o.Name == "ClaimConfirmText").FirstOrDefault();
+                            //Send SMS Text to confirm Claim
+                            DALDefaultService dal = new DALDefaultService();
+                            string message = sms.HtmlBody.Replace("{VisitType}", mv.VisitType)
+                                                .Replace("{ProviderName}", mv.ProviderName)
+                                                .Replace("{DateOfService}", mv.DateOfService.Value.ToShortDateString())
+                                                .Replace("{ApplicationUrl}", ApplicationUrl)
+                                                .Replace("{VisitId}", mv.VisitId.ToString()); 
+                            List<string> objMsg = dal.SendMessageByText(message, mv.MemberMobileNumber, mv.MemberCountryCode);
+                            isSMSSuccess = true;
+                            var errorsms = objMsg.FirstOrDefault(o => o.Contains("Error"));
+                            if (objMsg == null || errorsms == "Error")
+                                isSMSSuccess = false;
+                        }
+
+                        bool isEmailSuccess = false;
+                        if (!string.IsNullOrEmpty(mv.MemberEmail))
+                        {
+                            //Send Email to confirm Claim     
+                            EmailMaster em = emList.Where(o => o.Name == "ClaimConfirmEmail").FirstOrDefault();
+                            
+                            string body = em.HtmlBody.Replace("{VisitType}", mv.VisitType)
+                                                .Replace("{ProviderName}", mv.ProviderName)
+                                                .Replace("{DateOfService}", mv.DateOfService.Value.ToShortDateString())
+                                                .Replace("{ApplicationUrl}", ApplicationUrl)
+                                                .Replace("{VisitId}", mv.VisitId.ToString());
+                            Service.MailHelper _objMail = new Service.MailHelper();
+                            isEmailSuccess = _objMail.SendEmail(mv.MemberEmail, string.Empty, em.Subject, body);
+                        }
+                        int newClaimStatusId = 0, newClaimSubStatusId = 0;
+                        newClaimStatusId = ClaimStatus.Verification;
+                        if (isEmailSuccess && isSMSSuccess)                            
+                            newClaimSubStatusId = ClaimSubStatus.TextAndEmailSent;
+                        else
+                        {
+                            if (isSMSSuccess) newClaimSubStatusId = ClaimSubStatus.TextSent;
+
+                            if (isEmailSuccess) newClaimSubStatusId = ClaimSubStatus.EmailSent;
+
+                            if (!isEmailSuccess && !isSMSSuccess) newClaimSubStatusId = ClaimSubStatus.MemberContactError;
+                        }
+
+                        using (SqlConnection conn = new SqlConnection(ConfigurationManager.ConnectionStrings["DALDefaultService"].ConnectionString))
+                        {
+                            string ssql = "update MemberVisit set ClaimStatusId = @newClaimStatusId, ClaimSubStatusId = @newClaimSubStatusId where VisitId = @VisitId";
+                            conn.Execute(ssql, new { newClaimStatusId, mv.VisitId, newClaimSubStatusId });
+                        }
+                        
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Logging.LogMessage("SaveClaim", ex.Message + "; InnerException: " + ex.InnerException + "; stacktrace:" + ex.StackTrace, LogType.Error, -1);
+                return null;
+            }
+
+            return objResult;
         }
 
         #endregion

@@ -750,5 +750,15 @@ namespace PPCPWebApiServices.ServiceAccess
             return IntervalsList;
         }
 
+        public object ClaimConfirm(string VisitId)
+        {
+            object res = objdal.ClaimMemberResponse(Convert.ToInt32(VisitId), "Confirm");
+            return res;
+        }
+        public object ClaimDeny(string VisitId)
+        {
+            object res = objdal.ClaimMemberResponse(Convert.ToInt32(VisitId), "Deny");
+            return res;
+        }
     }
 }
