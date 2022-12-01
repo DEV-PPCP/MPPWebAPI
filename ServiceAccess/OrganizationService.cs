@@ -6,6 +6,7 @@ using System.Linq;
 using System.Web;
 using static PPCPWebApiServices.Models.PPCPWebService.DC.DCProviderService;
 using PPCPWebApiServices.CustomEntities;
+using static Antlr.Runtime.Tree.TreeWizard;
 
 namespace PPCPWebApiServices.ServiceAccess
 {
@@ -514,6 +515,20 @@ namespace PPCPWebApiServices.ServiceAccess
                 return objTemporaryDetails;
             }
             return 0;
+        }
+
+        public object ResendClaimConfirmText(string VisitId)
+        {
+            object res = new Result();
+            res = objdal.ResendClaimConfirmText(Convert.ToInt32(VisitId));
+            return res;
+        }
+
+        public object ResendClaimConfirmEmail(string VisitId)
+        {
+            object res = new Result();
+            res = objdal.ResendClaimConfirmEmail(Convert.ToInt32(VisitId));
+            return res;
         }
 
         #endregion

@@ -25,6 +25,7 @@ using Twilio.TwiML.Messaging;
 using System.Drawing.Drawing2D;
 using System.Xml.Linq;
 using System.Data.Entity.Core.Metadata.Edm;
+using System.Collections;
 
 namespace PPCPWebApiServices.Models.PPCPWebService.DAL
 {
@@ -1527,6 +1528,93 @@ namespace PPCPWebApiServices.Models.PPCPWebService.DAL
             }
 
             return objResult;
+        }
+
+        public Result ResendClaimConfirmText(int VisitId)
+        {
+            Result res = new Result();
+            res.ResultID = 1;
+
+            MemberVisit mv = new MemberVisit();
+            List<EmailMaster> emList = new List<EmailMaster>();
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(ConfigurationManager.ConnectionStrings["DALDefaultService"].ConnectionString))
+                {
+                    mv = conn.Query<MemberVisit>("pr_ClaimsGet", new { VisitId = VisitId }, commandType: CommandType.StoredProcedure).FirstOrDefault();
+                    emList = conn.Query<EmailMaster>("select * from EmailMaster where name='ClaimConfirmEmail' or name='ClaimConfirmText'", null, commandType: CommandType.Text).ToList();
+                }
+
+                List<Application_Parameter_Config> list = CommonService.GetApplicationConfigs();
+                string ApplicationUrl = list.Where(o => o.PARAMETER_NAME == "ApplicationUrl").First().PARAMETER_VALUE;
+
+                if (mv.MemberMobileNumber != "")
+                {
+                    EmailMaster sms = emList.Where(o => o.Name == "ClaimConfirmText").FirstOrDefault();
+                    //Send SMS Text to confirm Claim
+                    DALDefaultService dal = new DALDefaultService();
+                    string message = sms.HtmlBody.Replace("{VisitType}", mv.VisitType)
+                                        .Replace("{ProviderName}", mv.ProviderName)
+                                        .Replace("{DateOfService}", mv.DateOfService.Value.ToShortDateString())
+                                        .Replace("{ApplicationUrl}", ApplicationUrl)
+                                        .Replace("{VisitId}", mv.VisitId.ToString());
+                    List<string> objMsg = dal.SendMessageByText(message, mv.MemberMobileNumber, mv.MemberCountryCode);
+                    var errorsms = objMsg.FirstOrDefault(o => o.Contains("Error"));
+                    if (objMsg == null || errorsms == "Error")
+                        res.ResultID = -1;
+                }
+            }
+            catch (Exception ex)
+            {
+                Logging.LogMessage("ResendClaimConfirmText: VisitId" + VisitId, ex.Message + "; InnerException: " + ex.InnerException + "; stacktrace:" + ex.StackTrace, LogType.Error, -1);
+                res.ResultID = -1;
+            }
+
+            return res;
+        }
+
+        public Result ResendClaimConfirmEmail(int VisitId)
+        {
+            Result res = new Result();
+            res.ResultID = 1;
+
+            MemberVisit mv = new MemberVisit();
+            List<EmailMaster> emList = new List<EmailMaster>();
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(ConfigurationManager.ConnectionStrings["DALDefaultService"].ConnectionString))
+                {
+                    mv = conn.Query<MemberVisit>("pr_ClaimsGet", new { VisitId = VisitId }, commandType: CommandType.StoredProcedure).FirstOrDefault();
+                    emList = conn.Query<EmailMaster>("select * from EmailMaster where name='ClaimConfirmEmail' or name='ClaimConfirmText'", null, commandType: CommandType.Text).ToList();
+                }
+
+                List<Application_Parameter_Config> list = CommonService.GetApplicationConfigs();
+                string ApplicationUrl = list.Where(o => o.PARAMETER_NAME == "ApplicationUrl").First().PARAMETER_VALUE;
+
+                if (mv.MemberEmail != "")
+                {
+                    //Send Email to confirm Claim
+                    bool isEmailSuccess = false;
+                    EmailMaster em = emList.Where(o => o.Name == "ClaimConfirmEmail").FirstOrDefault();
+
+                    string body = em.HtmlBody.Replace("{VisitType}", mv.VisitType)
+                                        .Replace("{ProviderName}", mv.ProviderName)
+                                        .Replace("{DateOfService}", mv.DateOfService.Value.ToShortDateString())
+                                        .Replace("{ApplicationUrl}", ApplicationUrl)
+                                        .Replace("{VisitId}", mv.VisitId.ToString());
+                    Service.MailHelper _objMail = new Service.MailHelper();
+                    isEmailSuccess = _objMail.SendEmail(mv.MemberEmail, string.Empty, em.Subject, body);
+                    if (!isEmailSuccess)
+                        res.ResultID = -1;
+                }
+            }
+            catch (Exception ex)
+            {
+                Logging.LogMessage("ResendClaimConfirmEmail: VisitId" + VisitId, ex.Message + "; InnerException: " + ex.InnerException + "; stacktrace:" + ex.StackTrace, LogType.Error, -1);
+                res.ResultID = -1;
+            }
+
+            return res;
         }
 
         #endregion
