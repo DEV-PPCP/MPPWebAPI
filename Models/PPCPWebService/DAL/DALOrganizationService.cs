@@ -1458,11 +1458,7 @@ namespace PPCPWebApiServices.Models.PPCPWebService.DAL
                     MemberVisit mv = objResult[0];
                     if (mv.ClaimStatusId == ClaimStatus.Submitted)
                     {
-                        List<EmailMaster> emList = new List<EmailMaster>();
-                        using (SqlConnection conn = new SqlConnection(ConfigurationManager.ConnectionStrings["DALDefaultService"].ConnectionString))
-                        {
-                            emList = conn.Query<EmailMaster>("select * from EmailMaster where name='ClaimConfirmEmail' or name='ClaimConfirmText'", null, commandType: CommandType.Text).ToList();
-                        }
+                        List<EmailMaster> emList = CommonService.GetEmailList();
 
                         List<Application_Parameter_Config> list = CommonService.GetApplicationConfigs();
                         string ApplicationUrl = list.Where(o => o.PARAMETER_NAME == "ApplicationUrl").First().PARAMETER_VALUE;
@@ -1488,7 +1484,7 @@ namespace PPCPWebApiServices.Models.PPCPWebService.DAL
                         bool isEmailSuccess = false;
                         if (!string.IsNullOrEmpty(mv.MemberEmail))
                         {
-                            //Send Email to confirm Claim     
+                            //Send Email to confirm Claim                            
                             EmailMaster em = emList.Where(o => o.Name == "ClaimConfirmEmail").FirstOrDefault();
                             
                             string body = em.HtmlBody.Replace("{VisitType}", mv.VisitType)
@@ -1528,6 +1524,81 @@ namespace PPCPWebApiServices.Models.PPCPWebService.DAL
             }
 
             return objResult;
+        }
+
+        public Result ClaimMemberResponse(int VisitId, string mode)
+        {
+            Result res = new Result();
+            res.ResultID = 1;
+
+            int newClaimStatusId = 0;
+            int? newClaimSubStatusId = null;
+            if (mode == "Confirm")
+                newClaimStatusId = ClaimStatus.Approved;
+            if (mode == "Deny")
+            {
+                newClaimStatusId = ClaimStatus.Denied;
+                newClaimSubStatusId = ClaimSubStatus.MemberDenied;
+            }
+
+            MemberVisit mv = new MemberVisit();
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(ConfigurationManager.ConnectionStrings["DALDefaultService"].ConnectionString))
+                {
+                    string ssql = "update MemberVisit set ClaimStatusId = @newClaimStatusId, ClaimSubStatusId = @newClaimSubStatusId where VisitId = @VisitId";
+                    conn.Execute(ssql, new { newClaimStatusId, newClaimSubStatusId, VisitId });
+
+                    if (newClaimStatusId == ClaimStatus.Approved)
+                        mv = conn.Query<MemberVisit>("pr_ClaimsGet", new { VisitId = VisitId }, commandType: CommandType.StoredProcedure).FirstOrDefault();
+                }
+            }
+            catch (Exception ex)
+            {
+                Logging.LogMessage("ClaimMemberResponse", ex.Message + "; InnerException: " + ex.InnerException + "; stacktrace:" + ex.StackTrace, LogType.Error, -1);
+                return null;
+            }
+
+            //Transfer Stripe $$ to provider
+            List<Application_Parameter_Config> list = CommonService.GetApplicationConfigs();
+            string PPVPaymentMode = list.Where(o => o.PARAMETER_NAME == "PPVPaymentMode").First().PARAMETER_VALUE;
+            if (PPVPaymentMode == "Automatic")
+            {
+                if (newClaimStatusId == ClaimStatus.Approved && !string.IsNullOrEmpty(mv.OrgStripeAccountId))
+                {
+                    decimal TransferAmount = 0;
+                    if (mv.VisitTypeId == VisitType.InPerson) TransferAmount = mv.InPersonProviderFee * 100; //amount in cents
+                    if (mv.VisitTypeId == VisitType.Tele) TransferAmount = mv.TeleVisitProviderFee * 100; //amount in cents
+
+                    var mycharge = new Stripe.TransferCreateOptions();
+                    //mycharge.Source = StripeAccountID.Trim();
+                    mycharge.Description = "PPV Provider Payment";
+                    mycharge.Currency = "USD";
+                    mycharge.Amount = Convert.ToInt32(TransferAmount);
+                    mycharge.Destination = mv.OrgStripeAccountId.Trim();
+
+                    var service = new TransferService();
+                    Transfer response = service.Create(mycharge);
+                    string TransactionId = "";
+                    if (!string.IsNullOrEmpty(response.Id))
+                    {
+                        TransactionId = response.BalanceTransactionId;
+                        try
+                        {
+                            using (SqlConnection conn = new SqlConnection(ConfigurationManager.ConnectionStrings["DALDefaultService"].ConnectionString))
+                            {
+                                mv = conn.Query<MemberVisit>("pr_ClaimProviderPayment", new { VisitId = VisitId, TransactionId = TransactionId, TransferAmount = TransferAmount }, commandType: CommandType.StoredProcedure).FirstOrDefault();
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            Logging.LogMessage("pr_ClaimProviderPayment", ex.Message + "; InnerException: " + ex.InnerException + "; stacktrace:" + ex.StackTrace, LogType.Error, -1);
+                            return null;
+                        }
+                    }
+                }
+            }
+            return res;
         }
 
         public Result ResendClaimConfirmText(int VisitId)
@@ -1613,6 +1684,32 @@ namespace PPCPWebApiServices.Models.PPCPWebService.DAL
                 Logging.LogMessage("ResendClaimConfirmEmail: VisitId" + VisitId, ex.Message + "; InnerException: " + ex.InnerException + "; stacktrace:" + ex.StackTrace, LogType.Error, -1);
                 res.ResultID = -1;
             }
+
+            return res;
+        }
+
+        public Result AdminClaimApproval(int VisitId, string AdminNotes, int ModifiedBy)
+        {
+            Result res = new Result();
+            res.ResultID = 1;
+
+            res = ClaimMemberResponse(VisitId, "Confirm");
+            if(res != null)
+            {
+                try
+                {
+                    using (SqlConnection conn = new SqlConnection(ConfigurationManager.ConnectionStrings["DALDefaultService"].ConnectionString))
+                    {
+                        string ssql = "update MemberVisit set ManualApprovalDate = getutcdate(), ManualApprovalBy = @ModifiedBy, AdminNotes=@AdminNotes where VisitId = @VisitId";
+                        conn.Execute(ssql, new { ModifiedBy, AdminNotes, VisitId });
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Logging.LogMessage("AdminClaimApproval update", ex.Message + "; InnerException: " + ex.InnerException + "; stacktrace:" + ex.StackTrace, LogType.Error, -1);
+                    return null;
+                }
+            }            
 
             return res;
         }

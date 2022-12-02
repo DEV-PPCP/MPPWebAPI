@@ -517,6 +517,17 @@ namespace PPCPWebApiServices.ServiceAccess
             return 0;
         }
 
+        public object ClaimConfirm(string VisitId)
+        {
+            object res = objdal.ClaimMemberResponse(Convert.ToInt32(VisitId), "Confirm");
+            return res;
+        }
+        public object ClaimDeny(string VisitId)
+        {
+            object res = objdal.ClaimMemberResponse(Convert.ToInt32(VisitId), "Deny");
+            return res;
+        }
+
         public object ResendClaimConfirmText(string VisitId)
         {
             object res = new Result();
@@ -528,6 +539,13 @@ namespace PPCPWebApiServices.ServiceAccess
         {
             object res = new Result();
             res = objdal.ResendClaimConfirmEmail(Convert.ToInt32(VisitId));
+            return res;
+        }
+
+        public object AdminClaimApproval(string VisitId, string AdminNotes, string ModifiedBy)
+        {
+            object res = new Result();
+            res = objdal.AdminClaimApproval(Convert.ToInt32(VisitId), AdminNotes, Convert.ToInt32(ModifiedBy));
             return res;
         }
 

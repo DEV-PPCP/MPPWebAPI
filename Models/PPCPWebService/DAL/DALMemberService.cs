@@ -19,6 +19,7 @@ using PPCPWebApiServices.CustomEntities;
 using Dapper;
 using System.Configuration;
 using System.Data;
+using System.Collections;
 
 namespace PPCPWebApiServices.Models.PPCPWebService.DAL
 {
@@ -282,6 +283,23 @@ namespace PPCPWebApiServices.Models.PPCPWebService.DAL
                     DALDefaultService dal = new DALDefaultService();
                     string message = "Thank you for enrolling with MyPhysicianPlan. Your UserName : " + objMemberDetails.UserName + " and Password : " + objMemberDetails.Password;
                     dal.SendMessageByText(message, objMemberDetails.MobileNumber, objMemberDetails.CountryCode);
+                }
+                //new member email with no plan email
+                bool isEmailSuccess = false;
+                if (!string.IsNullOrEmpty(objMemberDetails.Email) && string.IsNullOrEmpty(objMemberDetails.CVV))
+                {
+                    //Send Email to confirm Claim
+                    List<Application_Parameter_Config> list = CommonService.GetApplicationConfigs();
+                    string ApplicationUrl = list.Where(o => o.PARAMETER_NAME == "ApplicationUrl").First().PARAMETER_VALUE;
+
+                    List<EmailMaster> emList = CommonService.GetEmailList();
+                    EmailMaster em = new EmailMaster();
+                    em = emList.Where(o => o.Name == "NewMemberWithNoPlanEmail").FirstOrDefault();
+                    string body = em.HtmlBody.Replace("{MemberName}", objMemberDetails.FirstName + " " + objMemberDetails.LastName)
+                                        .Replace("{UserName}", objMemberDetails.UserName)
+                                        .Replace("{ApplicationUrl}", ApplicationUrl);
+                    Service.MailHelper _objMail = new Service.MailHelper();
+                    isEmailSuccess = _objMail.SendEmail(objMemberDetails.Email, string.Empty, em.Subject, body);
                 }
                 if (Convert.ToDecimal(Netamount) > 0)
                 {
