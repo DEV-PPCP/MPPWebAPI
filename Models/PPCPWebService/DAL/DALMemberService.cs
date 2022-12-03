@@ -37,6 +37,15 @@ namespace PPCPWebApiServices.Models.PPCPWebService.DAL
             XmlSerializer serializer = new XmlSerializer(typeof(MemberDetails));
             StringReader rdr = new StringReader(xml);
             MemberDetails objMemberDetails = (MemberDetails)serializer.Deserialize(rdr);
+
+            //Check Member Exists
+            int id = CheckMemberExists(objMemberDetails.FirstName, objMemberDetails.LastName, objMemberDetails.Gender.ToString(), Convert.ToDateTime(objMemberDetails.DOB), objMemberDetails.MobileNumber);
+            if(id > 0)
+            {
+                objTemporaryDetails.Add(new TemporaryMemberDetails { ResultID = -1, result = "MemberExists" });
+                return objTemporaryDetails;
+            }
+
             string MemberPlanInstallmentxml = "";
             try
             {
@@ -203,13 +212,6 @@ namespace PPCPWebApiServices.Models.PPCPWebService.DAL
                     ////var service = new ChargeService();
                     ////var charge = service.Create(options);
 
-
-
-
-
-
-
-
                     //var items = new List<SubscriptionItemOptions> {
                     //new SubscriptionItemOptions {
                     //    Price = "price_CBb6IXqvTLXp3f"}
@@ -222,8 +224,6 @@ namespace PPCPWebApiServices.Models.PPCPWebService.DAL
                     //};
                     //var service = new SubscriptionService();
                     //Subscription subscription = service.Create(options);
-
-
 
                     //var options1 = new Stripe.PriceCreateOptions
                     //{
@@ -241,11 +241,6 @@ namespace PPCPWebApiServices.Models.PPCPWebService.DAL
 
                 
                     //var price = service.Create(options);
-
-
-
-
-
 
                     MemberPlanInstallmentxml = MemberPlanInstallment(objMemberDetails.NoofInstallments, objMemberDetails.Paymentschedule, objMemberDetails.PlanStartDate, objMemberDetails.InstallmentAmount, objMemberDetails.InstallmentFee);
                 }
@@ -1270,8 +1265,6 @@ namespace PPCPWebApiServices.Models.PPCPWebService.DAL
 
         public int CheckMemberExists(string FirstName, string LastName, string Gender, DateTime DOB, string MobileNumber)
         {
-            
-
             int result = 0;
             try
             {
@@ -1294,9 +1287,7 @@ namespace PPCPWebApiServices.Models.PPCPWebService.DAL
                 return result;
             }
             return result;
-
         }
-
 
 
         public List<TemporaryMemberDetails> AddDoctorDetails(string xml)

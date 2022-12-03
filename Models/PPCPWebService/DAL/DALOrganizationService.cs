@@ -486,11 +486,36 @@ namespace PPCPWebApiServices.Models.PPCPWebService.DAL
             return objTemporaryDetails;
         }
 
+        public int CheckMemberExists(string FirstName, string LastName, string Gender, DateTime DOB, string MobileNumber)
+        {
+            int result = 0;
+            try
+            {
+                List<Member> objMember = new List<Member>();
+                using (var Context = new Dev_PPCPEntities(1))
+                {
 
+                    objMember = Context.Members.Where(o => (o.FirstName == FirstName) &&
+                           (o.LastName == LastName) &&
+                           (o.Gender == Gender) &&
+                           (o.DOB == DOB) &&
+                           (o.MobileNumber == MobileNumber)).ToList();
+
+                    result = objMember[0].MemberID;
+                }
+            }
+            catch (Exception ex)
+            {
+                result = 0;
+                return result;
+            }
+            return result;
+        }
         public List<TemporaryUserDetails> AddMemberDetails(string xml)
         {
-            string MobileNumber = "", CountryCode = "";
+            string MobileNumber = "", CountryCode = "", Email = "", FirstName = "", LastName="", Gender="", DOB="";
             List<TemporaryUserDetails> objTemporaryDetails = new List<TemporaryUserDetails>();
+
             try
             {
                 using (var context = new DALMemberService())
@@ -502,6 +527,20 @@ namespace PPCPWebApiServices.Models.PPCPWebService.DAL
                     string UserName = node["UserName"].InnerText;
                     MobileNumber = node["MobileNumber"].InnerText;
                     CountryCode = node["CountryCode"].InnerText;
+                    FirstName = node["FirstName"].InnerText;
+                    LastName = node["LastName"].InnerText;
+                    Email = node["Email"].InnerText;
+                    Gender = node["Gender"].InnerText;
+                    DOB = node["DOB"].InnerText;
+
+                    //Check Member Exists
+                    int id = CheckMemberExists(FirstName, LastName, Gender, Convert.ToDateTime(DOB), MobileNumber);
+                    if (id > 0)
+                    {
+                        objTemporaryDetails.Add(new TemporaryUserDetails { result = "MemberExists" });
+                        return objTemporaryDetails;
+                    }
+
                     byte[] bytes = Encoding.UTF8.GetBytes(UserPassword);
                     string Encryptpassword = Convert.ToBase64String(bytes);
                     SqlParameter XML = new SqlParameter("@XML", xml);
@@ -511,6 +550,20 @@ namespace PPCPWebApiServices.Models.PPCPWebService.DAL
                     {
                         string message = "Thank you for enrolling with MyPhysicianPlan. Your UserName : " + UserName + " And Password : " + UserPassword;
                         SendMessageByText(message, MobileNumber, CountryCode);
+
+                        //new member email with no plan email
+                        //Send Email to confirm Claim
+                        List<Application_Parameter_Config> list = CommonService.GetApplicationConfigs();
+                        string ApplicationUrl = list.Where(o => o.PARAMETER_NAME == "ApplicationUrl").First().PARAMETER_VALUE;
+
+                        List<EmailMaster> emList = CommonService.GetEmailList();
+                        EmailMaster em = new EmailMaster();
+                        em = emList.Where(o => o.Name == "NewMemberWithNoPlanEmail").FirstOrDefault();
+                        string body = em.HtmlBody.Replace("{MemberName}", FirstName + " " + LastName)
+                                            .Replace("{UserName}", UserName)
+                                            .Replace("{ApplicationUrl}", ApplicationUrl);
+                        Service.MailHelper _objMail = new Service.MailHelper();
+                        bool isEmailSuccess = _objMail.SendEmail(Email, string.Empty, em.Subject, body);
                     }
                 }
             }
