@@ -11,6 +11,7 @@ namespace PPCPWebApiServices.Models.PPCPWebService.DC
         public string OrganizationName { get; set; }
 
         public string TaxID { get; set; }
+        public int BillingTypeId { get; set; }
         public string OrgEmail { get; set; }
      
         public string OrgCountryCode { get; set; }

@@ -137,9 +137,26 @@ namespace PPCPWebApiServices.Models.PPCPWebService.DAL
                                     + "Name: " + objDCOrganizationService.OrganizationName + "<br/>"
                                     + "Contact Person: " + objDCOrganizationService.FirstName + " " + objDCOrganizationService.LastName + "<br/>"
                                     + "Contact Phone: " + objDCOrganizationService.MobileNumber + "<br/>"
-                                    + "Contact Email: " + objDCOrganizationService.Email;
+                                    + "Contact Email: " + objDCOrganizationService.Email
+                                    + "Billling Type: " + (objDCOrganizationService.BillingTypeId == BillingType.Lumpsum ? "Lumpsum" : "PPV");
                     _objMail.SendEmail(toEmail, string.Empty, subject, body);
-                }                
+                }
+
+                //new Organization email
+                bool isEmailSuccess = false;
+                if (!string.IsNullOrEmpty(objDCOrganizationService.Email))
+                {
+                    //Send Email to confirm Claim
+                    string ApplicationUrl = list.Where(o => o.PARAMETER_NAME == "ApplicationUrl").First().PARAMETER_VALUE;
+
+                    List<EmailMaster> emList = CommonService.GetEmailList();
+                    EmailMaster em = new EmailMaster();
+                    em = emList.Where(o => o.Name == "NewOrganizationEmail").FirstOrDefault();
+                    string body = em.HtmlBody.Replace("{OrganizationName}", objDCOrganizationService.OrganizationName)
+                                        .Replace("{UserName}", objDCOrganizationService.UserName)
+                                        .Replace("{ApplicationUrl}", ApplicationUrl);
+                    isEmailSuccess = _objMail.SendEmail(objDCOrganizationService.Email, string.Empty, em.Subject, body);
+                }
             }
             catch (Exception ex)
             {

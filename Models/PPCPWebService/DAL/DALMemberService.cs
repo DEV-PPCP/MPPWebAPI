@@ -266,7 +266,7 @@ namespace PPCPWebApiServices.Models.PPCPWebService.DAL
                     SqlParameter MemberPlanInstallmentXML = new SqlParameter("@MemberPlanInstallmentXML", MemberPlanInstallmentxml);
                     SqlParameter TotalEnrollAmount = new SqlParameter("@TotalEnrollAmount", newtotalamount);
                     SqlParameter Transferamount = new SqlParameter("@TransferAmount", (TotalTransferAmount/100));
-                    objTemporaryDetails = context.Database.SqlQuery<TemporaryMemberDetails>("Pr_SaveMemberDetails @XML,@EncryptPassword,@TotalAmount,@NetAmount,@TransactionFee,@MemberName,@PaymentInterval,@TransactioID,@StripeCustomerID,@MemberPlanInstallmentXML,@TotalEnrollAmount,@TransferAmount", XML, EncryptPassword, TotalAmount, NetAmount, TransactionFee, MemberName, PaymentInterval, TransactioID, StripeCustomerID, MemberPlanInstallmentXML, TotalEnrollAmount, Transferamount).ToList();
+                    objTemporaryDetails = context.Database.SqlQuery<TemporaryMemberDetails>("Pr_MemberRegistration @XML,@EncryptPassword,@TotalAmount,@NetAmount,@TransactionFee,@MemberName,@PaymentInterval,@TransactioID,@StripeCustomerID,@MemberPlanInstallmentXML,@TotalEnrollAmount,@TransferAmount", XML, EncryptPassword, TotalAmount, NetAmount, TransactionFee, MemberName, PaymentInterval, TransactioID, StripeCustomerID, MemberPlanInstallmentXML, TotalEnrollAmount, Transferamount).ToList();
 
                 }
                 if (objTemporaryDetails.Count > 0)
@@ -1289,6 +1289,23 @@ namespace PPCPWebApiServices.Models.PPCPWebService.DAL
             return result;
         }
 
+        public List<MemberPlan> CheckMemberPlan(int OrganizationID, int MemberID, DateTime PlanStartDate, int PlanID)
+        {
+            List<MemberPlan> res = new List<MemberPlan>();
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(ConfigurationManager.ConnectionStrings["DALDefaultService"].ConnectionString))
+                {
+                    res = conn.Query<MemberPlan>("Pr_MemberPlanValidate", new { OrganizationID, MemberID, PlanStartDate, PlanID }, commandType: CommandType.StoredProcedure).ToList();
+                }
+            }
+            catch (Exception ex)
+            {
+                Logging.LogMessage("CheckMemberPlan", ex.Message + "; InnerException: " + ex.InnerException + "; stacktrace:" + ex.StackTrace, LogType.Error, -1);
+                return null;
+            }
+            return res;
+        }
 
         public List<TemporaryMemberDetails> AddDoctorDetails(string xml)
         {
