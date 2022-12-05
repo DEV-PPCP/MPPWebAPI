@@ -1637,8 +1637,9 @@ namespace PPCPWebApiServices.Models.PPCPWebService.DAL
                 if (newClaimStatusId == ClaimStatus.Approved && !string.IsNullOrEmpty(mv.OrgStripeAccountId))
                 {
                     decimal TransferAmount = 0;
-                    if (mv.VisitTypeId == VisitType.InPerson) TransferAmount = mv.InPersonProviderFee * 100; //amount in cents
-                    if (mv.VisitTypeId == VisitType.Tele) TransferAmount = mv.TeleVisitProviderFee * 100; //amount in cents
+                    TransferAmount = mv.PlanFee * 100; //amount in cents
+                    //if (mv.VisitTypeId == VisitType.InPerson) TransferAmount = mv.InPersonProviderFee * 100; //amount in cents
+                    //if (mv.VisitTypeId == VisitType.Tele) TransferAmount = mv.TeleVisitProviderFee * 100; //amount in cents
 
                     var mycharge = new Stripe.TransferCreateOptions();
                     //mycharge.Source = StripeAccountID.Trim();
