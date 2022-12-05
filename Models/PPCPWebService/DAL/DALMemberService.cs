@@ -1190,8 +1190,8 @@ namespace PPCPWebApiServices.Models.PPCPWebService.DAL
             {
                 using (SqlConnection conn = new SqlConnection(ConfigurationManager.ConnectionStrings["DALDefaultService"].ConnectionString))
                 {
-                    string ssql = "select p.PlanName, p.PlanTermMonths, p.VisitFee, p.TeleVisitFee, cast(case when GETUTCDATE() between mp.PlanStartDate and mp.PlanEndDate then 1 else 0 end as bit) as IsActive, mp.PlanStartDate, mp.PlanEndDate" +
-                                        " from MemberPlans mp join Plans p on p.Planid = mp.Planid where mp.Organizationid = " + OrganizationID + " and MemberID = " + MemberID;
+                    string ssql = "select o.OrganizationName, p.PlanName, p.PlanTermMonths, p.VisitFee, p.TeleVisitFee, cast(case when GETUTCDATE() between mp.PlanStartDate and mp.PlanEndDate then 1 else 0 end as bit) as IsActive, mp.PlanStartDate, mp.PlanEndDate" +
+                                        " from MemberPlans mp join Plans p on p.Planid = mp.Planid join Organizations o on o.Organizationid = mp.Organizationid where (" + OrganizationID + "=0 or mp.Organizationid = " + OrganizationID + ") and MemberID = " + MemberID;
                     list = conn.Query<MemberPlansDetails>(ssql, new {  }, commandType: CommandType.Text).ToList();
                 }
             }
