@@ -136,6 +136,14 @@ namespace PPCPWebApiServices.ServiceAccess
             }
             return objeGetMemberPlanDetails;
         }
+
+        public object GetMemberPlanDetailsByOrg(string OrganizationID, string MemberID)
+        {
+            //DALMemberService objdal = new DALMemberService();
+            List<MemberPlansDetails> list = new List<MemberPlansDetails>();
+            list = objdal.GetMemberPlanDetailsByOrg(Convert.ToInt32(OrganizationID), Convert.ToInt32(MemberID));
+            return list;
+        }
         /// <summary>
         /// Get Family details based on MemberParentID for Member Table-vinod-08/17/2019
         /// </summary>

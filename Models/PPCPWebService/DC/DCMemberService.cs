@@ -104,6 +104,7 @@ namespace PPCPWebApiServices.Models.PPCPWebService.DC
         public string PlanTermName { get; set; }
         public Nullable<int> PlanTermMonths { get; set; }
         public Nullable<decimal> VisitFee { get; set; }
+        public Nullable<decimal> TeleVisitFee { get; set; }
         public Nullable<decimal> EnrollFee { get; set; }
         public Nullable<int> FromAge { get; set; }
         public Nullable<int> ToAge { get; set; }
