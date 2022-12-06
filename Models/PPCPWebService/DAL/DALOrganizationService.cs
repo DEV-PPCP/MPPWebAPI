@@ -151,11 +151,14 @@ namespace PPCPWebApiServices.Models.PPCPWebService.DAL
 
                     List<EmailMaster> emList = CommonService.GetEmailList();
                     EmailMaster em = new EmailMaster();
-                    em = emList.Where(o => o.Name == "NewOrganizationEmail").FirstOrDefault();
-                    string body = em.HtmlBody.Replace("{OrganizationName}", objDCOrganizationService.OrganizationName)
-                                        .Replace("{UserName}", objDCOrganizationService.UserName)
-                                        .Replace("{ApplicationUrl}", ApplicationUrl);
-                    isEmailSuccess = _objMail.SendEmail(objDCOrganizationService.Email, string.Empty, em.Subject, body);
+                    em = emList.Where(o => o.Name == "NewOrganizationEmail" && o.isActive == true).FirstOrDefault();
+                    if(em != null)
+                    {
+                        string body = em.HtmlBody.Replace("{OrganizationName}", objDCOrganizationService.OrganizationName)
+                                       .Replace("{UserName}", objDCOrganizationService.UserName)
+                                       .Replace("{ApplicationUrl}", ApplicationUrl);
+                        isEmailSuccess = _objMail.SendEmail(objDCOrganizationService.Email, string.Empty, em.Subject, body);
+                    }                   
                 }
             }
             catch (Exception ex)
@@ -565,22 +568,33 @@ namespace PPCPWebApiServices.Models.PPCPWebService.DAL
                     objTemporaryDetails = context.Database.SqlQuery<TemporaryUserDetails>("Pr_AddMember @XML,@EncryptPassword", XML, EncryptPassword).ToList();
                     if (objTemporaryDetails.Count > 0)
                     {
-                        string message = "Thank you for enrolling with MyPhysicianPlan. Your UserName : " + UserName + " And Password : " + UserPassword;
-                        SendMessageByText(message, MobileNumber, CountryCode);
+                        List<EmailMaster> emList = CommonService.GetEmailList();
+                        EmailMaster em = new EmailMaster();
+                        if (MobileNumber != "")
+                        {
+                            em = emList.Where(o => o.Name == "NewMemberText" && o.isActive == true).FirstOrDefault();
+                            if (em != null)
+                            {
+                                string message = em.HtmlBody.Replace("{MemberName}", FirstName + " " + LastName)
+                                                    .Replace("{UserName}", UserName);
+                                DALDefaultService dal = new DALDefaultService();
+                                dal.SendMessageByText(message, MobileNumber, CountryCode);
+                            }
+                        }
 
                         //new member email with no plan email
                         //Send Email to confirm Claim
                         List<Application_Parameter_Config> list = CommonService.GetApplicationConfigs();
-                        string ApplicationUrl = list.Where(o => o.PARAMETER_NAME == "ApplicationUrl").First().PARAMETER_VALUE;
-
-                        List<EmailMaster> emList = CommonService.GetEmailList();
-                        EmailMaster em = new EmailMaster();
-                        em = emList.Where(o => o.Name == "NewMemberWithNoPlanEmail").FirstOrDefault();
-                        string body = em.HtmlBody.Replace("{MemberName}", FirstName + " " + LastName)
+                        string ApplicationUrl = list.Where(o => o.PARAMETER_NAME == "ApplicationUrl").First().PARAMETER_VALUE;                        
+                        em = emList.Where(o => o.Name == "NewMemberEmail" && o.isActive == true).FirstOrDefault();
+                        if(em != null)
+                        {
+                            string body = em.HtmlBody.Replace("{MemberName}", FirstName + " " + LastName)
                                             .Replace("{UserName}", UserName)
                                             .Replace("{ApplicationUrl}", ApplicationUrl);
-                        Service.MailHelper _objMail = new Service.MailHelper();
-                        bool isEmailSuccess = _objMail.SendEmail(Email, string.Empty, em.Subject, body);
+                            Service.MailHelper _objMail = new Service.MailHelper();
+                            bool isEmailSuccess = _objMail.SendEmail(Email, string.Empty, em.Subject, body);
+                        }                        
                     }
                 }
             }
