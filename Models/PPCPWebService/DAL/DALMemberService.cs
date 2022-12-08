@@ -184,6 +184,10 @@ namespace PPCPWebApiServices.Models.PPCPWebService.DAL
                         };
                         mycharge.TransferData = TransferDataOptions;
                     }
+                    else
+                    {
+                        TotalTransferAmount = 0;
+                    }
 
                     mycharge.OnBehalfOf = objMemberDetails.StripeAccountID.Trim();// StripeAccountID.Trim();
                                                                                   // mycharge.Destination = StripeAccountID;
@@ -267,7 +271,7 @@ namespace PPCPWebApiServices.Models.PPCPWebService.DAL
                     SqlParameter StripeCustomerID = new SqlParameter("@StripeCustomerID", StripeCustomerId);
                     SqlParameter MemberPlanInstallmentXML = new SqlParameter("@MemberPlanInstallmentXML", MemberPlanInstallmentxml);
                     SqlParameter TotalEnrollAmount = new SqlParameter("@TotalEnrollAmount", newtotalamount);
-                    SqlParameter Transferamount = new SqlParameter("@TransferAmount", (TotalTransferAmount/100));
+                    SqlParameter Transferamount = new SqlParameter("@TransferAmount", TotalTransferAmount > 0 ? (TotalTransferAmount/100) : 0);
                     objTemporaryDetails = context.Database.SqlQuery<TemporaryMemberDetails>("Pr_MemberRegistration @XML,@EncryptPassword,@TotalAmount,@NetAmount,@TransactionFee,@MemberName,@PaymentInterval,@TransactioID,@StripeCustomerID,@MemberPlanInstallmentXML,@TotalEnrollAmount,@TransferAmount", XML, EncryptPassword, TotalAmount, NetAmount, TransactionFee, MemberName, PaymentInterval, TransactioID, StripeCustomerID, MemberPlanInstallmentXML, TotalEnrollAmount, Transferamount).ToList();
 
                 }

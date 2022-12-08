@@ -1614,6 +1614,8 @@ namespace PPCPWebApiServices.Models.PPCPWebService.DAL
         {
             Result res = new Result();
             res.ResultID = 1;
+            res.ResultName = "Success";
+            res.Exception = "Success";
 
             int newClaimStatusId = 0;
             int? newClaimSubStatusId = null;
@@ -1630,11 +1632,52 @@ namespace PPCPWebApiServices.Models.PPCPWebService.DAL
             {
                 using (SqlConnection conn = new SqlConnection(ConfigurationManager.ConnectionStrings["DALDefaultService"].ConnectionString))
                 {
-                    string ssql = "update MemberVisit set ClaimStatusId = @newClaimStatusId, ClaimSubStatusId = @newClaimSubStatusId where VisitId = @VisitId";
-                    conn.Execute(ssql, new { newClaimStatusId, newClaimSubStatusId, VisitId });
+                    //mv = conn.Query<MemberVisit>("pr_ClaimMemberResponseSave", new { VisitId = VisitId, ClaimStatusId = newClaimStatusId, ClaimSubStatusId = newClaimSubStatusId }, commandType: CommandType.StoredProcedure).FirstOrDefault();
+                    mv = conn.Query<MemberVisit>("pr_ClaimsGet", new { VisitId = VisitId }, commandType: CommandType.StoredProcedure).FirstOrDefault();
 
-                    if (newClaimStatusId == ClaimStatus.Approved)
-                        mv = conn.Query<MemberVisit>("pr_ClaimsGet", new { VisitId = VisitId }, commandType: CommandType.StoredProcedure).FirstOrDefault();
+                    if (mv.ClaimStatusId == ClaimStatus.Verification || mv.ClaimStatusId == ClaimStatus.Denied) //claims still in verification; its possible the member clicks no after first clicking yes
+                    {
+                        string ssql = "update MemberVisit set ClaimStatusId = @newClaimStatusId, ClaimSubStatusId = @newClaimSubStatusId where VisitId = @VisitId";
+                        conn.Execute(ssql, new { newClaimStatusId, newClaimSubStatusId, VisitId });
+
+                        //if (newClaimStatusId == ClaimStatus.Approved)
+                        //    mv = conn.Query<MemberVisit>("pr_ClaimsGet", new { VisitId = VisitId }, commandType: CommandType.StoredProcedure).FirstOrDefault();
+
+                        //Transfer Stripe $$ to provider
+                        List<Application_Parameter_Config> list = CommonService.GetApplicationConfigs();
+                        string PPVPaymentMode = list.Where(o => o.PARAMETER_NAME == "PPVPaymentMode").First().PARAMETER_VALUE;
+                        if (PPVPaymentMode == "Automatic")
+                        {
+                            if (newClaimStatusId == ClaimStatus.Approved && !string.IsNullOrEmpty(mv.OrgStripeAccountId))
+                            {
+                                decimal TransferAmount = 0;
+                                TransferAmount = mv.PlanFee * 100; //amount in cents
+                                                                   //if (mv.VisitTypeId == VisitType.InPerson) TransferAmount = mv.InPersonProviderFee * 100; //amount in cents
+                                                                   //if (mv.VisitTypeId == VisitType.Tele) TransferAmount = mv.TeleVisitProviderFee * 100; //amount in cents
+
+                                var mycharge = new Stripe.TransferCreateOptions();
+                                //mycharge.Source = StripeAccountID.Trim();
+                                mycharge.Description = "PPV Provider Payment: VisitID: " + VisitId;
+                                mycharge.Currency = "USD";
+                                mycharge.Amount = Convert.ToInt32(TransferAmount);
+                                mycharge.Destination = mv.OrgStripeAccountId.Trim();
+
+                                var service = new TransferService();
+                                Transfer response = service.Create(mycharge);
+                                string TransactionId = "";
+                                if (!string.IsNullOrEmpty(response.Id))
+                                {
+                                    TransactionId = response.BalanceTransactionId;
+                                    mv = conn.Query<MemberVisit>("pr_ClaimProviderPayment", new { VisitId = VisitId, TransactionId = TransactionId, TransferAmount = TransferAmount }, commandType: CommandType.StoredProcedure).FirstOrDefault();
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        res.ResultID = 0;
+                        res.ResultName = "Already confirmed";
+                    }
                 }
             }
             catch (Exception ex)
@@ -1642,47 +1685,7 @@ namespace PPCPWebApiServices.Models.PPCPWebService.DAL
                 Logging.LogMessage("ClaimMemberResponse", ex.Message + "; InnerException: " + ex.InnerException + "; stacktrace:" + ex.StackTrace, LogType.Error, -1);
                 return null;
             }
-
-            //Transfer Stripe $$ to provider
-            List<Application_Parameter_Config> list = CommonService.GetApplicationConfigs();
-            string PPVPaymentMode = list.Where(o => o.PARAMETER_NAME == "PPVPaymentMode").First().PARAMETER_VALUE;
-            if (PPVPaymentMode == "Automatic")
-            {
-                if (newClaimStatusId == ClaimStatus.Approved && !string.IsNullOrEmpty(mv.OrgStripeAccountId))
-                {
-                    decimal TransferAmount = 0;
-                    TransferAmount = mv.PlanFee * 100; //amount in cents
-                    //if (mv.VisitTypeId == VisitType.InPerson) TransferAmount = mv.InPersonProviderFee * 100; //amount in cents
-                    //if (mv.VisitTypeId == VisitType.Tele) TransferAmount = mv.TeleVisitProviderFee * 100; //amount in cents
-
-                    var mycharge = new Stripe.TransferCreateOptions();
-                    //mycharge.Source = StripeAccountID.Trim();
-                    mycharge.Description = "PPV Provider Payment";
-                    mycharge.Currency = "USD";
-                    mycharge.Amount = Convert.ToInt32(TransferAmount);
-                    mycharge.Destination = mv.OrgStripeAccountId.Trim();
-
-                    var service = new TransferService();
-                    Transfer response = service.Create(mycharge);
-                    string TransactionId = "";
-                    if (!string.IsNullOrEmpty(response.Id))
-                    {
-                        TransactionId = response.BalanceTransactionId;
-                        try
-                        {
-                            using (SqlConnection conn = new SqlConnection(ConfigurationManager.ConnectionStrings["DALDefaultService"].ConnectionString))
-                            {
-                                mv = conn.Query<MemberVisit>("pr_ClaimProviderPayment", new { VisitId = VisitId, TransactionId = TransactionId, TransferAmount = TransferAmount }, commandType: CommandType.StoredProcedure).FirstOrDefault();
-                            }
-                        }
-                        catch (Exception ex)
-                        {
-                            Logging.LogMessage("pr_ClaimProviderPayment", ex.Message + "; InnerException: " + ex.InnerException + "; stacktrace:" + ex.StackTrace, LogType.Error, -1);
-                            return null;
-                        }
-                    }
-                }
-            }
+            
             return res;
         }
 

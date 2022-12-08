@@ -519,13 +519,17 @@ namespace PPCPWebApiServices.ServiceAccess
 
         public object ClaimConfirm(string VisitId)
         {
-            object res = objdal.ClaimMemberResponse(Convert.ToInt32(VisitId), "Confirm");
-            return res;
+            Result res = objdal.ClaimMemberResponse(Convert.ToInt32(VisitId), "Confirm");
+            List<Result> result = new List<Result>();
+            result.Add(res);
+            return result;
         }
         public object ClaimDeny(string VisitId)
         {
-            object res = objdal.ClaimMemberResponse(Convert.ToInt32(VisitId), "Deny");
-            return res;
+            Result res = objdal.ClaimMemberResponse(Convert.ToInt32(VisitId), "Deny");
+            List<Result> result = new List<Result>();
+            result.Add(res);
+            return result;
         }
 
         public object ResendClaimConfirmText(string VisitId)
