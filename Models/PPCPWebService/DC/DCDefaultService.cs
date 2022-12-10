@@ -306,6 +306,8 @@ namespace PPCPWebApiServices.Models.PPCPWebService.DC
         public Nullable<int> ProviderID { get; set; }
         
         public string ProviderName { get; set; }
+        public string FirstName { get; set; } //provider firstname
+        public string LastName { get; set; } //provider LastName
         public string OrganizationName { get; set; }
         public string OrganizationAddress { get; set; }
         public string ProviderAddress { get; set; }
