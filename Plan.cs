@@ -64,7 +64,10 @@ namespace PPCPWebApiServices
         public string OrganizationTAndCPath { get; set; }
         public string ProviderTAndCPath { get; set; }
         public Nullable<decimal> CommPPCP { get; set; }
-    
+
+        public int BillingTypeId { get; set; }
+        public string BillingType { get; set; }
+
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<OrganizationPlan> OrganizationPlans { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

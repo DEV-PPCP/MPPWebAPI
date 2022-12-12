@@ -26,6 +26,7 @@ using System.Drawing.Drawing2D;
 using System.Xml.Linq;
 using System.Data.Entity.Core.Metadata.Edm;
 using System.Collections;
+using Microsoft.Ajax.Utilities;
 
 namespace PPCPWebApiServices.Models.PPCPWebService.DAL
 {
@@ -1122,7 +1123,7 @@ namespace PPCPWebApiServices.Models.PPCPWebService.DAL
                     objMemberLoginDetails.Salutation = objMemberDetails.Salutation;
                     objMemberLoginDetails.Email = objMemberDetails.Email;
                     objMemberLoginDetails.CountryCode = objMemberDetails.CountryCode;
-                    objMemberDetails.MobileNumber = objMemberDetails.MobileNumber;
+                    objMemberLoginDetails.MobileNumber = objMemberDetails.MobileNumber;
                     objMemberLoginDetails.CountryID = objMemberDetails.CountryID;
                     objMemberLoginDetails.CountryName = objMemberDetails.CountryName;
                     objMemberLoginDetails.StateID = objMemberDetails.StateID;
@@ -1453,23 +1454,59 @@ namespace PPCPWebApiServices.Models.PPCPWebService.DAL
 
         }
 
-        public object GetMembersList(int intOrganizationID, int intMemberID, string searchtext)
+        public object GetMembersList(int OrganizationID, int MemberID, string searchtext, bool PPVMembers = false)
+        {
+
+            List<MembersList> getorganizationProviderDetail = new List<MembersList>();
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(ConfigurationManager.ConnectionStrings["DALDefaultService"].ConnectionString))
+                {
+                    getorganizationProviderDetail = conn.Query<MembersList>("Pr_MemberListGet", new { OrganizationID, MemberID, searchtext, PPVMembers }, commandType: CommandType.StoredProcedure).ToList();
+                }
+            }
+            catch (Exception ex)
+            {
+                Logging.LogMessage("GetMembersList: OrganizationId: " + OrganizationID + ", MemberID:" + MemberID + ", PPVMembers: " + PPVMembers, ex.Message + "; InnerException: " + ex.InnerException + "; stacktrace:" + ex.StackTrace, LogType.Error, -1);
+                return null;
+            }
+
+            //try
+            //{
+            //    using (var context = new Dev_PPCPEntities(1))
+            //    {                    
+            //        SqlParameter memberID = new SqlParameter("@MemberID", intMemberID);
+            //        SqlParameter OrganizationID = new SqlParameter("@OrganizationID", intOrganizationID);
+            //        SqlParameter SearchText = new SqlParameter("@SearchText", searchtext ?? string.Empty);
+            //        getorganizationProviderDetail = context.Database.SqlQuery<MembersList>("Pr_GetMembersList @MemberID, @OrganizationID, @SearchText, @PPVMembers", memberID, OrganizationID, SearchText, PPVMembers).ToList();                    
+            //    }
+            //}
+            //catch (Exception ex)
+            //{
+            //    Logging.LogMessage("GetMembersList", ex.Message + "; InnerException: " + ex.InnerException + "; stacktrace:" + ex.StackTrace, LogType.Error, -1);
+            //    return null;
+            //}
+            return getorganizationProviderDetail;
+
+        }
+
+        public object GetPPVMembersList(int intOrganizationID, int intMemberID, string searchtext)
         {
 
             List<MembersList> getorganizationProviderDetail = new List<MembersList>();
             try
             {
                 using (var context = new Dev_PPCPEntities(1))
-                {                    
+                {
                     SqlParameter memberID = new SqlParameter("@MemberID", intMemberID);
                     SqlParameter OrganizationID = new SqlParameter("@OrganizationID", intOrganizationID);
                     SqlParameter SearchText = new SqlParameter("@SearchText", searchtext ?? string.Empty);
-                    getorganizationProviderDetail = context.Database.SqlQuery<MembersList>("Pr_GetMembersList @MemberID, @OrganizationID, @SearchText", memberID, OrganizationID, SearchText).ToList();                    
+                    getorganizationProviderDetail = context.Database.SqlQuery<MembersList>("Pr_MembersPPVGet @MemberID, @OrganizationID, @SearchText", memberID, OrganizationID, SearchText).ToList();
                 }
             }
             catch (Exception ex)
             {
-                Logging.LogMessage("GetMembersList", ex.Message + "; InnerException: " + ex.InnerException + "; stacktrace:" + ex.StackTrace, LogType.Error, -1);
+                Logging.LogMessage("GetPPVMembersList", ex.Message + "; InnerException: " + ex.InnerException + "; stacktrace:" + ex.StackTrace, LogType.Error, -1);
                 return null;
             }
             return getorganizationProviderDetail;

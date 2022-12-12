@@ -22,6 +22,8 @@ using System.Data;
 using System.Collections;
 using System.Net.PeerToPeer;
 using System.Net;
+using System.Drawing.Drawing2D;
+using Twilio.TwiML.Voice;
 
 namespace PPCPWebApiServices.Models.PPCPWebService.DAL
 {
@@ -1196,23 +1198,39 @@ namespace PPCPWebApiServices.Models.PPCPWebService.DAL
             return getMemberPlanDetails;
         }
 
-        public List<MemberPlansDetails> GetMemberPlanDetailsByOrg(int OrganizationID, int MemberID)
+        public List<MemberPlansDetails> GetMemberPlanDetailsByOrg(int OrganizationID, int MemberID, bool PPVMembers = false)
         {
             List<MemberPlansDetails> list = new List<MemberPlansDetails>();
             try
             {
                 using (SqlConnection conn = new SqlConnection(ConfigurationManager.ConnectionStrings["DALDefaultService"].ConnectionString))
                 {
-                    string ssql = "select o.OrganizationName, p.PlanName, p.PlanTermMonths, p.VisitFee, p.TeleVisitFee, cast(case when GETUTCDATE() between mp.PlanStartDate and mp.PlanEndDate then 1 else 0 end as bit) as IsActive, mp.PlanStartDate, mp.PlanEndDate" +
-                                        " from MemberPlans mp join Plans p on p.Planid = mp.Planid join Organizations o on o.Organizationid = mp.Organizationid where (" + OrganizationID + "=0 or mp.Organizationid = " + OrganizationID + ") and MemberID = " + MemberID;
-                    list = conn.Query<MemberPlansDetails>(ssql, new {  }, commandType: CommandType.Text).ToList();
+                    list = conn.Query<MemberPlansDetails>("Pr_MemberPlansGetByMember", new { OrganizationID, MemberID, PPVMembers }, commandType: CommandType.StoredProcedure).ToList();
                 }
             }
             catch (Exception ex)
             {
-                Logging.LogMessage("GetMemberPlanDetailsByOrg", ex.Message + "; InnerException: " + ex.InnerException + "; stacktrace:" + ex.StackTrace, LogType.Error, -1);
+                Logging.LogMessage("GetMemberPlanDetailsByOrg: OrganizationId: " + OrganizationID + ", MemberID:" + MemberID + ", PPVMembers: " + PPVMembers, ex.Message + "; InnerException: " + ex.InnerException + "; stacktrace:" + ex.StackTrace, LogType.Error, -1);
                 return null;
             }
+
+            //try
+            //{
+            //    using (SqlConnection conn = new SqlConnection(ConfigurationManager.ConnectionStrings["DALDefaultService"].ConnectionString))
+            //    {
+            //        string ssql = "select o.OrganizationName, p.PlanName, p.PlanTermMonths, p.VisitFee, p.TeleVisitFee, cast(case when GETUTCDATE() between mp.PlanStartDate and mp.PlanEndDate then 1 else 0 end as bit) as IsActive, " +
+            //                            "mp.PlanStartDate, mp.PlanEndDate" +
+            //                            " from MemberPlans mp join Plans p on p.Planid = mp.Planid " +
+            //                            "join Organizations o on o.Organizationid = mp.Organizationid " +
+            //                            "where (" + OrganizationID + "=0 or mp.Organizationid = " + OrganizationID + ") and MemberID = " + MemberID;
+            //        list = conn.Query<MemberPlansDetails>(ssql, new {  }, commandType: CommandType.Text).ToList();
+            //    }
+            //}
+            //catch (Exception ex)
+            //{
+            //    Logging.LogMessage("GetMemberPlanDetailsByOrg", ex.Message + "; InnerException: " + ex.InnerException + "; stacktrace:" + ex.StackTrace, LogType.Error, -1);
+            //    return null;
+            //}
             return list;
         }
         public List<Member> GetFamilyDetails(int intMemberParentID)

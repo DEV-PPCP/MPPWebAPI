@@ -471,6 +471,23 @@ namespace PPCPWebApiServices.ServiceAccess
 
         }
 
+        public object GetPPVMembersList(string OrganizationID, string strMemberID, string searchtext)
+        {
+            int memberid = 0;
+            if (!string.IsNullOrEmpty(strMemberID))
+                memberid = Convert.ToInt32(strMemberID);
+            int orgid = 0;
+            if (!string.IsNullOrEmpty(OrganizationID))
+                orgid = Convert.ToInt32(OrganizationID);
+
+            object GetDetails = new List<MembersList>();
+
+            GetDetails = objdal.GetMembersList(orgid, memberid, searchtext, true);
+
+            return GetDetails;
+
+        }
+
 
 
         #region Billing
