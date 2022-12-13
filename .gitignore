@@ -365,3 +365,5 @@ FodyWeavers.xsd
 /Properties/PublishProfiles/FolderProfile.pubxml
 /_EventSourceUsersGuide.docx
 /_EventRegisterUsersGuide.docx
+/PPCPWebApiServices.csproj.user
+/.vs/PPCPWebApiSolution/config/applicationhost.config
