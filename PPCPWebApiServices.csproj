@@ -131,9 +131,8 @@
     <Reference Include="RestSharp">
       <HintPath>DLLS\RestSharp.dll</HintPath>
     </Reference>
-    <Reference Include="Stripe.net, Version=34.22.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>bin\Stripe.net.dll</HintPath>
+    <Reference Include="Stripe.net, Version=36.12.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\Stripe.net.36.12.2\lib\net45\Stripe.net.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Collections.Immutable, Version=1.2.5.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
@@ -544,6 +543,7 @@
   <ItemGroup>
     <Folder Include="App_Code\Services\" />
     <Folder Include="App_Data\" />
+    <Folder Include="bin\" />
     <Folder Include="Utils\" />
     <Folder Include="Views\DefaultXml\" />
     <Folder Include="Views\Provider\" />
