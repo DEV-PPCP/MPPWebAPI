@@ -470,6 +470,28 @@ namespace PPCPWebApiServices.ServiceAccess
             return GetDetails;
 
         }
+        /// <summary>
+        /// AdminPlans in Admin Module
+        /// </summary>
+        /// <returns></returns>
+        public List<Plan> GetPlans(string PlanId)
+        {
+            List<Plan> getPlans = new List<Plan>();
+            int PlanID= Convert.ToInt32(PlanId);
+            try
+            {
+                using (var context = new Dev_PPCPEntities(1))
+                {
+                    getPlans = context.Plans.Where(a => a.IsActive == true && a.IsDelete == true && a.PlanID== PlanID).OrderByDescending(a => a.PlanID).ToList();
+                }
+            }
+            catch (Exception ex)
+            {
+                Logging.LogMessage("GetPlans: PlanId: " + PlanId, ex.Message + "; InnerException: " + ex.InnerException + "; stacktrace:" + ex.StackTrace, LogType.Error, -1);
+            }
+
+            return getPlans;
+        }
 
 
 
