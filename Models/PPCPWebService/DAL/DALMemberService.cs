@@ -19,6 +19,11 @@ using PPCPWebApiServices.CustomEntities;
 using Dapper;
 using System.Configuration;
 using System.Data;
+using System.Collections;
+using System.Net.PeerToPeer;
+using System.Net;
+using System.Drawing.Drawing2D;
+using Twilio.TwiML.Voice;
 
 namespace PPCPWebApiServices.Models.PPCPWebService.DAL
 {
@@ -36,6 +41,15 @@ namespace PPCPWebApiServices.Models.PPCPWebService.DAL
             XmlSerializer serializer = new XmlSerializer(typeof(MemberDetails));
             StringReader rdr = new StringReader(xml);
             MemberDetails objMemberDetails = (MemberDetails)serializer.Deserialize(rdr);
+
+            //Check Member Exists
+            int id = CheckMemberExists(objMemberDetails.FirstName, objMemberDetails.LastName, objMemberDetails.Gender.ToString(), Convert.ToDateTime(objMemberDetails.DOB), objMemberDetails.MobileNumber);
+            if(id > 0)
+            {
+                objTemporaryDetails.Add(new TemporaryMemberDetails { ResultID = -1, result = "MemberExists" });
+                return objTemporaryDetails;
+            }
+
             string MemberPlanInstallmentxml = "";
             try
             {
@@ -172,6 +186,10 @@ namespace PPCPWebApiServices.Models.PPCPWebService.DAL
                         };
                         mycharge.TransferData = TransferDataOptions;
                     }
+                    else
+                    {
+                        TotalTransferAmount = 0;
+                    }
 
                     mycharge.OnBehalfOf = objMemberDetails.StripeAccountID.Trim();// StripeAccountID.Trim();
                                                                                   // mycharge.Destination = StripeAccountID;
@@ -202,13 +220,6 @@ namespace PPCPWebApiServices.Models.PPCPWebService.DAL
                     ////var service = new ChargeService();
                     ////var charge = service.Create(options);
 
-
-
-
-
-
-
-
                     //var items = new List<SubscriptionItemOptions> {
                     //new SubscriptionItemOptions {
                     //    Price = "price_CBb6IXqvTLXp3f"}
@@ -221,8 +232,6 @@ namespace PPCPWebApiServices.Models.PPCPWebService.DAL
                     //};
                     //var service = new SubscriptionService();
                     //Subscription subscription = service.Create(options);
-
-
 
                     //var options1 = new Stripe.PriceCreateOptions
                     //{
@@ -240,11 +249,6 @@ namespace PPCPWebApiServices.Models.PPCPWebService.DAL
 
                 
                     //var price = service.Create(options);
-
-
-
-
-
 
                     MemberPlanInstallmentxml = MemberPlanInstallment(objMemberDetails.NoofInstallments, objMemberDetails.Paymentschedule, objMemberDetails.PlanStartDate, objMemberDetails.InstallmentAmount, objMemberDetails.InstallmentFee);
                 }
@@ -269,19 +273,45 @@ namespace PPCPWebApiServices.Models.PPCPWebService.DAL
                     SqlParameter StripeCustomerID = new SqlParameter("@StripeCustomerID", StripeCustomerId);
                     SqlParameter MemberPlanInstallmentXML = new SqlParameter("@MemberPlanInstallmentXML", MemberPlanInstallmentxml);
                     SqlParameter TotalEnrollAmount = new SqlParameter("@TotalEnrollAmount", newtotalamount);
-                    SqlParameter Transferamount = new SqlParameter("@TransferAmount", (TotalTransferAmount/100));
-                    objTemporaryDetails = context.Database.SqlQuery<TemporaryMemberDetails>("Pr_SaveMemberDetails @XML,@EncryptPassword,@TotalAmount,@NetAmount,@TransactionFee,@MemberName,@PaymentInterval,@TransactioID,@StripeCustomerID,@MemberPlanInstallmentXML,@TotalEnrollAmount,@TransferAmount", XML, EncryptPassword, TotalAmount, NetAmount, TransactionFee, MemberName, PaymentInterval, TransactioID, StripeCustomerID, MemberPlanInstallmentXML, TotalEnrollAmount, Transferamount).ToList();
+                    SqlParameter Transferamount = new SqlParameter("@TransferAmount", TotalTransferAmount > 0 ? (TotalTransferAmount/100) : 0);
+                    objTemporaryDetails = context.Database.SqlQuery<TemporaryMemberDetails>("Pr_MemberRegistration @XML,@EncryptPassword,@TotalAmount,@NetAmount,@TransactionFee,@MemberName,@PaymentInterval,@TransactioID,@StripeCustomerID,@MemberPlanInstallmentXML,@TotalEnrollAmount,@TransferAmount", XML, EncryptPassword, TotalAmount, NetAmount, TransactionFee, MemberName, PaymentInterval, TransactioID, StripeCustomerID, MemberPlanInstallmentXML, TotalEnrollAmount, Transferamount).ToList();
 
                 }
                 if (objTemporaryDetails.Count > 0)
                 {
                     objTemporaryDetails[0].TransactionID = TransactioId;
                 }
+
+                List<EmailMaster> emList = CommonService.GetEmailList();
+                EmailMaster em = new EmailMaster();
                 if (objTemporaryDetails.Count > 0 && objMemberDetails.MobileNumber != "")
                 {
-                    DALDefaultService dal = new DALDefaultService();
-                    string message = "Thank you for enrolling with MyPhysicianPlan. Your UserName : " + objMemberDetails.UserName + " and Password : " + objMemberDetails.Password;
-                    dal.SendMessageByText(message, objMemberDetails.MobileNumber, objMemberDetails.CountryCode);
+                    em = emList.Where(o => o.Name == "NewMemberText" && o.isActive == true).FirstOrDefault();
+                    if (em != null)
+                    {
+                        string message = em.HtmlBody.Replace("{MemberName}", objMemberDetails.FirstName + " " + objMemberDetails.LastName)
+                                            .Replace("{UserName}", objMemberDetails.UserName);
+                        DALDefaultService dal = new DALDefaultService();
+                        dal.SendMessageByText(message, objMemberDetails.MobileNumber, objMemberDetails.CountryCode);
+                    }
+                }
+                //new member email 
+                bool isEmailSuccess = false;
+                if (!string.IsNullOrEmpty(objMemberDetails.Email))
+                {
+                    //Send Email to confirm Claim
+                    List<Application_Parameter_Config> list = CommonService.GetApplicationConfigs();
+                    string ApplicationUrl = list.Where(o => o.PARAMETER_NAME == "ApplicationUrl").First().PARAMETER_VALUE;                    
+                    
+                    em = emList.Where(o => o.Name == "NewMemberEmail" && o.isActive == true).FirstOrDefault();
+                    if (em != null)
+                    {
+                        string body = em.HtmlBody.Replace("{MemberName}", objMemberDetails.FirstName + " " + objMemberDetails.LastName)
+                                            .Replace("{UserName}", objMemberDetails.UserName)
+                                            .Replace("{ApplicationUrl}", ApplicationUrl);
+                        Service.MailHelper _objMail = new Service.MailHelper();
+                        isEmailSuccess = _objMail.SendEmail(objMemberDetails.Email, string.Empty, em.Subject, body);
+                    }
                 }
                 if (Convert.ToDecimal(Netamount) > 0)
                 {
@@ -1168,6 +1198,41 @@ namespace PPCPWebApiServices.Models.PPCPWebService.DAL
             return getMemberPlanDetails;
         }
 
+        public List<MemberPlansDetails> GetMemberPlanDetailsByOrg(int OrganizationID, int MemberID, bool PPVMembers = false)
+        {
+            List<MemberPlansDetails> list = new List<MemberPlansDetails>();
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(ConfigurationManager.ConnectionStrings["DALDefaultService"].ConnectionString))
+                {
+                    list = conn.Query<MemberPlansDetails>("Pr_MemberPlansGetByMember", new { OrganizationID, MemberID, PPVMembers }, commandType: CommandType.StoredProcedure).ToList();
+                }
+            }
+            catch (Exception ex)
+            {
+                Logging.LogMessage("GetMemberPlanDetailsByOrg: OrganizationId: " + OrganizationID + ", MemberID:" + MemberID + ", PPVMembers: " + PPVMembers, ex.Message + "; InnerException: " + ex.InnerException + "; stacktrace:" + ex.StackTrace, LogType.Error, -1);
+                return null;
+            }
+
+            //try
+            //{
+            //    using (SqlConnection conn = new SqlConnection(ConfigurationManager.ConnectionStrings["DALDefaultService"].ConnectionString))
+            //    {
+            //        string ssql = "select o.OrganizationName, p.PlanName, p.PlanTermMonths, p.VisitFee, p.TeleVisitFee, cast(case when GETUTCDATE() between mp.PlanStartDate and mp.PlanEndDate then 1 else 0 end as bit) as IsActive, " +
+            //                            "mp.PlanStartDate, mp.PlanEndDate" +
+            //                            " from MemberPlans mp join Plans p on p.Planid = mp.Planid " +
+            //                            "join Organizations o on o.Organizationid = mp.Organizationid " +
+            //                            "where (" + OrganizationID + "=0 or mp.Organizationid = " + OrganizationID + ") and MemberID = " + MemberID;
+            //        list = conn.Query<MemberPlansDetails>(ssql, new {  }, commandType: CommandType.Text).ToList();
+            //    }
+            //}
+            //catch (Exception ex)
+            //{
+            //    Logging.LogMessage("GetMemberPlanDetailsByOrg", ex.Message + "; InnerException: " + ex.InnerException + "; stacktrace:" + ex.StackTrace, LogType.Error, -1);
+            //    return null;
+            //}
+            return list;
+        }
         public List<Member> GetFamilyDetails(int intMemberParentID)
         {
 
@@ -1252,8 +1317,6 @@ namespace PPCPWebApiServices.Models.PPCPWebService.DAL
 
         public int CheckMemberExists(string FirstName, string LastName, string Gender, DateTime DOB, string MobileNumber)
         {
-            
-
             int result = 0;
             try
             {
@@ -1276,10 +1339,25 @@ namespace PPCPWebApiServices.Models.PPCPWebService.DAL
                 return result;
             }
             return result;
-
         }
 
-
+        public List<MemberPlan> CheckMemberPlan(int OrganizationID, int MemberID, DateTime PlanStartDate, int PlanID)
+        {
+            List<MemberPlan> res = new List<MemberPlan>();
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(ConfigurationManager.ConnectionStrings["DALDefaultService"].ConnectionString))
+                {
+                    res = conn.Query<MemberPlan>("Pr_MemberPlanValidate", new { OrganizationID, MemberID, PlanStartDate, PlanID }, commandType: CommandType.StoredProcedure).ToList();
+                }
+            }
+            catch (Exception ex)
+            {
+                Logging.LogMessage("CheckMemberPlan", ex.Message + "; InnerException: " + ex.InnerException + "; stacktrace:" + ex.StackTrace, LogType.Error, -1);
+                return null;
+            }
+            return res;
+        }
 
         public List<TemporaryMemberDetails> AddDoctorDetails(string xml)
         {

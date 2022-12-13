@@ -35,7 +35,7 @@ namespace PPCPWebApiServices.ServiceAccess
                                 case "Member":
                                     Message = "MyPhysicianPlan: DO NOT share this Sign In Code.  We will Never call you or text you for it.  Code " + OTP;
                                     break;
-                                case "Admin":
+                                case "MPP":
                                     Message = "Dear " + Username + ", Your one time password is : " + OTP;
                                     break;
                                 case "Organization":
@@ -749,16 +749,6 @@ namespace PPCPWebApiServices.ServiceAccess
 
             return IntervalsList;
         }
-
-        public object ClaimConfirm(string VisitId)
-        {
-            object res = objdal.ClaimMemberResponse(Convert.ToInt32(VisitId), "Confirm");
-            return res;
-        }
-        public object ClaimDeny(string VisitId)
-        {
-            object res = objdal.ClaimMemberResponse(Convert.ToInt32(VisitId), "Deny");
-            return res;
-        }
+        
     }
 }

@@ -493,6 +493,23 @@ namespace PPCPWebApiServices.ServiceAccess
             return getPlans;
         }
 
+        public object GetPPVMembersList(string OrganizationID, string strMemberID, string searchtext)
+        {
+            int memberid = 0;
+            if (!string.IsNullOrEmpty(strMemberID))
+                memberid = Convert.ToInt32(strMemberID);
+            int orgid = 0;
+            if (!string.IsNullOrEmpty(OrganizationID))
+                orgid = Convert.ToInt32(OrganizationID);
+
+            object GetDetails = new List<MembersList>();
+
+            GetDetails = objdal.GetMembersList(orgid, memberid, searchtext, true);
+
+            return GetDetails;
+
+        }
+
 
 
         #region Billing
@@ -539,6 +556,21 @@ namespace PPCPWebApiServices.ServiceAccess
             return 0;
         }
 
+        public object ClaimConfirm(string VisitId)
+        {
+            Result res = objdal.ClaimMemberResponse(Convert.ToInt32(VisitId), "Confirm");
+            List<Result> result = new List<Result>();
+            result.Add(res);
+            return result;
+        }
+        public object ClaimDeny(string VisitId)
+        {
+            Result res = objdal.ClaimMemberResponse(Convert.ToInt32(VisitId), "Deny");
+            List<Result> result = new List<Result>();
+            result.Add(res);
+            return result;
+        }
+
         public object ResendClaimConfirmText(string VisitId)
         {
             object res = new Result();
@@ -550,6 +582,13 @@ namespace PPCPWebApiServices.ServiceAccess
         {
             object res = new Result();
             res = objdal.ResendClaimConfirmEmail(Convert.ToInt32(VisitId));
+            return res;
+        }
+
+        public object AdminClaimApproval(string VisitId, string AdminNotes, string ModifiedBy)
+        {
+            object res = new Result();
+            res = objdal.AdminClaimApproval(Convert.ToInt32(VisitId), AdminNotes, Convert.ToInt32(ModifiedBy));
             return res;
         }
 

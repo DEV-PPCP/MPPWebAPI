@@ -26,6 +26,7 @@ using System.Drawing.Drawing2D;
 using System.Xml.Linq;
 using System.Data.Entity.Core.Metadata.Edm;
 using System.Collections;
+using Microsoft.Ajax.Utilities;
 
 namespace PPCPWebApiServices.Models.PPCPWebService.DAL
 {
@@ -137,9 +138,29 @@ namespace PPCPWebApiServices.Models.PPCPWebService.DAL
                                     + "Name: " + objDCOrganizationService.OrganizationName + "<br/>"
                                     + "Contact Person: " + objDCOrganizationService.FirstName + " " + objDCOrganizationService.LastName + "<br/>"
                                     + "Contact Phone: " + objDCOrganizationService.MobileNumber + "<br/>"
-                                    + "Contact Email: " + objDCOrganizationService.Email;
+                                    + "Contact Email: " + objDCOrganizationService.Email
+                                    + "Billling Type: " + (objDCOrganizationService.BillingTypeId == BillingType.Lumpsum ? "Lumpsum" : "PPV");
                     _objMail.SendEmail(toEmail, string.Empty, subject, body);
-                }                
+                }
+
+                //new Organization email
+                bool isEmailSuccess = false;
+                if (!string.IsNullOrEmpty(objDCOrganizationService.Email))
+                {
+                    //Send Email to confirm Claim
+                    string ApplicationUrl = list.Where(o => o.PARAMETER_NAME == "ApplicationUrl").First().PARAMETER_VALUE;
+
+                    List<EmailMaster> emList = CommonService.GetEmailList();
+                    EmailMaster em = new EmailMaster();
+                    em = emList.Where(o => o.Name == "NewOrganizationEmail" && o.isActive == true).FirstOrDefault();
+                    if(em != null)
+                    {
+                        string body = em.HtmlBody.Replace("{OrganizationName}", objDCOrganizationService.OrganizationName)
+                                       .Replace("{UserName}", objDCOrganizationService.UserName)
+                                       .Replace("{ApplicationUrl}", ApplicationUrl);
+                        isEmailSuccess = _objMail.SendEmail(objDCOrganizationService.Email, string.Empty, em.Subject, body);
+                    }                   
+                }
             }
             catch (Exception ex)
             {
@@ -486,11 +507,36 @@ namespace PPCPWebApiServices.Models.PPCPWebService.DAL
             return objTemporaryDetails;
         }
 
+        public int CheckMemberExists(string FirstName, string LastName, string Gender, DateTime DOB, string MobileNumber)
+        {
+            int result = 0;
+            try
+            {
+                List<Member> objMember = new List<Member>();
+                using (var Context = new Dev_PPCPEntities(1))
+                {
 
+                    objMember = Context.Members.Where(o => (o.FirstName == FirstName) &&
+                           (o.LastName == LastName) &&
+                           (o.Gender == Gender) &&
+                           (o.DOB == DOB) &&
+                           (o.MobileNumber == MobileNumber)).ToList();
+
+                    result = objMember[0].MemberID;
+                }
+            }
+            catch (Exception ex)
+            {
+                result = 0;
+                return result;
+            }
+            return result;
+        }
         public List<TemporaryUserDetails> AddMemberDetails(string xml)
         {
-            string MobileNumber = "", CountryCode = "";
+            string MobileNumber = "", CountryCode = "", Email = "", FirstName = "", LastName="", Gender="", DOB="";
             List<TemporaryUserDetails> objTemporaryDetails = new List<TemporaryUserDetails>();
+
             try
             {
                 using (var context = new DALMemberService())
@@ -502,6 +548,20 @@ namespace PPCPWebApiServices.Models.PPCPWebService.DAL
                     string UserName = node["UserName"].InnerText;
                     MobileNumber = node["MobileNumber"].InnerText;
                     CountryCode = node["CountryCode"].InnerText;
+                    FirstName = node["FirstName"].InnerText;
+                    LastName = node["LastName"].InnerText;
+                    Email = node["Email"].InnerText;
+                    Gender = node["Gender"].InnerText;
+                    DOB = node["DOB"].InnerText;
+
+                    //Check Member Exists
+                    int id = CheckMemberExists(FirstName, LastName, Gender, Convert.ToDateTime(DOB), MobileNumber);
+                    if (id > 0)
+                    {
+                        objTemporaryDetails.Add(new TemporaryUserDetails { result = "MemberExists" });
+                        return objTemporaryDetails;
+                    }
+
                     byte[] bytes = Encoding.UTF8.GetBytes(UserPassword);
                     string Encryptpassword = Convert.ToBase64String(bytes);
                     SqlParameter XML = new SqlParameter("@XML", xml);
@@ -509,8 +569,33 @@ namespace PPCPWebApiServices.Models.PPCPWebService.DAL
                     objTemporaryDetails = context.Database.SqlQuery<TemporaryUserDetails>("Pr_AddMember @XML,@EncryptPassword", XML, EncryptPassword).ToList();
                     if (objTemporaryDetails.Count > 0)
                     {
-                        string message = "Thank you for enrolling with MyPhysicianPlan. Your UserName : " + UserName + " And Password : " + UserPassword;
-                        SendMessageByText(message, MobileNumber, CountryCode);
+                        List<EmailMaster> emList = CommonService.GetEmailList();
+                        EmailMaster em = new EmailMaster();
+                        if (MobileNumber != "")
+                        {
+                            em = emList.Where(o => o.Name == "NewMemberText" && o.isActive == true).FirstOrDefault();
+                            if (em != null)
+                            {
+                                string message = em.HtmlBody.Replace("{MemberName}", FirstName + " " + LastName)
+                                                    .Replace("{UserName}", UserName);
+                                DALDefaultService dal = new DALDefaultService();
+                                dal.SendMessageByText(message, MobileNumber, CountryCode);
+                            }
+                        }
+
+                        //new member email with no plan email
+                        //Send Email to confirm Claim
+                        List<Application_Parameter_Config> list = CommonService.GetApplicationConfigs();
+                        string ApplicationUrl = list.Where(o => o.PARAMETER_NAME == "ApplicationUrl").First().PARAMETER_VALUE;                        
+                        em = emList.Where(o => o.Name == "NewMemberEmail" && o.isActive == true).FirstOrDefault();
+                        if(em != null)
+                        {
+                            string body = em.HtmlBody.Replace("{MemberName}", FirstName + " " + LastName)
+                                            .Replace("{UserName}", UserName)
+                                            .Replace("{ApplicationUrl}", ApplicationUrl);
+                            Service.MailHelper _objMail = new Service.MailHelper();
+                            bool isEmailSuccess = _objMail.SendEmail(Email, string.Empty, em.Subject, body);
+                        }                        
                     }
                 }
             }
@@ -1038,7 +1123,7 @@ namespace PPCPWebApiServices.Models.PPCPWebService.DAL
                     objMemberLoginDetails.Salutation = objMemberDetails.Salutation;
                     objMemberLoginDetails.Email = objMemberDetails.Email;
                     objMemberLoginDetails.CountryCode = objMemberDetails.CountryCode;
-                    objMemberDetails.MobileNumber = objMemberDetails.MobileNumber;
+                    objMemberLoginDetails.MobileNumber = objMemberDetails.MobileNumber;
                     objMemberLoginDetails.CountryID = objMemberDetails.CountryID;
                     objMemberLoginDetails.CountryName = objMemberDetails.CountryName;
                     objMemberLoginDetails.StateID = objMemberDetails.StateID;
@@ -1369,23 +1454,59 @@ namespace PPCPWebApiServices.Models.PPCPWebService.DAL
 
         }
 
-        public object GetMembersList(int intOrganizationID, int intMemberID, string searchtext)
+        public object GetMembersList(int OrganizationID, int MemberID, string searchtext, bool PPVMembers = false)
+        {
+
+            List<MembersList> getorganizationProviderDetail = new List<MembersList>();
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(ConfigurationManager.ConnectionStrings["DALDefaultService"].ConnectionString))
+                {
+                    getorganizationProviderDetail = conn.Query<MembersList>("Pr_MemberListGet", new { OrganizationID, MemberID, searchtext, PPVMembers }, commandType: CommandType.StoredProcedure).ToList();
+                }
+            }
+            catch (Exception ex)
+            {
+                Logging.LogMessage("GetMembersList: OrganizationId: " + OrganizationID + ", MemberID:" + MemberID + ", PPVMembers: " + PPVMembers, ex.Message + "; InnerException: " + ex.InnerException + "; stacktrace:" + ex.StackTrace, LogType.Error, -1);
+                return null;
+            }
+
+            //try
+            //{
+            //    using (var context = new Dev_PPCPEntities(1))
+            //    {                    
+            //        SqlParameter memberID = new SqlParameter("@MemberID", intMemberID);
+            //        SqlParameter OrganizationID = new SqlParameter("@OrganizationID", intOrganizationID);
+            //        SqlParameter SearchText = new SqlParameter("@SearchText", searchtext ?? string.Empty);
+            //        getorganizationProviderDetail = context.Database.SqlQuery<MembersList>("Pr_GetMembersList @MemberID, @OrganizationID, @SearchText, @PPVMembers", memberID, OrganizationID, SearchText, PPVMembers).ToList();                    
+            //    }
+            //}
+            //catch (Exception ex)
+            //{
+            //    Logging.LogMessage("GetMembersList", ex.Message + "; InnerException: " + ex.InnerException + "; stacktrace:" + ex.StackTrace, LogType.Error, -1);
+            //    return null;
+            //}
+            return getorganizationProviderDetail;
+
+        }
+
+        public object GetPPVMembersList(int intOrganizationID, int intMemberID, string searchtext)
         {
 
             List<MembersList> getorganizationProviderDetail = new List<MembersList>();
             try
             {
                 using (var context = new Dev_PPCPEntities(1))
-                {                    
+                {
                     SqlParameter memberID = new SqlParameter("@MemberID", intMemberID);
                     SqlParameter OrganizationID = new SqlParameter("@OrganizationID", intOrganizationID);
                     SqlParameter SearchText = new SqlParameter("@SearchText", searchtext ?? string.Empty);
-                    getorganizationProviderDetail = context.Database.SqlQuery<MembersList>("Pr_GetMembersList @MemberID, @OrganizationID, @SearchText", memberID, OrganizationID, SearchText).ToList();                    
+                    getorganizationProviderDetail = context.Database.SqlQuery<MembersList>("Pr_MembersPPVGet @MemberID, @OrganizationID, @SearchText", memberID, OrganizationID, SearchText).ToList();
                 }
             }
             catch (Exception ex)
             {
-                Logging.LogMessage("GetMembersList", ex.Message + "; InnerException: " + ex.InnerException + "; stacktrace:" + ex.StackTrace, LogType.Error, -1);
+                Logging.LogMessage("GetPPVMembersList", ex.Message + "; InnerException: " + ex.InnerException + "; stacktrace:" + ex.StackTrace, LogType.Error, -1);
                 return null;
             }
             return getorganizationProviderDetail;
@@ -1458,11 +1579,7 @@ namespace PPCPWebApiServices.Models.PPCPWebService.DAL
                     MemberVisit mv = objResult[0];
                     if (mv.ClaimStatusId == ClaimStatus.Submitted)
                     {
-                        List<EmailMaster> emList = new List<EmailMaster>();
-                        using (SqlConnection conn = new SqlConnection(ConfigurationManager.ConnectionStrings["DALDefaultService"].ConnectionString))
-                        {
-                            emList = conn.Query<EmailMaster>("select * from EmailMaster where name='ClaimConfirmEmail' or name='ClaimConfirmText'", null, commandType: CommandType.Text).ToList();
-                        }
+                        List<EmailMaster> emList = CommonService.GetEmailList();
 
                         List<Application_Parameter_Config> list = CommonService.GetApplicationConfigs();
                         string ApplicationUrl = list.Where(o => o.PARAMETER_NAME == "ApplicationUrl").First().PARAMETER_VALUE;
@@ -1488,7 +1605,7 @@ namespace PPCPWebApiServices.Models.PPCPWebService.DAL
                         bool isEmailSuccess = false;
                         if (!string.IsNullOrEmpty(mv.MemberEmail))
                         {
-                            //Send Email to confirm Claim     
+                            //Send Email to confirm Claim                            
                             EmailMaster em = emList.Where(o => o.Name == "ClaimConfirmEmail").FirstOrDefault();
                             
                             string body = em.HtmlBody.Replace("{VisitType}", mv.VisitType)
@@ -1528,6 +1645,85 @@ namespace PPCPWebApiServices.Models.PPCPWebService.DAL
             }
 
             return objResult;
+        }
+
+        public Result ClaimMemberResponse(int VisitId, string mode)
+        {
+            Result res = new Result();
+            res.ResultID = 1;
+            res.ResultName = "Success";
+            res.Exception = "Success";
+
+            int newClaimStatusId = 0;
+            int? newClaimSubStatusId = null;
+            if (mode == "Confirm")
+                newClaimStatusId = ClaimStatus.Approved;
+            if (mode == "Deny")
+            {
+                newClaimStatusId = ClaimStatus.Denied;
+                newClaimSubStatusId = ClaimSubStatus.MemberDenied;
+            }
+
+            MemberVisit mv = new MemberVisit();
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(ConfigurationManager.ConnectionStrings["DALDefaultService"].ConnectionString))
+                {
+                    //mv = conn.Query<MemberVisit>("pr_ClaimMemberResponseSave", new { VisitId = VisitId, ClaimStatusId = newClaimStatusId, ClaimSubStatusId = newClaimSubStatusId }, commandType: CommandType.StoredProcedure).FirstOrDefault();
+                    mv = conn.Query<MemberVisit>("pr_ClaimsGet", new { VisitId = VisitId }, commandType: CommandType.StoredProcedure).FirstOrDefault();
+
+                    if (mv.ClaimStatusId == ClaimStatus.Verification || mv.ClaimStatusId == ClaimStatus.Denied) //claims still in verification; its possible the member clicks no after first clicking yes
+                    {
+                        string ssql = "update MemberVisit set ClaimStatusId = @newClaimStatusId, ClaimSubStatusId = @newClaimSubStatusId where VisitId = @VisitId";
+                        conn.Execute(ssql, new { newClaimStatusId, newClaimSubStatusId, VisitId });
+
+                        //if (newClaimStatusId == ClaimStatus.Approved)
+                        //    mv = conn.Query<MemberVisit>("pr_ClaimsGet", new { VisitId = VisitId }, commandType: CommandType.StoredProcedure).FirstOrDefault();
+
+                        //Transfer Stripe $$ to provider
+                        List<Application_Parameter_Config> list = CommonService.GetApplicationConfigs();
+                        string PPVPaymentMode = list.Where(o => o.PARAMETER_NAME == "PPVPaymentMode").First().PARAMETER_VALUE;
+                        if (PPVPaymentMode == "Automatic")
+                        {
+                            if (newClaimStatusId == ClaimStatus.Approved && !string.IsNullOrEmpty(mv.OrgStripeAccountId))
+                            {
+                                decimal TransferAmount = 0;
+                                TransferAmount = mv.PlanFee * 100; //amount in cents
+                                                                   //if (mv.VisitTypeId == VisitType.InPerson) TransferAmount = mv.InPersonProviderFee * 100; //amount in cents
+                                                                   //if (mv.VisitTypeId == VisitType.Tele) TransferAmount = mv.TeleVisitProviderFee * 100; //amount in cents
+
+                                var mycharge = new Stripe.TransferCreateOptions();
+                                //mycharge.Source = StripeAccountID.Trim();
+                                mycharge.Description = "PPV Provider Payment: VisitID: " + VisitId;
+                                mycharge.Currency = "USD";
+                                mycharge.Amount = Convert.ToInt32(TransferAmount);
+                                mycharge.Destination = mv.OrgStripeAccountId.Trim();
+
+                                var service = new TransferService();
+                                Transfer response = service.Create(mycharge);
+                                string TransactionId = "";
+                                if (!string.IsNullOrEmpty(response.Id))
+                                {
+                                    TransactionId = response.BalanceTransactionId;
+                                    mv = conn.Query<MemberVisit>("pr_ClaimProviderPayment", new { VisitId = VisitId, TransactionId = TransactionId, TransferAmount = TransferAmount }, commandType: CommandType.StoredProcedure).FirstOrDefault();
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        res.ResultID = 0;
+                        res.ResultName = "Already confirmed";
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Logging.LogMessage("ClaimMemberResponse", ex.Message + "; InnerException: " + ex.InnerException + "; stacktrace:" + ex.StackTrace, LogType.Error, -1);
+                return null;
+            }
+            
+            return res;
         }
 
         public Result ResendClaimConfirmText(int VisitId)
@@ -1613,6 +1809,32 @@ namespace PPCPWebApiServices.Models.PPCPWebService.DAL
                 Logging.LogMessage("ResendClaimConfirmEmail: VisitId" + VisitId, ex.Message + "; InnerException: " + ex.InnerException + "; stacktrace:" + ex.StackTrace, LogType.Error, -1);
                 res.ResultID = -1;
             }
+
+            return res;
+        }
+
+        public Result AdminClaimApproval(int VisitId, string AdminNotes, int ModifiedBy)
+        {
+            Result res = new Result();
+            res.ResultID = 1;
+
+            res = ClaimMemberResponse(VisitId, "Confirm");
+            if(res != null)
+            {
+                try
+                {
+                    using (SqlConnection conn = new SqlConnection(ConfigurationManager.ConnectionStrings["DALDefaultService"].ConnectionString))
+                    {
+                        string ssql = "update MemberVisit set ManualApprovalDate = getutcdate(), ManualApprovalBy = @ModifiedBy, AdminNotes=@AdminNotes where VisitId = @VisitId";
+                        conn.Execute(ssql, new { ModifiedBy, AdminNotes, VisitId });
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Logging.LogMessage("AdminClaimApproval update", ex.Message + "; InnerException: " + ex.InnerException + "; stacktrace:" + ex.StackTrace, LogType.Error, -1);
+                    return null;
+                }
+            }            
 
             return res;
         }

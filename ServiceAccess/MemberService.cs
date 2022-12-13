@@ -136,6 +136,22 @@ namespace PPCPWebApiServices.ServiceAccess
             }
             return objeGetMemberPlanDetails;
         }
+
+        public object GetMemberPlanDetailsByOrg(string OrganizationID, string MemberID)
+        {
+            //DALMemberService objdal = new DALMemberService();
+            List<MemberPlansDetails> list = new List<MemberPlansDetails>();
+            list = objdal.GetMemberPlanDetailsByOrg(Convert.ToInt32(string.IsNullOrEmpty(OrganizationID) ? "0" : OrganizationID), Convert.ToInt32(MemberID));
+            return list;
+        }
+
+        public object GetPPVMemberPlanDetailsByOrg(string OrganizationID, string MemberID)
+        {
+            //DALMemberService objdal = new DALMemberService();
+            List<MemberPlansDetails> list = new List<MemberPlansDetails>();
+            list = objdal.GetMemberPlanDetailsByOrg(Convert.ToInt32(string.IsNullOrEmpty(OrganizationID) ? "0" : OrganizationID), Convert.ToInt32(MemberID));
+            return list;
+        }
         /// <summary>
         /// Get Family details based on MemberParentID for Member Table-vinod-08/17/2019
         /// </summary>
@@ -199,6 +215,13 @@ namespace PPCPWebApiServices.ServiceAccess
             //DALMemberService objdal = new DALMemberService();
             // List<MemberPlan> objGetPaymentDetails = new List<MemberPlan>();
             int objGetPaymentDetails = objdal.CheckMemberExists(FirstName, LastName, Gender, Convert.ToDateTime(DOB), MobileNumber);
+            return objGetPaymentDetails;
+        }
+        public object CheckMemberPlan(string OrganizationID, string MemberID, string PlanStartDate, string PlanID)
+        {
+            //DALMemberService objdal = new DALMemberService();
+            // List<MemberPlan> objGetPaymentDetails = new List<MemberPlan>();
+            List<MemberPlan> objGetPaymentDetails = objdal.CheckMemberPlan(Convert.ToInt32(OrganizationID), Convert.ToInt32(MemberID), Convert.ToDateTime(PlanStartDate), Convert.ToInt32(PlanID));
             return objGetPaymentDetails;
         }
         public object AddDoctorDetails(string xml)

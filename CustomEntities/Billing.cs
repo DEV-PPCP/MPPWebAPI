@@ -46,9 +46,11 @@ namespace PPCPWebApiServices.CustomEntities
         public DateTime? ManualApprovalDate { get; set; }
         public int ManualApprovalBy { get; set; }
         public string ManualApprovalUserName { get; set; }
+        public string AdminNotes { get; set; }
         public DateTime CreatedDate { get; set; }
         public DateTime ModifiedDate { get; set; }
         public int ModifiedBy { get; set; }
+        public string ClaimSaveResult { get; set; }
 
         //Plan 
         public int PlanId { get; set; }
@@ -57,6 +59,7 @@ namespace PPCPWebApiServices.CustomEntities
         public DateTime PlanEndDate { get; set; }
         public decimal AllowedFee { get; set; }
         public decimal CoPayFee { get; set; }
+        public decimal PlanFee { get; set; }
         public decimal InPersonProviderFee { get; set; }
         public decimal TeleVisitProviderFee { get; set; }
 

@@ -6,6 +6,7 @@ using System.Data;
 using System.Linq;
 using System.Web;
 using Dapper;
+using PPCPWebApiServices.CustomEntities;
 
 namespace PPCPWebApiServices.Models.PPCPWebService.DAL
 {
@@ -39,6 +40,25 @@ namespace PPCPWebApiServices.Models.PPCPWebService.DAL
                 {
                     string ssql = "select * from Application_Parameter_Config";
                     list = conn.Query<Application_Parameter_Config>(ssql, new { }, commandType: CommandType.Text).ToList();
+                }
+            }
+
+            catch (Exception ex)
+            {
+
+            }
+            return list;
+        }
+
+        public static List<EmailMaster> GetEmailList()
+        {
+            List<EmailMaster> list = new List<EmailMaster>();
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(ConfigurationManager.ConnectionStrings["DALDefaultService"].ConnectionString))
+                {
+                    string ssql = "select * from EmailMaster";
+                    list = conn.Query<EmailMaster>(ssql, new { }, commandType: CommandType.Text).ToList();
                 }
             }
 
