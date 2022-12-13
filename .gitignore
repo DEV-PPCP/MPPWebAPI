@@ -361,3 +361,7 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+/Properties/PublishProfiles/FolderProfile.pubxml.user
+/Properties/PublishProfiles/FolderProfile.pubxml
+/_EventSourceUsersGuide.docx
+/_EventRegisterUsersGuide.docx
