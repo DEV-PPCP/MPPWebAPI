@@ -1726,6 +1726,31 @@ namespace PPCPWebApiServices.Models.PPCPWebService.DAL
             return res;
         }
 
+        public Result ClaimDelete(int VisitId)
+        {
+            Result res = new Result();
+            res.ResultID = 1;
+            res.ResultName = "Success";
+            res.Exception = "Success";
+
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(ConfigurationManager.ConnectionStrings["DALDefaultService"].ConnectionString))
+                {
+                    string ssql = "delete from MemberVisit where VisitId = @VisitId";
+                    conn.Execute(ssql, new { VisitId });                    
+                }
+            }
+            catch (Exception ex)
+            {
+                Logging.LogMessage("ClaimDelete", ex.Message + "; InnerException: " + ex.InnerException + "; stacktrace:" + ex.StackTrace, LogType.Error, -1);
+                res.ResultID = 0;
+                res.ResultName = "Error";
+            }
+
+            return res;
+        }
+
         public Result ResendClaimConfirmText(int VisitId)
         {
             Result res = new Result();

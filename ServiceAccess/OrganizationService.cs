@@ -571,6 +571,14 @@ namespace PPCPWebApiServices.ServiceAccess
             return result;
         }
 
+        public object ClaimDelete(string VisitId)
+        {
+            Result res = objdal.ClaimDelete(Convert.ToInt32(VisitId));
+            List<Result> result = new List<Result>();
+            result.Add(res);
+            return result;
+        }
+
         public object ResendClaimConfirmText(string VisitId)
         {
             object res = new Result();
