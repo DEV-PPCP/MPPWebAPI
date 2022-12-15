@@ -43,6 +43,7 @@ namespace PPCPWebApiServices.CustomEntities
         public int? OrganizationID { get; set; }
         public string OrganizationName { get; set; }
         public int BillingTypeID { get; set; }
+        public bool HasPPVMembers { get; set; }
         //public DateTime? OrganizationUserTandC { get; set; }
         //public DateTime? OrganizationTandC { get; set; }
         //public int OrganizationUserTandCFlag { get; set; }

@@ -332,23 +332,6 @@ namespace PPCPWebApiServices.Models.PPCPWebService.DAL
             return IsActive;
         }
 
-        public List<OrganizationDetails> GetOrganizationUsersProfile(int OrganizationId)
-        {
-            List<OrganizationDetails> getOrganizationUsersDetails = new List<OrganizationDetails>();
-            try
-            {
-                using (var context = new DALDefaultService())
-                {
-                    SqlParameter OrganizationID = new SqlParameter("@OrganizationID", OrganizationId);
-                    getOrganizationUsersDetails = context.Database.SqlQuery<OrganizationDetails>("Pr_GetOrganizationUsers @OrganizationID", OrganizationID).ToList();
-                }
-            }
-            catch (Exception ex)
-            {
-
-            }
-            return getOrganizationUsersDetails;
-        }
 
         //public List<ValidateOrgForgotCredentials> ValidateOrgForgotCredentials(string Username, string Firstname, string Lastname, string Mobilenumber, string Countrycode, string email, string type)
         //{
@@ -450,6 +433,42 @@ namespace PPCPWebApiServices.Models.PPCPWebService.DAL
             return objTemporaryDetails;
         }
 
+        public List<OrganizationDetails> ConvertOrganizationBillingType(int OrganizationID)
+        {
+            List<Models.PPCPWebService.DC.OrganizationDetails> list = new List<OrganizationDetails>();
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(ConfigurationManager.ConnectionStrings["DALDefaultService"].ConnectionString))
+                {
+                    list = conn.Query<OrganizationDetails>("Pr_OrganizationBillingConvert", new { OrganizationID }, commandType: CommandType.StoredProcedure).ToList();
+                }
+            }
+            catch (Exception ex)
+            {
+                Logging.LogMessage("ConvertOrganizationBillingType: OrganizationId: " + OrganizationID, ex.Message + "; InnerException: " + ex.InnerException + "; stacktrace:" + ex.StackTrace, LogType.Error, -1);
+                return null;
+            }
+            return list;
+        }
+
+        public List<OrganizationDetails> GetOrganizationUsersProfile(int OrganizationId)
+        {
+            List<OrganizationDetails> getOrganizationUsersDetails = new List<OrganizationDetails>();
+            try
+            {
+                using (var context = new DALDefaultService())
+                {
+                    SqlParameter OrganizationID = new SqlParameter("@OrganizationID", OrganizationId);
+                    getOrganizationUsersDetails = context.Database.SqlQuery<OrganizationDetails>("Pr_OrganizationProfile @OrganizationID", OrganizationID).ToList();
+                }
+            }
+            catch (Exception ex)
+            {
+                Logging.LogMessage("GetOrganizationUsersProfile: OrganizationId: " + OrganizationId, ex.Message + "; InnerException: " + ex.InnerException + "; stacktrace:" + ex.StackTrace, LogType.Error, -1);
+                return null;
+            }
+            return getOrganizationUsersDetails;
+        }
 
         public List<SpecializationLKP> GetSpecializationLKP()
         {
@@ -1001,29 +1020,26 @@ namespace PPCPWebApiServices.Models.PPCPWebService.DAL
 
             List<PlansAndPlansMapping> getOrganizationDetails = new List<PlansAndPlansMapping>();
             try {
-                using (var context = new DALDefaultService())
+                using (SqlConnection conn = new SqlConnection(ConfigurationManager.ConnectionStrings["DALDefaultService"].ConnectionString))
                 {
-                    SqlParameter OrganizationID = new SqlParameter("@OrganizationID", intOrganizationID);
-                    getOrganizationDetails = context.Database.SqlQuery<PlansAndPlansMapping>("Pr_GetOrganizationPlans @OrganizationID", OrganizationID).ToList();
-
-                    if (Type == 1)//1 Subcribed
-                    {
-                        var result = getOrganizationDetails.OrderByDescending(item => item.PlanID).GroupBy(item => item.PlanID).SelectMany(g => g.Count() > 1 ? g.Where(x => x.OrgID != 0) : g).Where(a => a.OrgID == 1);
-                        getOrganizationDetails = result.ToList();
-                    }
-                    else if (Type == 2)// Unsubcribed
-                    {
-                        var result = getOrganizationDetails.OrderByDescending(item => item.PlanID).GroupBy(item => item.PlanID).SelectMany(g => g.Count() > 1 ? g.Where(x => x.OrgID != 0) : g).Where(a => a.OrgID == 0);
-                        getOrganizationDetails = result.ToList();
-                    }
-                    else//3 ALL
-                    {
-                        var result = getOrganizationDetails.OrderByDescending(item => item.PlanID).GroupBy(item => item.PlanID).SelectMany(g => g.Count() > 1 ? g.Where(x => x.OrgID != 0) : g);
-                        getOrganizationDetails = result.ToList();
-
-                    }
+                    getOrganizationDetails = conn.Query<PlansAndPlansMapping>("Pr_GetOrganizationPlans", new { OrganizationID = intOrganizationID }, commandType: CommandType.StoredProcedure).ToList();
                 }
-              
+
+                if (Type == 1)//1 Subcribed
+                {
+                    var result = getOrganizationDetails.OrderByDescending(item => item.PlanID).GroupBy(item => item.PlanID).SelectMany(g => g.Count() > 1 ? g.Where(x => x.OrgID != 0) : g).Where(a => a.OrgID == 1);
+                    getOrganizationDetails = result.ToList();
+                }
+                else if (Type == 2)// Unsubcribed
+                {
+                    var result = getOrganizationDetails.OrderByDescending(item => item.PlanID).GroupBy(item => item.PlanID).SelectMany(g => g.Count() > 1 ? g.Where(x => x.OrgID != 0) : g).Where(a => a.OrgID == 0);
+                    getOrganizationDetails = result.ToList();
+                }
+                else//3 ALL
+                {
+                    var result = getOrganizationDetails.OrderByDescending(item => item.PlanID).GroupBy(item => item.PlanID).SelectMany(g => g.Count() > 1 ? g.Where(x => x.OrgID != 0) : g);
+                    getOrganizationDetails = result.ToList();
+                }              
             }
             catch (Exception ex)
             {
@@ -1036,28 +1052,26 @@ namespace PPCPWebApiServices.Models.PPCPWebService.DAL
         {
             List<PlansAndPlansMapping> getOrganizationDetails = new List<PlansAndPlansMapping>();
 
-            using (var context = new DALDefaultService())
+            using (SqlConnection conn = new SqlConnection(ConfigurationManager.ConnectionStrings["DALDefaultService"].ConnectionString))
             {
-                SqlParameter OrganizationID = new SqlParameter("@OrganizationID", intOrganizationID);
-                SqlParameter ProviderID = new SqlParameter("@ProviderID", intProviderID);
-                getOrganizationDetails = context.Database.SqlQuery<PlansAndPlansMapping>("Pr_GetOrganizationProviderPlans @OrganizationID,@ProviderID", OrganizationID, ProviderID).ToList();
-                if (intType == 1)
-                {
-                    var result = getOrganizationDetails.OrderByDescending(item => item.PlanID).GroupBy(item => item.PlanID).SelectMany(g => g.Count() > 1 ? g.Where(x => x.OrgID != 1) : g).Where(a => a.OrgID == 1);
-                    getOrganizationDetails = result.ToList();
-                }
-                else if (intType == 2)
-                {
-                    var result = getOrganizationDetails.OrderByDescending(item => item.PlanID).GroupBy(item => item.PlanID).SelectMany(g => g.Count() > 1 ? g.Where(x => x.OrgID != 1) : g).Where(a => a.OrgID == 0);
-                    getOrganizationDetails = result.ToList();
-                }
-                else
-                {
-                    var result = getOrganizationDetails.OrderByDescending(item => item.PlanID).GroupBy(item => item.PlanID).SelectMany(g => g.Count() > 1 ? g.Where(x => x.OrgID != 1) : g);
-                    getOrganizationDetails = result.ToList();
-                }
-
+                getOrganizationDetails = conn.Query<PlansAndPlansMapping>("Pr_GetOrganizationProviderPlans", new { OrganizationID = intOrganizationID, ProviderID = intProviderID }, commandType: CommandType.StoredProcedure).ToList();
             }
+            if (intType == 1)
+            {
+                var result = getOrganizationDetails.OrderByDescending(item => item.PlanID).GroupBy(item => item.PlanID).SelectMany(g => g.Count() > 1 ? g.Where(x => x.OrgID != 1) : g).Where(a => a.OrgID == 1);
+                getOrganizationDetails = result.ToList();
+            }
+            else if (intType == 2)
+            {
+                var result = getOrganizationDetails.OrderByDescending(item => item.PlanID).GroupBy(item => item.PlanID).SelectMany(g => g.Count() > 1 ? g.Where(x => x.OrgID != 1) : g).Where(a => a.OrgID == 0);
+                getOrganizationDetails = result.ToList();
+            }
+            else
+            {
+                var result = getOrganizationDetails.OrderByDescending(item => item.PlanID).GroupBy(item => item.PlanID).SelectMany(g => g.Count() > 1 ? g.Where(x => x.OrgID != 1) : g);
+                getOrganizationDetails = result.ToList();
+            }
+
             return getOrganizationDetails;
         }
 

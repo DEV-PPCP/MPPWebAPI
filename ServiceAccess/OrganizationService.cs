@@ -119,12 +119,7 @@ namespace PPCPWebApiServices.ServiceAccess
             }
             return 0;
         }
-        public object GetOrganizationUsersProfile(string OrganizationID)
-        {
-
-            List<OrganizationDetails> ValidateUserName = objdal.GetOrganizationUsersProfile(Convert.ToInt32(OrganizationID));
-            return ValidateUserName;
-        }
+        
         /// <summary>
         /// 
         /// </summary>
@@ -156,6 +151,19 @@ namespace PPCPWebApiServices.ServiceAccess
 
             List<Models.PPCPWebService.DC.OrganizationDetails> UpdateOrganizationDetails = objdal.UpdateOrganizationDetails(organizationxml);
             return UpdateOrganizationDetails;
+        }
+
+        public object ConvertOrganizationBillingType(string OrganizationId)
+        {
+            List<Models.PPCPWebService.DC.OrganizationDetails> UpdateOrganizationDetails = objdal.ConvertOrganizationBillingType(Convert.ToInt32(OrganizationId));
+            return UpdateOrganizationDetails;
+        }
+
+        public object GetOrganizationUsersProfile(string OrganizationID)
+        {
+
+            List<OrganizationDetails> ValidateUserName = objdal.GetOrganizationUsersProfile(Convert.ToInt32(OrganizationID));
+            return ValidateUserName;
         }
         /// <summary>
         /// Get SpecializationLKP-vinod

@@ -100,6 +100,9 @@ namespace PPCPWebApiServices.Models.PPCPWebService.DC
         public Nullable<decimal> Amount { get; set; }
         public string PaymentIntervals { get; set; }
         public Nullable<bool> IsActive { get; set; }
+
+        public int BillingTypeID { get; set; }
+        public string BillingType { get; set; }
       
         public string PlanTermName { get; set; }
         public Nullable<int> PlanTermMonths { get; set; }

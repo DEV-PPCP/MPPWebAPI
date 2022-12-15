@@ -149,7 +149,7 @@ namespace PPCPWebApiServices.ServiceAccess
         {
             //DALMemberService objdal = new DALMemberService();
             List<MemberPlansDetails> list = new List<MemberPlansDetails>();
-            list = objdal.GetMemberPlanDetailsByOrg(Convert.ToInt32(string.IsNullOrEmpty(OrganizationID) ? "0" : OrganizationID), Convert.ToInt32(MemberID));
+            list = objdal.GetMemberPlanDetailsByOrg(Convert.ToInt32(string.IsNullOrEmpty(OrganizationID) ? "0" : OrganizationID), Convert.ToInt32(MemberID), true);
             return list;
         }
         /// <summary>

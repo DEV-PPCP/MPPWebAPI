@@ -46,34 +46,7 @@ namespace PPCPWebApiServices.ServiceAccess
                                     break;
                                 default:
                                     break;
-                            }
-
-                            //if (string.IsNullOrEmpty(usrDetails[0].RoleType))
-                            //{
-                            //    switch(usrDetails[0].RoleName)
-                            //    {
-                            //        case "Member":
-                            //            Message = "MyPhysicianPlan: DO NOT share this Sign In Code.  We will Never call you or text you for it.  Code " + OTP;
-                            //            break;
-                            //        case "Admin":
-                            //            Message = "Dear " + Username + ", Your one time password is : " + OTP;
-                            //            break;
-                            //    }
-                            //}
-                            //else
-                            //{
-                            //    switch (usrDetails[0].RoleType)
-                            //    {
-                            //        case "Organization":
-                            //            Message = "MyPhysicianPlan: DO NOT share this Sign In Code.  We will Never call you or text you for it.  Code " + OTP;
-                            //            break;
-                            //        case "Provider":
-                            //            Message = "Dear " + Username + ", Your one time password is : " + OTP;
-                            //            break;
-                            //        default:
-                            //            break;
-                            //    }
-                            //}                           
+                            }                      
 
                             if (usrDetails[0].TwoFactorType == 1)
                             {
@@ -122,33 +95,6 @@ namespace PPCPWebApiServices.ServiceAccess
                                     usrDetails[0].IsTermsAccepted = true;
                             }
                         }
-
-                        //if (usrDetails[0].RoleType == "Organization")
-                        //{
-                        //    //Organization Terms and Conditions flag
-                        //    List<TermsAndCondition> objTermsAndConditionsOrganization = objdal.GetTermsAndConditions(TermsType.Organization);//intType=2-Organization
-                        //    if (objTermsAndConditionsOrganization.Count >= 1)
-                        //    {
-                        //        int value = DateTime.Compare(Convert.ToDateTime(usrDetails[0].OrganizationTandC), Convert.ToDateTime(objTermsAndConditionsOrganization[0].CreatedDate));
-                        //        if (value > 0)
-                        //            usrDetails[0].TermsAndConditionsNeeded = 0;
-                        //        else if (value < 0)
-                        //            usrDetails[0].TermsAndConditionsNeeded = 1;
-                        //    }
-                        //}
-                        //if (usrDetails[0].RoleType == "Member")
-                        //{
-                        //    List<TermsAndCondition> objTermsAndConditions = objdal.GetTermsAndConditions(TermsType.Member);//intType=1-Member
-                        //    if (objTermsAndConditions.Count >= 1)
-                        //    {
-                        //        int value = DateTime.Compare(Convert.ToDateTime(usrDetails[0].MemberTandCDate), Convert.ToDateTime(objTermsAndConditions[0].CreatedDate));
-                        //        if (value > 0)
-                        //            usrDetails[0].TermsAndConditionsNeeded = 0;
-                        //        else if (value < 0)
-                        //            usrDetails[0].TermsAndConditionsNeeded = 1;
-
-                        //    }
-                        //}
                     }
                 }
             }

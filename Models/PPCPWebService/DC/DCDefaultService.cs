@@ -287,6 +287,7 @@ namespace PPCPWebApiServices.Models.PPCPWebService.DC
         public string PlanTermName { get; set; }
         public Nullable<int> PlanTermMonths { get; set; }
         public Nullable<decimal> VisitFee { get; set; }
+        public Nullable<decimal> TeleVisitFee { get; set; }
         public Nullable<decimal> EnrollFee { get; set; }
         public Nullable<int> FromAge { get; set; }
         public Nullable<int> ToAge { get; set; }
@@ -325,6 +326,7 @@ namespace PPCPWebApiServices.Models.PPCPWebService.DC
         public Nullable<decimal> CommPrimaryMember { get; set; }
         public int MapID { get; set; }
         public int BillingTypeID { get; set; }
+        public string BillingType { get; set; }
         public int MaxAllowedClaims { get; set; }
     }
     public class PaymentDetails
