@@ -541,8 +541,6 @@ namespace PPCPWebApiServices.Models.PPCPWebService.DAL
             TemporaryMemberDetails res = new TemporaryMemberDetails();
             List<TemporaryMemberDetails> objTemporaryDetails = new List<TemporaryMemberDetails>();
 
-
-
             //  XmlSerializer serializer = new XmlSerializer(typeof(MemberDetails));
             XmlSerializer serializer = new XmlSerializer(typeof(List<MemberDetails>));
             StringReader rdr = new StringReader(xml);
@@ -632,7 +630,7 @@ namespace PPCPWebApiServices.Models.PPCPWebService.DAL
                         }
                         Stripe.Card card = new Stripe.Card();
                         var mycharge = new Stripe.ChargeCreateOptions();
-                        if (!string.IsNullOrEmpty(objMemberDetails[0].StripeCustomerID) && StripeCustomerId == "" && objMemberDetails[0].CardID == "")
+                        if (!string.IsNullOrEmpty(objMemberDetails[0].StripeCustomerID) && StripeCustomerId == "" && string.IsNullOrEmpty(objMemberDetails[0].CardID))
                         {
                             try
                             {
