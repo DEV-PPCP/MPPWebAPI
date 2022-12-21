@@ -217,6 +217,13 @@ namespace PPCPWebApiServices.ServiceAccess
             int objGetPaymentDetails = objdal.CheckMemberExists(FirstName, LastName, Gender, Convert.ToDateTime(DOB), MobileNumber);
             return objGetPaymentDetails;
         }
+
+        public object GetMemberIfExisting(string FirstName, string LastName, string Gender, string DOB, string MobileNumber)
+        {
+            List<MemberDetails> objGetPaymentDetails = objdal.GetMemberIfExisting(FirstName, LastName, Gender, Convert.ToDateTime(DOB), MobileNumber);
+            return objGetPaymentDetails;
+        }
+
         public object CheckMemberPlan(string OrganizationID, string MemberID, string PlanStartDate, string PlanID)
         {
             //DALMemberService objdal = new DALMemberService();

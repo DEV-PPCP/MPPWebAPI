@@ -24,6 +24,8 @@ using System.Net.PeerToPeer;
 using System.Net;
 using System.Drawing.Drawing2D;
 using Twilio.TwiML.Voice;
+using static Antlr.Runtime.Tree.TreeWizard;
+using System.Data.Linq;
 
 namespace PPCPWebApiServices.Models.PPCPWebService.DAL
 {
@@ -43,12 +45,12 @@ namespace PPCPWebApiServices.Models.PPCPWebService.DAL
             MemberDetails objMemberDetails = (MemberDetails)serializer.Deserialize(rdr);
 
             //Check Member Exists
-            int id = CheckMemberExists(objMemberDetails.FirstName, objMemberDetails.LastName, objMemberDetails.Gender.ToString(), Convert.ToDateTime(objMemberDetails.DOB), objMemberDetails.MobileNumber);
-            if(id > 0)
-            {
-                objTemporaryDetails.Add(new TemporaryMemberDetails { ResultID = -1, result = "MemberExists" });
-                return objTemporaryDetails;
-            }
+            //int id = CheckMemberExists(objMemberDetails.FirstName, objMemberDetails.LastName, objMemberDetails.Gender.ToString(), Convert.ToDateTime(objMemberDetails.DOB), objMemberDetails.MobileNumber);
+            //if(id > 0)
+            //{
+            //    objTemporaryDetails.Add(new TemporaryMemberDetails { ResultID = -1, result = "MemberExists" });
+            //    return objTemporaryDetails;
+            //}
 
             string MemberPlanInstallmentxml = "";
             try
@@ -66,7 +68,6 @@ namespace PPCPWebApiServices.Models.PPCPWebService.DAL
                 intervals.EnrollFee = objMemberDetails.EnrollFee;
 
                 var newtotalamount = ((intervals.InstallmentAmount + intervals.InstallmentFee) * intervals.NoofInstallments) + intervals.EnrollFee;
-
 
                 var json = JsonConvert.SerializeObject(intervals);
                 string Paymentinterval = json;
@@ -131,7 +132,7 @@ namespace PPCPWebApiServices.Models.PPCPWebService.DAL
                     }
                     Stripe.Card card = new Stripe.Card();
                     var mycharge = new Stripe.ChargeCreateOptions();
-                    if (!string.IsNullOrEmpty(objMemberDetails.StripeCustomerID) && StripeCustomerId == "" && objMemberDetails.CardID == "")
+                    if (!string.IsNullOrEmpty(objMemberDetails.StripeCustomerID) && StripeCustomerId == "" && string.IsNullOrEmpty(objMemberDetails.CardID))
                     {
                         try
                         {
@@ -1337,6 +1338,24 @@ namespace PPCPWebApiServices.Models.PPCPWebService.DAL
                 return result;
             }
             return result;
+        }
+
+        public List<MemberDetails> GetMemberIfExisting(string FirstName, string LastName, string Gender, DateTime DOB, string MobileNumber)
+        {
+            List<MemberDetails> list = new List<MemberDetails>();
+            try
+            {                
+                using (SqlConnection conn = new SqlConnection(ConfigurationManager.ConnectionStrings["DALDefaultService"].ConnectionString))
+                {
+                    string ssql = "select m.*, mp.OrganizationId from Member m left outer join MemberPlans mp on mp.MemberId = m.MemberId where m.FirstName = @FirstName and m.LastName = @LastName and m.Gender = @Gender and m.DOB = @DOB and m.MobileNumber = @MobileNumber";
+                    list = conn.Query<MemberDetails>(ssql, new { FirstName, LastName, Gender, DOB, MobileNumber }, commandType: CommandType.Text).ToList();
+                }
+            }
+            catch (Exception ex)
+            {
+                Logging.LogMessage("GetMemberIfExisting", ex.Message + "; InnerException: " + ex.InnerException + "; stacktrace:" + ex.StackTrace, LogType.Error, -1);
+            }
+            return list;
         }
 
         public List<MemberPlan> CheckMemberPlan(int OrganizationID, int MemberID, DateTime PlanStartDate, int PlanID)

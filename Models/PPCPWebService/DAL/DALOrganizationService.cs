@@ -564,7 +564,7 @@ namespace PPCPWebApiServices.Models.PPCPWebService.DAL
                     xmlDoc.LoadXml(xml);
                     XmlNode node = xmlDoc.SelectSingleNode("/AddMemberDetails");
                     string UserPassword = node["Password"].InnerText;
-                    string UserName = node["UserName"].InnerText;
+                    string UserName = node["UserName"] != null ? node["UserName"].InnerText : string.Empty;
                     MobileNumber = node["MobileNumber"].InnerText;
                     CountryCode = node["CountryCode"].InnerText;
                     FirstName = node["FirstName"].InnerText;
@@ -574,18 +574,18 @@ namespace PPCPWebApiServices.Models.PPCPWebService.DAL
                     DOB = node["DOB"].InnerText;
 
                     //Check Member Exists
-                    int id = CheckMemberExists(FirstName, LastName, Gender, Convert.ToDateTime(DOB), MobileNumber);
-                    if (id > 0)
-                    {
-                        objTemporaryDetails.Add(new TemporaryUserDetails { result = "MemberExists" });
-                        return objTemporaryDetails;
-                    }
+                    //int id = CheckMemberExists(FirstName, LastName, Gender, Convert.ToDateTime(DOB), MobileNumber);
+                    //if (id > 0)
+                    //{
+                    //    objTemporaryDetails.Add(new TemporaryUserDetails { result = "MemberExists" });
+                    //    return objTemporaryDetails;
+                    //}
 
                     byte[] bytes = Encoding.UTF8.GetBytes(UserPassword);
                     string Encryptpassword = Convert.ToBase64String(bytes);
                     SqlParameter XML = new SqlParameter("@XML", xml);
                     SqlParameter EncryptPassword = new SqlParameter("@EncryptPassword", Encryptpassword);
-                    objTemporaryDetails = context.Database.SqlQuery<TemporaryUserDetails>("Pr_AddMember @XML,@EncryptPassword", XML, EncryptPassword).ToList();
+                    objTemporaryDetails = context.Database.SqlQuery<TemporaryUserDetails>("Pr_MemberRegNoPlan @XML,@EncryptPassword", XML, EncryptPassword).ToList();
                     if (objTemporaryDetails.Count > 0)
                     {
                         List<EmailMaster> emList = CommonService.GetEmailList();
