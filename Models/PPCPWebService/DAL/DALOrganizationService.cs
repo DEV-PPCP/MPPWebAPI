@@ -1591,12 +1591,29 @@ namespace PPCPWebApiServices.Models.PPCPWebService.DAL
                 if (objResult.Count > 0)
                 {
                     MemberVisit mv = objResult[0];
+                    List<Application_Parameter_Config> list = CommonService.GetApplicationConfigs();
+                    string ApplicationUrl = list.Where(o => o.PARAMETER_NAME == "ApplicationUrl").First().PARAMETER_VALUE;
+                    string SupportEmail = list.Where(o => o.PARAMETER_NAME == "Support_Mail").First().PARAMETER_VALUE;
+
+                    if (mv.ClaimStatusId == ClaimStatus.Verification && mv.ClaimSubStatusId == ClaimSubStatus.ExceededClaimCount)
+                    {
+                        string body = "Claim in Verification for exceeding Max Claim Count: <br/><br/>" +
+                                        "Organization: {OrganizationName}<br/>" +
+                                        "ProviderName: {ProviderName}<br/>" +
+                                        "MemberName: {MemberName}<br/>" +
+                                        "VisitType: {VisitType}<br/>" +
+                                        "VisitId: {VisitId}<br/>";
+                        body = body.Replace("{VisitType}", mv.VisitType)
+                                            .Replace("{OrganizationName}", mv.OrganizationName)
+                                            .Replace("{ProviderName}", mv.ProviderName)
+                                            .Replace("{MemberName}", mv.MemberName)
+                                            .Replace("{VisitId}", mv.VisitId.ToString());
+                        Service.MailHelper _objMail = new Service.MailHelper();
+                        _objMail.SendEmail(SupportEmail, string.Empty, "Claim Verification: Exceeded Claim Count", body);
+                    }
                     if (mv.ClaimStatusId == ClaimStatus.Submitted)
                     {
                         List<EmailMaster> emList = CommonService.GetEmailList();
-
-                        List<Application_Parameter_Config> list = CommonService.GetApplicationConfigs();
-                        string ApplicationUrl = list.Where(o => o.PARAMETER_NAME == "ApplicationUrl").First().PARAMETER_VALUE;
 
                         bool isSMSSuccess = false;
                         if (mv.MemberMobileNumber != "")
@@ -1632,23 +1649,32 @@ namespace PPCPWebApiServices.Models.PPCPWebService.DAL
                         }
                         int newClaimStatusId = 0, newClaimSubStatusId = 0;
                         newClaimStatusId = ClaimStatus.Verification;
-                        if (isEmailSuccess && isSMSSuccess)                            
-                            newClaimSubStatusId = ClaimSubStatus.TextAndEmailSent;
+
+                        if (mv.ClaimSubStatusId == ClaimSubStatus.ExceededClaimCount)
+                        {
+                            newClaimSubStatusId = ClaimSubStatus.ExceededClaimCount;
+                        }
                         else
                         {
-                            if (isSMSSuccess) newClaimSubStatusId = ClaimSubStatus.TextSent;
+                            if (isEmailSuccess && isSMSSuccess)
+                                newClaimSubStatusId = ClaimSubStatus.TextAndEmailSent;
+                            else
+                            {
+                                if (isSMSSuccess) newClaimSubStatusId = ClaimSubStatus.TextSent;
 
-                            if (isEmailSuccess) newClaimSubStatusId = ClaimSubStatus.EmailSent;
+                                if (isEmailSuccess) newClaimSubStatusId = ClaimSubStatus.EmailSent;
 
-                            if (!isEmailSuccess && !isSMSSuccess) newClaimSubStatusId = ClaimSubStatus.MemberContactError;
+                                if (!isEmailSuccess && !isSMSSuccess) newClaimSubStatusId = ClaimSubStatus.MemberContactError;
+                            }
                         }
 
                         using (SqlConnection conn = new SqlConnection(ConfigurationManager.ConnectionStrings["DALDefaultService"].ConnectionString))
                         {
                             string ssql = "update MemberVisit set ClaimStatusId = @newClaimStatusId, ClaimSubStatusId = @newClaimSubStatusId, MemberContactDate=getutcdate() where VisitId = @VisitId";
+                            if(newClaimSubStatusId == ClaimSubStatus.MemberContactError)
+                                ssql = "update MemberVisit set ClaimStatusId = @newClaimStatusId, ClaimSubStatusId = @newClaimSubStatusId, MemberContactDate=null where VisitId = @VisitId";
                             conn.Execute(ssql, new { newClaimStatusId, mv.VisitId, newClaimSubStatusId });
-                        }
-                        
+                        }                        
                     }
                 }
             }
@@ -1688,11 +1714,15 @@ namespace PPCPWebApiServices.Models.PPCPWebService.DAL
 
                     if (mv.ClaimStatusId == ClaimStatus.Verification || mv.ClaimStatusId == ClaimStatus.Denied) //claims still in verification; its possible the member clicks no after first clicking yes
                     {
-                        string ssql = "update MemberVisit set ClaimStatusId = @newClaimStatusId, ClaimSubStatusId = @newClaimSubStatusId where VisitId = @VisitId";
+                        if(mv.ClaimSubStatusId == ClaimSubStatus.ExceededClaimCount)
+                        {
+                            //no payment needed; claim stays in Verification;
+                            string ssql1 = "update MemberVisit set MemberResponseDate = getutcdate() where VisitId = @VisitId";
+                            conn.Execute(ssql1, new { VisitId });
+                            return res;
+                        }
+                        string ssql = "update MemberVisit set ClaimStatusId = @newClaimStatusId, ClaimSubStatusId = @newClaimSubStatusId, MemberResponseDate = getutcdate() where VisitId = @VisitId";
                         conn.Execute(ssql, new { newClaimStatusId, newClaimSubStatusId, VisitId });
-
-                        //if (newClaimStatusId == ClaimStatus.Approved)
-                        //    mv = conn.Query<MemberVisit>("pr_ClaimsGet", new { VisitId = VisitId }, commandType: CommandType.StoredProcedure).FirstOrDefault();
 
                         //Transfer Stripe $$ to provider
                         List<Application_Parameter_Config> list = CommonService.GetApplicationConfigs();
@@ -1797,6 +1827,18 @@ namespace PPCPWebApiServices.Models.PPCPWebService.DAL
                     var errorsms = objMsg.FirstOrDefault(o => o.Contains("Error"));
                     if (objMsg == null || errorsms == "Error")
                         res.ResultID = -1;
+                    else
+                    {
+                        int newClaimSubStatusId = ClaimSubStatus.TextSent;
+                        if (mv.MemberContactDate == null)
+                        {
+                            using (SqlConnection conn = new SqlConnection(ConfigurationManager.ConnectionStrings["DALDefaultService"].ConnectionString))
+                            {
+                                string ssql = "update MemberVisit set ClaimSubStatusId = @newClaimSubStatusId, MemberContactDate=getutcdate() where VisitId = @VisitId";
+                                conn.Execute(ssql, new { mv.VisitId, newClaimSubStatusId });
+                            }
+                        }
+                    }
                 }
             }
             catch (Exception ex)
@@ -1841,6 +1883,18 @@ namespace PPCPWebApiServices.Models.PPCPWebService.DAL
                     isEmailSuccess = _objMail.SendEmail(mv.MemberEmail, string.Empty, em.Subject, body);
                     if (!isEmailSuccess)
                         res.ResultID = -1;
+                    else
+                    {
+                        int newClaimSubStatusId = ClaimSubStatus.EmailSent;
+                        if (mv.MemberContactDate == null)
+                        {
+                            using (SqlConnection conn = new SqlConnection(ConfigurationManager.ConnectionStrings["DALDefaultService"].ConnectionString))
+                            {
+                                string ssql = "update MemberVisit set ClaimSubStatusId = @newClaimSubStatusId, MemberContactDate=getutcdate() where VisitId = @VisitId";
+                                conn.Execute(ssql, new { mv.VisitId, newClaimSubStatusId });
+                            }
+                        }
+                    }
                 }
             }
             catch (Exception ex)
@@ -1856,6 +1910,12 @@ namespace PPCPWebApiServices.Models.PPCPWebService.DAL
         {
             Result res = new Result();
             res.ResultID = 1;
+
+            using (SqlConnection conn = new SqlConnection(ConfigurationManager.ConnectionStrings["DALDefaultService"].ConnectionString))
+            {
+                string ssql = "update MemberVisit set ClaimSubStatusId=null where VisitId = @VisitId";
+                conn.Execute(ssql, new { VisitId });
+            }
 
             res = ClaimMemberResponse(VisitId, "Confirm");
             if(res != null)
