@@ -633,30 +633,31 @@ namespace PPCPWebApiServices.Models.PPCPWebService.DAL
         {
             List<Member> getMemberDetails = new List<Member>();
 
-            using (var Context = new Dev_PPCPEntities(1))
+            if (MemberID == 0 && OrganizationID != 0)
             {
-                if(MemberID==0 && OrganizationID!=0)
+                using (SqlConnection conn = new SqlConnection(ConfigurationManager.ConnectionStrings["DALDefaultService"].ConnectionString))
                 {
-                    //getMemberDetails = Context.Members.Where(m => m.ID == OrganizationID && m.Type == 2).ToList();
-                    getMemberDetails = (from mp in Context.MemberPlans
-                                        join m in Context.Members on mp.MemberID equals m.MemberID
-                                        where mp.OrganizationID == OrganizationID
-                                        select m).ToList();
+                    string ssql = "select m.* from member m left outer join MemberPlans mp on mp.MemberID = m.Memberid where (mp.OrganizationID = @OrganizationID or m.ID = @OrganizationID)";
+                    getMemberDetails = conn.Query<Member>(ssql, new { OrganizationID = OrganizationID }, commandType: CommandType.Text).ToList();
                 }
-                else if (MemberID == 0 && OrganizationID == 0)
+            }
+            else
+            {
+                using (var Context = new Dev_PPCPEntities(1))
                 {
-                    getMemberDetails = Context.Members.ToList();
+                    if (MemberID == 0 && OrganizationID == 0)
+                    {
+                        getMemberDetails = Context.Members.ToList();
+                    }
+                    else if (MemberID != 0 && OrganizationID == 0)
+                    {
+                        getMemberDetails = Context.Members.Where(m => m.MemberID == MemberID).ToList();
+                    }
+                    else
+                    {
+                        getMemberDetails = Context.Members.Where(m => m.ID == OrganizationID && m.Type == 2 && m.MemberID == MemberID).ToList();
+                    }
                 }
-                else if (MemberID != 0 && OrganizationID == 0)
-                {
-                    getMemberDetails = Context.Members.Where(m => m.MemberID == MemberID).ToList();
-                }
-                else
-                {
-                    getMemberDetails = Context.Members.Where(m => m.ID == OrganizationID && m.Type == 2 && m.MemberID== MemberID).ToList();
-                }
-
-               
             }
             return getMemberDetails;
         }
