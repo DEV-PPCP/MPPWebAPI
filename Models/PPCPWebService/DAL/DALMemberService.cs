@@ -44,7 +44,7 @@ namespace PPCPWebApiServices.Models.PPCPWebService.DAL
             StringReader rdr = new StringReader(xml);
             MemberDetails objMemberDetails = (MemberDetails)serializer.Deserialize(rdr);
 
-            //Check Member Exists
+            //Check Member Exists - commented
             //int id = CheckMemberExists(objMemberDetails.FirstName, objMemberDetails.LastName, objMemberDetails.Gender.ToString(), Convert.ToDateTime(objMemberDetails.DOB), objMemberDetails.MobileNumber);
             //if(id > 0)
             //{
