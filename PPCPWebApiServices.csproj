@@ -324,6 +324,7 @@
     <Compile Include="CustomEntities\DBEntityAddlProperties.cs" />
     <Compile Include="CustomEntities\Lookup.cs" />
     <Compile Include="CustomEntities\MemberPlanDetails.cs" />
+    <Compile Include="CustomEntities\Organization.cs" />
     <Compile Include="CustomEntities\UserDetail.cs" />
     <Compile Include="FamilyMember.cs">
       <DependentUpon>PPCP_EntityFrameWork.tt</DependentUpon>

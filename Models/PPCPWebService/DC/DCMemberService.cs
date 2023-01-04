@@ -142,6 +142,7 @@ namespace PPCPWebApiServices.Models.PPCPWebService.DC
         public DateTime PaymentDueDate { get; set; }
         public Nullable<decimal> PaymentAmount { get; set; }
         public Nullable<decimal> InstallmentAmount { get; set; }
+        public Nullable<decimal> PointsAmount { get; set; }
         public Nullable<System.DateTime> PaymentDate { get; set; }
         public Nullable<decimal> PaidAmount { get; set; }
         public string PaymentStatus { get; set; }
@@ -154,6 +155,7 @@ namespace PPCPWebApiServices.Models.PPCPWebService.DC
 
         public int MemberPlanID { get; set; }
         public int MemberID { get; set; }
+        public int ReferringMemberId { get; set; }
 
         public int MemberParentID { get; set; }
         public string MemberName { get; set; }
@@ -207,6 +209,7 @@ namespace PPCPWebApiServices.Models.PPCPWebService.DC
         public decimal? Amount { get; set; }
         public decimal? AmountPaid { get; set; }
         public decimal DueAmount { get; set; }
+        public decimal Discount { get; set; }
         public string Status { get; set; }
         public string Duration { get; set; }
         public int RelationshipID { get; set; }
@@ -341,6 +344,7 @@ namespace PPCPWebApiServices.Models.PPCPWebService.DC
         public Nullable<System.DateTime> PaymentDueDate { get; set; }
         public Nullable<decimal> PaymentAmount { get; set; }
         public Nullable<decimal> InstallmentAmount { get; set; }
+        public Nullable<decimal> PointsAmount { get; set; }
         public Nullable<System.DateTime> PaymentDate { get; set; }
         public Nullable<decimal> PaidAmount { get; set; }
         public string PaymentStatus { get; set; }
@@ -357,7 +361,35 @@ namespace PPCPWebApiServices.Models.PPCPWebService.DC
         public bool? IS_ENABLED { get; set; }
     }
 
+    public class ReferralSummary
+    {
+        public int TotalPoints { get; set; }
+        public int PointsEarned { get; set; }
+        public int PointsPending { get; set; }
+        public int AvailableToUse { get; set; }
+        public int PointsUsed { get; set; }
+        public string MemberReferralLink { get; set; }
 
+    }
+    public class Referral
+    {
+        public int Id { get; set; }
+        public int MemberID { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public string MobileNumber { get; set; }
+        public string Email { get; set; }
+        public string Message { get; set; }
+        public bool isReminderSet { get; set; }
+        public DateTime? ReferralDate { get; set; }
 
+        //set if member joins
+        public DateTime? ReferralJoinedDate { get; set; }
+        public int ReferralMemberID { get; set; }
+        public int ReferralPlanID { get; set; }
+        public string PlanName { get; set; }
+        public int Points { get; set; }
+        public DateTime? PointsEarnedDate { get; set; }
+    }
 
 }

@@ -326,7 +326,7 @@ namespace PPCPWebApiServices.ServiceAccess
         /// <returns></returns>
         public object GetOrganizationDetails(string strOrganizationID)
         {
-            List<Organization> getOrganizationDetails = new List<Organization>();
+            List<OrganizationDetail> getOrganizationDetails = new List<OrganizationDetail>();
             getOrganizationDetails = objdal.GetOrganizationDetails(Convert.ToInt32(strOrganizationID));
             return getOrganizationDetails;
         }
@@ -606,6 +606,17 @@ namespace PPCPWebApiServices.ServiceAccess
             object res = new Result();
             res = objdal.AdminClaimApproval(Convert.ToInt32(VisitId), AdminNotes, Convert.ToInt32(ModifiedBy));
             return res;
+        }
+
+        public object GetBillingReport(string FromDate, string ToDate, string OrganziationID)
+        {
+
+            object GetDetails = new List<RptBillingDetails>();
+
+            GetDetails = objdal.GetBillingReport(Convert.ToDateTime(FromDate), Convert.ToDateTime(ToDate), Convert.ToInt32(OrganziationID));
+
+            return GetDetails;
+
         }
 
         #endregion

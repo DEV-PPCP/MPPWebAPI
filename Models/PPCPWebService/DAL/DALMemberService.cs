@@ -26,6 +26,9 @@ using System.Drawing.Drawing2D;
 using Twilio.TwiML.Voice;
 using static Antlr.Runtime.Tree.TreeWizard;
 using System.Data.Linq;
+using System.Data.Entity.Core.Metadata.Edm;
+using Twilio.TwiML.Messaging;
+using System.Web.Helpers;
 
 namespace PPCPWebApiServices.Models.PPCPWebService.DAL
 {
@@ -996,7 +999,7 @@ namespace PPCPWebApiServices.Models.PPCPWebService.DAL
                     }
                     else
                     {
-                        PaymentStatus = "Partially Paid";
+                        PaymentStatus = "Partially";
                     }
                     using (var context = new DALMemberService())
                     {
@@ -1616,6 +1619,7 @@ namespace PPCPWebApiServices.Models.PPCPWebService.DAL
                     model.PaidAmount = abc.PaidAmount;
                     model.InstallmentAmount = abc.InstallmentAmount;
                     model.PaymentAmount = abc.PaymentAmount;
+                    model.PointsAmount = abc.PointsAmount;
                     getMemberPlanInstallments1.Add(model);
 
                 }
@@ -1644,5 +1648,180 @@ namespace PPCPWebApiServices.Models.PPCPWebService.DAL
             }
             return getMemberPlanInstallments1;
         }
+
+        #region Referral
+
+        public List<ReferralSummary> GetReferralSummary(string MemberID)
+        {
+            List<ReferralSummary> list = new List<ReferralSummary>();
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(ConfigurationManager.ConnectionStrings["DALDefaultService"].ConnectionString))
+                {
+                    list = conn.Query<ReferralSummary>("Pr_ReferralSummaryGet", new { MemberID }, commandType: CommandType.StoredProcedure).ToList();
+                }
+
+                List<Application_Parameter_Config> config = CommonService.GetApplicationConfigs();
+                string ApplicationUrl = config.Where(o => o.PARAMETER_NAME == "ApplicationUrl").First().PARAMETER_VALUE;
+                list.First().MemberReferralLink = ApplicationUrl + "Referral/" + MemberID;
+            }
+            catch (Exception ex)
+            {
+                Logging.LogMessage("GetReferralSummary", ex.Message + "; InnerException: " + ex.InnerException + "; stacktrace:" + ex.StackTrace, LogType.Error, -1);
+                return null;
+            }
+            return list;
+        }
+
+        public List<Referral> GetReferralSummaryList(string MemberID)
+        {
+            List<Referral> list = new List<Referral>();
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(ConfigurationManager.ConnectionStrings["DALDefaultService"].ConnectionString))
+                {
+                    string ssql = "select mr.*, p.PlanName from MemberReferral mr join Plans p on p.PlanID = mr.ReferralPlanID where mr.MemberID = @MemberID and ReferralJoinedDate is not null";
+                    list = conn.Query<Referral>(ssql, new { MemberID }, commandType: CommandType.Text).ToList();
+                }
+            }
+            catch (Exception ex)
+            {
+                Logging.LogMessage("GetReferralSummaryList", ex.Message + "; InnerException: " + ex.InnerException + "; stacktrace:" + ex.StackTrace, LogType.Error, -1);
+                return null;
+            }
+            return list;
+        }
+
+        public List<Referral> GetReferralList(string MemberID)
+        {
+            List<Referral> list = new List<Referral>();
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(ConfigurationManager.ConnectionStrings["DALDefaultService"].ConnectionString))
+                {
+                    string ssql = "select mr.*, p.PlanName from MemberReferral mr left outer join Plans p on p.PlanID = mr.ReferralPlanID where mr.MemberID = @MemberID";
+                    list = conn.Query<Referral>(ssql, new { MemberID }, commandType: CommandType.Text).ToList();
+                }
+            }
+            catch (Exception ex)
+            {
+                Logging.LogMessage("GetReferralList", ex.Message + "; InnerException: " + ex.InnerException + "; stacktrace:" + ex.StackTrace, LogType.Error, -1);
+                return null;
+            }
+            return list;
+        }
+
+        public Result SaveReferral(string MemberID, string FirstName, string LastName, string MobileNumber, string Email, string Message)
+        {
+            Result res = new Result();
+            res.ResultID = 1;
+            res.ResultName = "Success";
+            try
+            {
+                int isReminderSet = 0;
+                using (SqlConnection conn = new SqlConnection(ConfigurationManager.ConnectionStrings["DALDefaultService"].ConnectionString))
+                {
+                    string ssql = "insert into MemberReferral(MemberID, FirstName, LastName, MobileNumber, Email, Message, isReminderSet, ReferralDate) " +
+                                    " values(@MemberID, @FirstName, @LastName, @MobileNumber, @Email, @Message, @isReminderSet, getutcdate() ) ";
+                    conn.Execute(ssql, new { MemberID, FirstName, LastName, MobileNumber, Email, Message, isReminderSet });
+
+                    List<Application_Parameter_Config> config = CommonService.GetApplicationConfigs();
+                    string ApplicationUrl = config.Where(o => o.PARAMETER_NAME == "ApplicationUrl").First().PARAMETER_VALUE;
+                    string MemberReferralLink = ApplicationUrl + "Referral/" + MemberID;                    
+
+                    if (MobileNumber != "")
+                    {
+                        Message = Message + " " + MemberReferralLink;
+                        //Send SMS
+                        DALDefaultService dal = new DALDefaultService();
+                        string message = Message;
+                        List<string> objMsg = dal.SendMessageByText(message, MobileNumber, "1");
+                        bool isSMSSuccess = true;
+                        var errorsms = objMsg.FirstOrDefault(o => o.Contains("Error"));
+                        if (objMsg == null || errorsms == "Error")
+                            isSMSSuccess = false;
+                    }
+
+                    if (!string.IsNullOrEmpty(Email))
+                    {
+                        Message = Message + "<br/><br/><a href='" + MemberReferralLink + "'>Click here to Register</a>";
+                        //Send Email                           
+                        string body = Message;
+                        MailHelper _objMail = new MailHelper();
+                        bool isEmailSuccess = _objMail.SendEmail(Email, string.Empty, "MyPhysicianPlan Referral", body);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Logging.LogMessage("SaveReferral", ex.Message + "; InnerException: " + ex.InnerException + "; stacktrace:" + ex.StackTrace, LogType.Error, -1);
+                res.ResultID = 0;
+            }
+            return res;
+        }
+
+        public Result ResendReferralEmail(int MemberID, int Id)
+        {
+            Result res = new Result();
+            res.ResultID = 1;
+
+            Referral obj = new Referral();
+
+            using (SqlConnection conn = new SqlConnection(ConfigurationManager.ConnectionStrings["DALDefaultService"].ConnectionString))
+            {
+                string ssql = "select mr.* from MemberReferral mr where mr.Id = @Id";
+                obj = conn.Query<Referral>(ssql, new { Id }, commandType: CommandType.Text).FirstOrDefault();
+            }
+
+            List<Application_Parameter_Config> config = CommonService.GetApplicationConfigs();
+            string ApplicationUrl = config.Where(o => o.PARAMETER_NAME == "ApplicationUrl").First().PARAMETER_VALUE;
+            string MemberReferralLink = ApplicationUrl + "Referral/" + MemberID;
+            string Message = obj.Message + "<br/><br/><a href='" + MemberReferralLink + "'>Click here to Register</a>";
+
+            if (!string.IsNullOrEmpty(obj.Email))
+            {
+                //Send Email                           
+                string body = Message;
+                MailHelper _objMail = new MailHelper();
+                bool isEmailSuccess = _objMail.SendEmail(obj.Email, string.Empty, "MyPhysicianPlan Referral", body);
+            }
+
+            return res;
+        }
+
+        public Result ResendReferralText(int MemberID, int Id)
+        {
+            Result res = new Result();
+            res.ResultID = 1;
+
+            Referral obj = new Referral();
+
+            using (SqlConnection conn = new SqlConnection(ConfigurationManager.ConnectionStrings["DALDefaultService"].ConnectionString))
+            {
+                string ssql = "select mr.* from MemberReferral mr where mr.Id = @Id";
+                obj = conn.Query<Referral>(ssql, new { Id }, commandType: CommandType.Text).FirstOrDefault();
+            }
+
+            List<Application_Parameter_Config> config = CommonService.GetApplicationConfigs();
+            string ApplicationUrl = config.Where(o => o.PARAMETER_NAME == "ApplicationUrl").First().PARAMETER_VALUE;
+            string MemberReferralLink = ApplicationUrl + "Referral/" + MemberID;
+            string Message = obj.Message + " " + MemberReferralLink;
+
+            if (obj.MobileNumber != "")
+            {
+                //Send SMS
+                DALDefaultService dal = new DALDefaultService();
+                string message = Message;
+                List<string> objMsg = dal.SendMessageByText(message, obj.MobileNumber, "1");
+                bool isSMSSuccess = true;
+                var errorsms = objMsg.FirstOrDefault(o => o.Contains("Error"));
+                if (objMsg == null || errorsms == "Error")
+                    res.ResultID = 0;
+            }
+
+            return res;
+        }
+
+        #endregion
     }
 }

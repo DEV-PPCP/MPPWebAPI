@@ -283,5 +283,47 @@ namespace PPCPWebApiServices.ServiceAccess
             objGetPaymentDetails = objdal.GetMemberPlanInstallments(Convert.ToInt32(MemberPlanID));
             return objGetPaymentDetails;
         }
+
+        #region Referral
+
+        public object GetReferralSummary(string MemberID)
+        {
+            List<ReferralSummary> getStates = objdal.GetReferralSummary(MemberID);
+            return getStates;
+        }
+
+        public object GetReferralSummaryList(string MemberID)
+        {
+            List<Referral> getStates = objdal.GetReferralSummaryList(MemberID);
+            return getStates;
+        }
+
+        public object GetReferralList(string MemberID)
+        {
+            List<Referral> getStates = objdal.GetReferralList(MemberID);
+            return getStates;
+        }
+
+        public object SaveReferral(string MemberID, string FirstName, string LastName, string MobileNumber, string Email, string Message)
+        {
+            Result res = objdal.SaveReferral(MemberID, FirstName, LastName, MobileNumber, Email, Message);
+            return res;
+        }
+
+        public object ResendReferralEmail(string MemberID, string Id)
+        {
+            object res = new Result();
+            res = objdal.ResendReferralEmail(Convert.ToInt32(MemberID), Convert.ToInt32(Id));
+            return res;
+        }
+
+        public object ResendReferralText(string MemberID, string Id)
+        {
+            object res = new Result();
+            res = objdal.ResendReferralText(Convert.ToInt32(MemberID), Convert.ToInt32(Id));
+            return res;
+        }
+
+        #endregion
     }
 }

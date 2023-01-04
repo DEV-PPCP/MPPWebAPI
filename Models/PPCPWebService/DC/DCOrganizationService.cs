@@ -373,6 +373,32 @@ namespace PPCPWebApiServices.Models.PPCPWebService.DC
 
     }
 
+    public class RptBillingDetails
+    {
+        public int MemberID { get; set; }
+        public string MemberName { get; set; }
+        public string DOB { get; set; }
+        public int OrganizationID { get; set; }
+        public string OrganizationName { get; set; }
+        public int ProviderID { get; set; }
+        public string ProviderName { get; set; }
+        public string NPI { get; set; }
+        public string PlanStartDate { get; set; }
+        public string PlanEndDate { get; set; }
+        public int VisitTypeId { get; set; }
+        public string CoPayType { get; set; }
+        public int CoPayCount { get; set; }
+        public string InPersonType { get; set; }
+        public int InPersonCount { get; set; }
+
+        public Nullable<decimal> TotalCoPayAmount { get; set; }
+        public Nullable<decimal> CoPayPaidAmount { get; set; }
+
+        public Nullable<decimal> TotalInPersonAmount { get; set; }
+        public Nullable<decimal> InPersonpaidAmount { get; set; }
+
+    }
+
 
     //public class PracticeTransactions
     //{

@@ -998,21 +998,26 @@ namespace PPCPWebApiServices.Models.PPCPWebService.DAL
             return res;
         }
 
-        public List<Organization> GetOrganizationDetails(int intOrganizationID)
+        public List<OrganizationDetail> GetOrganizationDetails(int intOrganizationID)
         {
-            List<Organization> getOrganizationDetails = new List<Organization>();
-            using (var Context = new Dev_PPCPEntities(1))
+            List<OrganizationDetail> getOrganizationDetails = new List<OrganizationDetail>();
+            using (SqlConnection conn = new SqlConnection(ConfigurationManager.ConnectionStrings["DALDefaultService"].ConnectionString))
             {
-                if (intOrganizationID == 0)
-                {
-                    getOrganizationDetails = Context.Organizations.ToList();
-                }
-                else
-                {
-                    getOrganizationDetails = Context.Organizations.Where(a => a.OrganizationID == intOrganizationID).ToList();
-                }
-
+                string ssql = "select o.*, lv.Name as BillingType from Organizations o join LookupValues lv on lv.Id = o.BillingTypeID where (@OrganizationID = 0 or OrganizationID = @OrganizationID)";
+                getOrganizationDetails = conn.Query<OrganizationDetail>(ssql, new { OrganizationID = intOrganizationID }, commandType: CommandType.Text).ToList();
             }
+            //using (var Context = new Dev_PPCPEntities(1))
+            //{
+            //    if (intOrganizationID == 0)
+            //    {
+            //        getOrganizationDetails = Context.Organizations.ToList();
+            //    }
+            //    else
+            //    {
+            //        getOrganizationDetails = Context.Organizations.Where(a => a.OrganizationID == intOrganizationID).ToList();
+            //    }
+
+            //}
             return getOrganizationDetails;
         }
 
@@ -1937,6 +1942,36 @@ namespace PPCPWebApiServices.Models.PPCPWebService.DAL
             }            
 
             return res;
+        }
+
+        public object GetBillingReport(DateTime FromDate, DateTime ToDate, int OrganziationID)
+        {
+            DateTime todate1 = DateTime.UtcNow;
+            if (ToDate != null)
+
+            {
+                todate1 = ToDate.AddDays(1).AddMinutes(-1);
+            }
+            List<RptBillingDetails> getorganizationProviderDetail = new List<RptBillingDetails>();
+            try
+            {
+
+                using (var context = new Dev_PPCPEntities(1))
+                {
+                    SqlParameter fromdate = new SqlParameter("@FromDate", FromDate);
+                    SqlParameter todate = new SqlParameter("@ToDate", todate1);
+                    SqlParameter orgid = new SqlParameter("@OrganziationID", OrganziationID);
+                    getorganizationProviderDetail = context.Database.SqlQuery<RptBillingDetails>("PR_Rpt_GetBillingDetails @FromDate,@ToDate,@OrganziationID", fromdate, todate, orgid).ToList();
+
+
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
+            return getorganizationProviderDetail;
+
         }
 
         #endregion
