@@ -82,7 +82,9 @@ namespace PPCPWebApiServices.Models.PPCPWebService.DC
         public Nullable<int> ProviderID { get; set; }
         public string ProviderName { get; set; }
         public string Status { get; set; }
-      
+
+        public int PointsEarned { get; set; }
+
         public Nullable<decimal> TotalAmount { get; set; }
         public Nullable<decimal> AmountPaid { get; set; }
         public Nullable<decimal> DueAmount { get; set; }
@@ -158,6 +160,8 @@ namespace PPCPWebApiServices.Models.PPCPWebService.DC
         public int ReferringMemberId { get; set; }
 
         public int MemberParentID { get; set; }
+        public string MemberCode { get; set; }
+        
         public string MemberName { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
@@ -224,6 +228,9 @@ namespace PPCPWebApiServices.Models.PPCPWebService.DC
         public string PreferredIP { get; set; }
         public string RelationshipName { get; set; }
 
+        public Nullable<int> ID { get; set; }
+        public Nullable<int> Type { get; set; }
+
         public string PlanTermName { get; set; }
         public int? PlanTermMonths { get; set; }
         public decimal? VisitFee { get; set; }
@@ -257,7 +264,7 @@ namespace PPCPWebApiServices.Models.PPCPWebService.DC
     public class MakePayment
     {
         public int MemberID { get; set; }
-        public int MemberParentID { get; set; }
+        public int MemberParentID { get; set; }        
         public int CountryCode { get; set; }
         public string MobileNumber { get; set; }
         public int MemberPlanCode { get; set; }

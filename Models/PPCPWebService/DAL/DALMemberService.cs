@@ -29,6 +29,7 @@ using System.Data.Linq;
 using System.Data.Entity.Core.Metadata.Edm;
 using Twilio.TwiML.Messaging;
 using System.Web.Helpers;
+using Microsoft.Ajax.Utilities;
 
 namespace PPCPWebApiServices.Models.PPCPWebService.DAL
 {
@@ -1165,14 +1166,17 @@ namespace PPCPWebApiServices.Models.PPCPWebService.DAL
             List<PPCPWebApiServices.Models.PPCPWebService.DC.MemberPlansDetails> getMemberPlanDetails = new List<PPCPWebApiServices.Models.PPCPWebService.DC.MemberPlansDetails>();
             try
             {
-
-                using (var context = new DALMemberService())
+                using (SqlConnection conn = new SqlConnection(ConfigurationManager.ConnectionStrings["DALDefaultService"].ConnectionString))
                 {
-
-                    SqlParameter PlanCode = new SqlParameter("@PlanCode", intMemberPlanCode);
-
-                    getMemberPlanDetails = context.Database.SqlQuery<PPCPWebApiServices.Models.PPCPWebService.DC.MemberPlansDetails>("Pr_GetMemberPlans @PlanCode", PlanCode).ToList();
+                    getMemberPlanDetails = conn.Query<MemberPlansDetails>("Pr_GetMemberPlans", new { PlanCode = intMemberPlanCode }, commandType: CommandType.StoredProcedure).ToList();
                 }
+                //using (var context = new DALMemberService())
+                //{
+
+                //    SqlParameter PlanCode = new SqlParameter("@PlanCode", intMemberPlanCode);
+
+                //    getMemberPlanDetails = context.Database.SqlQuery<PPCPWebApiServices.Models.PPCPWebService.DC.MemberPlansDetails>("Pr_GetMemberPlans @PlanCode", PlanCode).ToList();
+                //}
                 if (getMemberPlanDetails.Count >= 1)
                 {
                     string json = "{\"PaymentIntervalsDetails1\":" + "[" + getMemberPlanDetails[0].PaymentInterval + "]" + "}";
@@ -1241,10 +1245,16 @@ namespace PPCPWebApiServices.Models.PPCPWebService.DAL
             List<Member> getFamilyDetails = new List<Member>();
             try
             {
-                using (var Context = new Dev_PPCPEntities(1))
+                using (SqlConnection conn = new SqlConnection(ConfigurationManager.ConnectionStrings["DALDefaultService"].ConnectionString))
                 {
-                    getFamilyDetails = Context.Members.Where(m => m.MemberParentID == intMemberParentID).ToList();
+                    string ssql = "select *  from Member where MemberParentID = @intMemberParentID";
+                    getFamilyDetails = conn.Query<Member>(ssql, new { intMemberParentID }, commandType: CommandType.Text).ToList();
                 }
+
+                //using (var Context = new Dev_PPCPEntities(1))
+                //{
+                //    getFamilyDetails = Context.Members.Where(m => m.MemberParentID == intMemberParentID).ToList();
+                //}
             }
             catch (Exception ex)
             {

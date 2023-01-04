@@ -57,7 +57,9 @@ namespace PPCPWebApiServices
         public Nullable<System.DateTime> TandCAcceptedDate { get; set; }
         public Nullable<int> UserId { get; set; }
         public string MemberCardID { get; set; }
-    
+        public int ReferringMemberId { get; set; }
+        public int PointsEarned { get; set; }
+
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<FamilyMember> FamilyMembers { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
