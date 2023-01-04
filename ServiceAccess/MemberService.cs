@@ -324,6 +324,17 @@ namespace PPCPWebApiServices.ServiceAccess
             return res;
         }
 
+        public object ValidateReferringMemberCardId(string ReferringMemberCardId)
+        {
+            List<Member> list = new List<Member>();
+            if (!string.IsNullOrEmpty(ReferringMemberCardId))
+            {
+                list = objdal.ValidateReferringMemberCardId(ReferringMemberCardId);
+                return list;
+            }
+            return list;
+        }
+
         #endregion
     }
 }

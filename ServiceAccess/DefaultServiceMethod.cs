@@ -322,6 +322,8 @@ namespace PPCPWebApiServices.ServiceAccess
                     intervals.AccountID = getPPCPOrganizationProvidersplans[0].AccountID;
                     intervals.CommPPCP = getPPCPOrganizationProvidersplans[0].CommPPCP;
                     intervals.CommPrimaryMember = getPPCPOrganizationProvidersplans[0].CommPrimaryMember;
+                    intervals.ReferringMemberPoints = getPPCPOrganizationProvidersplans[0].ReferringMemberPoints;
+                    intervals.NewMemberPoints = getPPCPOrganizationProvidersplans[0].NewMemberPoints;
 
                     IntervalsList.Add(intervals);
                 }

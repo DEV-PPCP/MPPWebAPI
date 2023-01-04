@@ -200,6 +200,8 @@ namespace PPCPWebApiServices.Models.PPCPWebService.DC
         public decimal? InstallmentAmount { get; set; }
 
         public decimal? InstallmentFee { get; set; }
+        public int ReferringMemberPoints { get; set; }
+        public int NewMemberPoints { get; set; }
         public int? Savings { get; set; }
 
         public decimal? TotalAmount { get; set; }
@@ -289,6 +291,8 @@ namespace PPCPWebApiServices.Models.PPCPWebService.DC
         public Nullable<decimal> VisitFee { get; set; }
         public Nullable<decimal> TeleVisitFee { get; set; }
         public Nullable<decimal> EnrollFee { get; set; }
+        public int ReferringMemberPoints { get; set; }
+        public int NewMemberPoints { get; set; }
         public Nullable<int> FromAge { get; set; }
         public Nullable<int> ToAge { get; set; }
         public Nullable<int> GenderID { get; set; }

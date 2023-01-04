@@ -1822,6 +1822,17 @@ namespace PPCPWebApiServices.Models.PPCPWebService.DAL
             return res;
         }
 
+        public List<Member> ValidateReferringMemberCardId(string ReferringMemberCardId)
+        {
+            List<Member> list = new List<Member>();
+            using (SqlConnection conn = new SqlConnection(ConfigurationManager.ConnectionStrings["DALDefaultService"].ConnectionString))
+            {
+                string ssql = "select * from Member where MemberCardId = @ReferringMemberCardId";
+                list = conn.Query<Member>(ssql, new { ReferringMemberCardId }, commandType: CommandType.Text).ToList();
+            }
+            return list;
+        }
+
         #endregion
     }
 }
