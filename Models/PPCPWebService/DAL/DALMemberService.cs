@@ -1843,6 +1843,72 @@ namespace PPCPWebApiServices.Models.PPCPWebService.DAL
             return list;
         }
 
+        public Result RequestReferralCheck(int MemberID)
+        {
+            Result res = new Result();
+            res.ResultID = 1;
+
+            MemberDetails obj = new MemberDetails();
+
+            using (SqlConnection conn = new SqlConnection(ConfigurationManager.ConnectionStrings["DALDefaultService"].ConnectionString))
+            {
+                obj = conn.Query<MemberDetails>("Pr_ReferralCheck", new { MemberID }, commandType: CommandType.StoredProcedure).FirstOrDefault();
+            }
+
+            List<Application_Parameter_Config> config = CommonService.GetApplicationConfigs();
+            string SupportEmail = config.Where(o => o.PARAMETER_NAME == "Support_Mail").First().PARAMETER_VALUE;
+            string Message = "Member requested check to be sent for Points. <br/><br/> MemberID: " + obj.MemberID
+                                + "<br/>Member Name: " + obj.FirstName + " " + obj.LastName
+                                + "<br/>Member Card ID: " + obj.MemberCardID;
+
+            if (!string.IsNullOrEmpty(SupportEmail))
+            {
+                //Send Email                           
+                string body = Message;
+                MailHelper _objMail = new MailHelper();
+                bool isEmailSuccess = _objMail.SendEmail(SupportEmail, string.Empty, "MyPhysicianPlan Referral Check Request", body);
+            }
+
+            return res;
+        }
+
+        public List<ReferralCheck> GetReferralCheckRequests(int MemberID)
+        {
+            List<ReferralCheck> list = new List<ReferralCheck>();
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(ConfigurationManager.ConnectionStrings["DALDefaultService"].ConnectionString))
+                {
+                    string ssql = "select mr.*, concat(m.FirstName, ' ', m.LastName) as MemberName, concat(m.Address, ', ', lvcity.CityName, ', ', lvstate.StateCode, ' - ', m.Zip) as MemberAddress" +
+                        " from MemberReferralCheck mr join Member m on m.Memberid = mr.Memberid  " +
+                        " left outer join CitiesLKP lvcity on lvcity.CityID = m.CityID " +
+                        " left outer join StatesLKP lvstate on lvstate.StateID = m.StateID " +
+                        " where (@MemberID = '0' or mr.MemberID = @MemberID) and Status = 'Requested'";
+                    list = conn.Query<ReferralCheck>(ssql, new { MemberID }, commandType: CommandType.Text).ToList();
+                }
+            }
+            catch (Exception ex)
+            {
+                Logging.LogMessage("GetReferralCheckRequests", ex.Message + "; InnerException: " + ex.InnerException + "; stacktrace:" + ex.StackTrace, LogType.Error, -1);
+                return null;
+            }
+            return list;
+        }
+
+        public Result ReferralCheckMailed(int Id)
+        {
+            Result res = new Result();
+            res.ResultID = 1;
+
+            using (SqlConnection conn = new SqlConnection(ConfigurationManager.ConnectionStrings["DALDefaultService"].ConnectionString))
+            {
+                string ssql = "update MemberReferralCheck set Status = 'Sent', CheckSentDate=getutcdate() where Id = @Id";
+                conn.Execute(ssql, new { Id });
+            }
+
+            return res;
+        }
+
         #endregion
     }
 }

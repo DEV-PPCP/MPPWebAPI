@@ -335,6 +335,26 @@ namespace PPCPWebApiServices.ServiceAccess
             return list;
         }
 
+        public object RequestReferralCheck(string MemberID)
+        {
+            object res = new Result();
+            res = objdal.RequestReferralCheck(Convert.ToInt32(MemberID));
+            return res;
+        }
+
+        public object GetReferralCheckRequests(string MemberID)
+        {
+            List<ReferralCheck> getStates = objdal.GetReferralCheckRequests(Convert.ToInt32(MemberID));
+            return getStates;
+        }
+
+        public object ReferralCheckMailed(string Id)
+        {
+            object res = new Result();
+            res = objdal.ReferralCheckMailed(Convert.ToInt32(Id));
+            return res;
+        }
+
         #endregion
     }
 }
