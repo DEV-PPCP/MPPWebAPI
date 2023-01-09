@@ -1690,7 +1690,7 @@ namespace PPCPWebApiServices.Models.PPCPWebService.DAL
             {
                 using (SqlConnection conn = new SqlConnection(ConfigurationManager.ConnectionStrings["DALDefaultService"].ConnectionString))
                 {
-                    string ssql = "select mr.*, p.PlanName from MemberReferral mr join Plans p on p.PlanID = mr.ReferralPlanID where mr.MemberID = @MemberID and ReferralJoinedDate is not null";
+                    string ssql = "select mr.*, p.PlanName, concat(m.FirstName, ' ', m.LastName) as MemberName from MemberReferral mr join Plans p on p.PlanID = mr.ReferralPlanID join Member m on m.Memberid = mr.Memberid where (@MemberID = '0' or mr.MemberID = @MemberID) and ReferralJoinedDate is not null";
                     list = conn.Query<Referral>(ssql, new { MemberID }, commandType: CommandType.Text).ToList();
                 }
             }
